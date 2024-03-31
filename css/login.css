@@ -1,0 +1,422 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Nunito+Sans:opsz@6..12&display=swap");
+
+*,
+*::before,
+*::after {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+img {
+   display: block;
+   max-width: 100%;
+   height: auto;
+}
+
+body {
+   min-height: 100vh;
+   max-width: 100vw;
+   font-family: "Inter";
+}
+
+label,
+button {
+   font-family: "Nunito Sans";
+}
+
+.hide {
+   display: none !important;
+}
+
+.rotate180 {
+   transform: rotateY(180deg);
+}
+
+.flip-content {
+   transform: rotateY(180deg);
+}
+
+.login__container {
+   position: relative;
+   width: 100%;
+   height: 100vh;
+   display: grid;
+   justify-content: center;
+   align-items: center;
+}
+
+.login__bg--img {
+   /* color: #8645ff;   bg image color -> used in svg as fill */
+   height: 100vh;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   z-index: -1;
+}
+
+.login__div {
+   transition: all 1s;
+}
+
+.login__div--content {
+   width: 80vw;
+   height: auto;
+   height: 70vh;
+   padding: 1rem;
+   background-color: aliceblue;
+
+   grid-template: 1fr 4fr / repeat(2, 1fr);
+   border-radius: 2.5%;
+
+   display: grid;
+   justify-content: center;
+   align-items: center;
+   overflow: hidden;
+   transition: all 1s;
+}
+
+.login__div--titleImg {
+   grid-area: 1 / 1 / 2 / 2;
+
+   display: flex;
+   flex-flow: row nowrap;
+   justify-content: flex-start;
+   align-items: center;
+   gap: 0.2rem;
+}
+
+.login__div--Logo {
+   width: 2.25rem;
+   height: auto;
+}
+
+.login__div--LogoName {
+   width: 12rem;
+   height: auto;
+}
+
+.login__div--titleTxt,
+.sign__div--titleTxt {
+   grid-area: 1 / 2 / 2 / 3;
+   text-align: left;
+   padding: 0.5rem 0rem;
+}
+
+.login__div--titleHead,
+.sign__div--titleHead {
+   font-size: 1.75rem;
+}
+
+.login__div--img {
+   grid-area: 2 / 1 / 3 / 2;
+}
+.sign__div--img {
+   grid-area: 2 / 1 / 3 / 2;
+}
+
+.login__form,
+.sign__form {
+   grid-area: 2 / 2 / 3 / 3;
+
+   display: grid;
+   justify-content: center;
+   align-items: stretch;
+}
+
+.login__form {
+   grid-template: repeat(2, 1.5fr) 0.5fr 1fr / repeat(2, 1fr);
+   gap: 1rem;
+}
+
+.sign__form {
+   grid-template: repeat(3, 1fr) / repeat(2, 1fr);
+   gap: 0.5rem;
+}
+
+.login__form--email,
+.login__form--password,
+.sign__form--name,
+.sign__form--reg_no,
+.sign__form--email,
+.sign__form--phone,
+.sign__form--pass,
+.sign__form--confirmPass {
+   max-width: 20rem;
+   width: 100%;
+   background-color: white;
+   display: flex;
+   flex-flow: row nowrap;
+   justify-self: center;
+   justify-content: center;
+   align-items: center;
+
+   gap: 1.5rem;
+   margin: 0.25rem 1rem 0.25rem 1rem;
+   padding: 10px;
+
+   border-radius: 7.5%;
+   outline: none;
+   overflow: hidden;
+}
+
+.login__form--emailInput,
+.login__form--passInput,
+.sign__form--nameInput,
+.sign__form--reg_noInput,
+.sign__form--emailInput,
+.sign__form--phoneInput,
+.sign__form--passInput,
+.sign__form--confirmPassInput {
+   width: 100%;
+   display: flex;
+   flex-flow: column wrap;
+   gap: 0.5rem;
+}
+
+.login__form label::after,
+.sign__form label::after {
+   content: "*";
+   color: red;
+}
+
+.login__form input,
+.sign__form input {
+   width: 100%;
+   height: 1.5rem;
+   font-size: 0.9rem;
+   padding: 5px;
+}
+
+.login__form--email {
+   grid-area: 1 / 1 / 2 / 3;
+}
+
+.login__form--password {
+   grid-area: 2 / 1 / 3 / 3;
+}
+
+.login__form--forgotPass {
+   grid-area: 3 / 1 / 4 / 3;
+   text-decoration: underline;
+   font-size: 0.85rem;
+   padding-bottom: 1rem;
+
+   background: none;
+   border: none;
+   outline: none;
+   box-shadow: none;
+   cursor: pointer;
+}
+
+.login__form--login,
+.login__form--createAcc,
+.sign__form--signUp,
+.sign__form--existUser {
+   justify-self: center;
+   height: 2.5rem;
+   font-size: 0.9rem;
+   width: 60%;
+   background-color: #e3eeff;
+   color: #222;
+   border-radius: 20px;
+   border-width: 0;
+   transition: all 0.3s;
+   cursor: pointer;
+}
+
+.login__form--login:hover,
+.login__form--createAcc:hover,
+.sign__form--signUp:hover,
+.sign__form--existUser:hover {
+   background-color: #4285f4;
+   color: white;
+}
+
+.login__form--login {
+   grid-area: 4 / 1 / 5 / 2;
+}
+.login__form--createAcc {
+   grid-area: 4 / 2 / 5 / 3;
+}
+
+.sign__form--name {
+   grid-area: 1 / 1 / 2 / 2;
+}
+.sign__form--reg_no {
+   grid-area: 1 / 2 / 2 / 3;
+}
+.sign__form--email {
+   grid-area: 2 / 1 / 3 / 2;
+}
+.sign__form--phone {
+   grid-area: 2 / 2 / 3 / 3;
+}
+.sign__form--pass {
+   grid-area: 3 / 1 / 4 / 2;
+}
+.sign__form--confirmPass {
+   grid-area: 3 / 2 / 4 / 3;
+}
+
+.login__form--login {
+   margin-left: 4rem;
+}
+.login__form--createAcc {
+   margin-right: 4rem;
+}
+
+.sign__form--signUp {
+   margin: 2rem 0 2rem 4rem;
+}
+.sign__form--existUser {
+   margin: 2rem 4rem 2rem 0;
+}
+
+@media screen and (max-width: 1200px) {
+   .login__div--content {
+      grid-template: 1fr 4fr / 3fr 4fr;
+   }
+
+   .sign__form {
+      margin: 0 1rem;
+   }
+
+   .sign__form--name,
+   .sign__form--reg_no,
+   .sign__form--email,
+   .sign__form--phone,
+   .sign__form--pass,
+   .sign__form--confirmPass {
+      margin: 0.2rem;
+   }
+}
+
+@media screen and (max-width: 1024px) {
+   .login__div--content {
+      width: 90vw;
+      height: auto;
+   }
+}
+
+@media screen and (max-width: 900px) {
+   .login__div--LogoName {
+      width: 10rem;
+   }
+
+   .login__div--content {
+      grid-template: 1fr 4fr / repeat(2, 1fr);
+   }
+
+   .login__div--img {
+      display: none;
+   }
+   .sign__div--img {
+      display: none;
+   }
+
+   .login__form {
+      grid-area: 2 / 1 / 3 / 3;
+   }
+   .sign__form {
+      grid-area: 2 / 1 / 3 / 3;
+      margin: 1rem;
+      gap: 1rem;
+   }
+}
+
+@media screen and (max-width: 768px) {
+   .sign__form {
+      margin: 0;
+      gap: 0.5rem;
+   }
+
+   .login__div--Logo {
+      width: 40px;
+   }
+   .login__div--LogoName {
+      width: 9rem;
+   }
+
+   .login__div--titleTxt,
+   .sign__div--titleTxt {
+      margin-left: 1rem;
+   }
+
+   .login__form--login {
+      margin-left: 3rem;
+   }
+   .login__form--createAcc {
+      margin-right: 3rem;
+   }
+   .sign__form--signUp {
+      margin: 2rem 0 2rem 3rem;
+   }
+   .sign__form--existUser {
+      margin: 2rem 3rem 2rem 0;
+   }
+}
+
+@media screen and (max-width: 650px) {
+   .login__div--titleHead,
+   .sign__div--titleHead {
+      font-size: 1.25rem;
+      font-weight: bold;
+   }
+}
+
+@media screen and (max-width: 480px) {
+   .login__div--content {
+      grid-template: repeat(2, 1fr) 5fr / repeat(2, 1fr);
+   }
+
+   .login__div--titleImg {
+      grid-area: 1 / 1 / 2 / 3;
+   }
+
+   .login__div--titleTxt,
+   .sign__div--titleTxt {
+      grid-area: 2 / 1 / 3 / 3;
+      margin: 0;
+   }
+
+   .login__form,
+   .sign__form {
+      grid-area: 3 / 1 / 4 / 3;
+   }
+
+   .sign__form {
+      grid-template: repeat(7, 1fr) / repeat(2, 1fr);
+   }
+
+   .sign__form--name {
+      grid-area: 1 / 1 / 2 / 3;
+   }
+   .sign__form--reg_no {
+      grid-area: 2 / 1 / 3 / 3;
+   }
+   .sign__form--email {
+      grid-area: 3 / 1 / 4 / 3;
+   }
+   .sign__form--phone {
+      grid-area: 4 / 1 / 5 / 3;
+   }
+   .sign__form--pass {
+      grid-area: 5 / 1 / 6 / 3;
+   }
+   .sign__form--confirmPass {
+      grid-area: 6 / 1 / 7 / 3;
+   }
+
+   .login__form--login {
+      margin-left: 2rem;
+   }
+   .login__form--createAcc {
+      margin-right: 2rem;
+   }
+   .sign__form--signUp,
+   .sign__form--existUser {
+      margin: 2rem 0;
+   }
+}

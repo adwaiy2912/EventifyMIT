@@ -1,0 +1,104 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Nunito+Sans:opsz@6..12&display=swap");
+
+*,
+*::before,
+*::after {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+img {
+   display: block;
+   max-width: 100%;
+   height: auto;
+}
+
+body {
+   scroll-behavior: smooth;
+   min-height: 100vh;
+   max-width: 100vw;
+   font-family: "Inter";
+}
+
+label,
+button {
+   font-family: "Nunito Sans";
+}
+
+.hide {
+   display: none !important;
+}
+
+header {
+   font-family: "Inter";
+   width: 100%;
+   position: fixed;
+   background-color: aliceblue;
+}
+
+.header__login--button {
+   background: linear-gradient(#b085ff, #8645ff);
+}
+
+.header__login--button:hover {
+   background: linear-gradient(#945bff, #763ce2);
+}
+
+.header__ul {
+   margin-left: 2rem;
+}
+
+.header__ul li:first-child a {
+   color: #8645ff;
+}
+
+.underline-hover {
+   text-decoration: none;
+   font-size: 2rem;
+   color: black;
+   font-weight: bold;
+   position: relative;
+}
+
+.underline-hover::after {
+   content: "";
+   position: absolute;
+   height: 2px;
+   background-color: #8645ff;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   transition: transform 0.75s;
+   transform-origin: bottom right;
+   transform: scaleX(0);
+}
+
+.underline-hover:hover::after {
+   transform-origin: bottom left;
+   transform: scaleX(1);
+}
+
+.main__div--arrow {
+   display: flex;
+   align-items: center;
+   color: #8645ff;
+   gap: 6px;
+}
+
+.main__div--arrow::after {
+   align-self: center;
+   height: 40px;
+   width: auto;
+   content: url("../img/home/arrow1.svg");
+   transition: all 0.25s;
+}
+
+.main__div--arrow:hover::after {
+   transform: translateX(5px);
+   content: url("../img/home/arrow.svg");
+}
+
+footer {
+   background-color: aliceblue;
+}

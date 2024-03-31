@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>EventifyMIT</title>
+      <link rel="icon" href="../img/Logo.png" type="image/x-icon" />
+      <link rel="stylesheet" href="../css/login.css" />
+      <script defer src="../js/login.js"></script>
+   </head>
+   <body>
+      <div class="login__container">
+         <img
+            src="../img/login/bg.svg"
+            alt="Background"
+            class="login__bg--img"
+         />
+         <div class="login__div">
+            <div class="login__div--content">
+               <a href="home.html" class="login__div--titleImg">
+                  <img
+                     src="../img/Logo.png"
+                     alt="Logo"
+                     class="login__div--Logo"
+                     width="50"
+                     height="50"
+                  />
+                  <img
+                     src="../img/EventifyMIT.png"
+                     alt="EventifyMIT"
+                     class="login__div--LogoName"
+                     width="300"
+                     height="40"
+                  />
+               </a>
+               <p class="login__div--titleTxt">
+                  <span class="login__div--titleHead">Welcome Back! :)</span>
+                  <br />
+                  Log in to your account to manage your events and registrations
+                  effortlessly.
+               </p>
+               <p class="sign__div--titleTxt hide">
+                  <span class="sign__div--titleHead">New to EventifyMIT?</span>
+                  <br />
+                  Sign up now to start organizing your events with ease.
+               </p>
+               <img
+                  src="../img/login/loginImg.png"
+                  alt="Event Planner"
+                  width="600"
+                  height="400"
+                  class="sign__div--img"
+               />
+               <img
+                  src="../img/login/signupImg.png"
+                  alt="Event Planner"
+                  width="600"
+                  height="400"
+                  class="login__div--img hide"
+               />
+               <form action="" class="login__form">
+                  <div class="login__form--email">
+                     <img
+                        src="../img/login/user.png"
+                        alt="email"
+                        width="50"
+                        height="50"
+                     />
+                     <div class="login__form--emailInput">
+                        <label for="email">Email</label>
+                        <input
+                           type="email"
+                           id="login__form--input--email"
+                           name="sender-email"
+                           required
+                        />
+                     </div>
+                  </div>
+                  <div class="login__form--password">
+                     <img
+                        src="../img/login/password.png"
+                        alt="password"
+                        width="50"
+                        height="50"
+                     />
+                     <div class="login__form--passInput">
+                        <label for="password">Password</label>
+                        <input
+                           type="password"
+                           id="login__form--input--pass"
+                           name="sender-password"
+                           required
+                        />
+                     </div>
+                  </div>
+                  <button class="login__form--forgotPass" role="button">
+                     Forgot Password?
+                  </button>
+                  <button class="login__form--login" role="button">
+                     Login
+                  </button>
+                  <button class="login__form--createAcc" role="button">
+                     Create Account
+                  </button>
+               </form>
+               <form action="" class="sign__form hide">
+                  <div class="sign__form--name">
+                     <img
+                        src="../img/login/user.png"
+                        alt="Name"
+                        width="35"
+                        height="35"
+                     />
+                     <div class="sign__form--nameInput">
+                        <label for="name">Name</label>
+                        <input
+                           type="text"
+                           id="sign__form--input--name"
+                           name="sender-name"
+                           required
+                        />
+                     </div>
+                  </div>
+                  <div class="sign__form--reg_no">
+                     <img
+                        src="../img/login/reg_no.png"
+                        alt="Reg No"
+                        width="35"
+                        height="35"
+                     />
+                     <div class="sign__form--reg_noInput">
+                        <label for="reg_no">Reg. No.</label>
+                        <input
+                           type="number"
+                           id="sing__form--input--reg_no"
+                           name="sender-reg_no"
+                           required
+                        />
+                     </div>
+                  </div>
+                  <div class="sign__form--email">
+                     <img
+                        src="../img/login/email.png"
+                        alt="Email"
+                        width="35"
+                        height="35"
+                     />
+                     <div class="sign__form--emailInput">
+                        <label for="email">Email</label>
+                        <input
+                           type="email"
+                           id="sign__form--input--email"
+                           name="sender-email"
+                           required
+                        />
+                     </div>
+                  </div>
+                  <div class="sign__form--phone">
+                     <img
+                        src="../img/login/phone.png"
+                        alt="Phone"
+                        width="35"
+                        height="35"
+                     />
+                     <div class="sign__form--phoneInput">
+                        <label for="phone">Phone</label>
+                        <input
+                           type="number"
+                           id="sign__form--input--phone"
+                           required
+                        />
+                     </div>
+                  </div>
+                  <div class="sign__form--pass">
+                     <img
+                        src="../img/login/password.png"
+                        alt="Password"
+                        width="35"
+                        height="35"
+                     />
+                     <div class="sign__form--passInput">
+                        <label for="password">Password</label>
+                        <input
+                           type="password"
+                           id="sign__form--input--pass"
+                           name="sender-password"
+                           required
+                        />
+                     </div>
+                  </div>
+                  <div class="sign__form--confirmPass">
+                     <img
+                        src="../img/login/confirmPass.png"
+                        alt="Confirm Password"
+                        width="35"
+                        height="35"
+                     />
+                     <div class="sign__form--confirmPassInput">
+                        <label for="confirm_pass">Confirm Password</label>
+                        <input
+                           type="password"
+                           id="sign__form--input--confirm_pass"
+                           name="sender-confirm_pass"
+                           required
+                        />
+                     </div>
+                  </div>
+                  <button class="sign__form--signUp" role="button">
+                     Sign Up
+                  </button>
+                  <button class="sign__form--existUser" role="button">
+                     Existing User
+                  </button>
+               </form>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>

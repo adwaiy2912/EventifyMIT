@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>EventifyMIT</title>
+      <link rel="icon" href="../img/Logo.png" type="image/x-icon" />
+      <link rel="stylesheet" href="../css/home.css" />
+      <script defer src="../js/home.js"></script>
+      <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
+      <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
+   </head>
+   <body>
+      <header class="p-3">
+         <div
+            class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+         >
+            <a
+               href="home.html"
+               class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
+            >
+               <img
+                  src="../img/Logo.png"
+                  alt="Logo"
+                  class="login__div--Logo"
+                  width="40"
+                  height="40"
+               />
+               <img
+                  src="../img/EventifyMIT.png"
+                  alt="EventifyMIT"
+                  class="login__div--LogoName"
+                  width="200"
+                  height="30"
+               />
+            </a>
+
+            <ul
+               class="header__ul nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+            >
+               <li>
+                  <a href="#home-hero" class="underline-hover nav-link px-3"
+                     >Home</a
+                  >
+               </li>
+               <li>
+                  <a
+                     href="#find-events"
+                     class="underline-hover nav-link px-3 text-black"
+                     >Find Events</a
+                  >
+               </li>
+               <li>
+                  <a
+                     href="#create-events"
+                     class="underline-hover nav-link px-3 text-black"
+                     >Create Events</a
+                  >
+               </li>
+               <li>
+                  <a
+                     href="#"
+                     class="underline-hover nav-link px-3 text-black d-none"
+                     >Manage Events</a
+                  >
+               </li>
+               <li>
+                  <a
+                     href="#"
+                     class="underline-hover nav-link px-3 text-black d-none"
+                     >History</a
+                  >
+               </li>
+            </ul>
+
+            <form
+               class="header__search col-lg-2 mb-3 mb-lg-0 me-lg-3"
+               role="search"
+            >
+               <input
+                  type="search"
+                  class="form-control form-control-dark text-bg-black"
+                  placeholder="Search..."
+                  aria-label="Search"
+               />
+            </form>
+
+            <div class="text-end">
+               <button type="button" class="header__login--button btn">
+                  <a href="login.html" class="text-white text-decoration-none"
+                     >Log In / Sign Up</a
+                  >
+               </button>
+            </div>
+            <a href="login.html">
+               <img
+                  src="../img/home/people.png"
+                  alt="User"
+                  width="45"
+                  height="45"
+                  class="bg-white rounded-circle d-none"
+               />
+            </a>
+         </div>
+      </header>
+      <main>
+         <div class="container col-xxl-8 px-4 py-5">
+            <section id="home-hero">
+               <div
+                  class="row flex-lg-row-reverse align-items-center g-5 py-5 min-vh-100"
+               >
+                  <div class="col-10 col-sm-8 col-lg-6">
+                     <img
+                        src="../img/home/hero.png"
+                        class="d-block mx-lg-auto img-fluid"
+                        alt="Bootstrap Themes"
+                        width="700"
+                        height="500"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="col-lg-6">
+                     <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">
+                        Simplify Event Registrations
+                     </h1>
+                     <p class="lead">
+                        Platform for effortlessly creating event registration
+                        forms that cater to conferences, races, seminars,
+                        festivals, sports tournaments, and any other event
+                        category within the Manipal Community.
+                     </p>
+                     <div
+                        class="d-grid gap-2 d-md-flex justify-content-md-start"
+                     >
+                        <button
+                           type="button"
+                           class="btn btn-outline-secondary btn-lg px-4"
+                        >
+                           Ongoing Events
+                        </button>
+                        <button
+                           type="button"
+                           class="btn btn-primary btn-lg px-4 me-md-2"
+                        >
+                           Sign Up
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </section>
+
+            <section id="find-events">
+               <div
+                  class="row flex-lg-row-reverse align-items-center g-5 py-5 min-vh-100"
+               >
+                  <div class="col-10 col-sm-8 col-lg-6">
+                     <img
+                        src="../img/home/attendee.png"
+                        class="d-block mx-lg-auto img-fluid"
+                        alt="Bootstrap Themes"
+                        width="700"
+                        height="500"
+                        loading="lazy"
+                     />
+                  </div>
+                  <div class="col-lg-6">
+                     <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">
+                        Attendees
+                     </h1>
+                     <p class="lead">
+                        A seamless registration experience to browse upcoming
+                        events, register with just a few clicks, and securely
+                        purchase tickets online. Attendees can also access event
+                        details, receive updates, and connect with the
+                        organisers through our integrated networking features.
+                     </p>
+                     <div
+                        class="d-flex gap-2 d-md-flex align-items-center justify-content-md-start"
+                     >
+                        <a
+                           href="login.html"
+                           class="main__div--arrow text-decoration-none fw-bolder fs-5"
+                           >LEARN MORE</a
+                        >
+                     </div>
+                  </div>
+               </div>
+            </section>
+
+            <section id="create-events">
+               <div
+                  class="row flex-lg-row-reverse align-items-center g-5 py-5 min-vh-100"
+               >
+                  <div class="col-lg-6">
+                     <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">
+                        Organisers
+                     </h1>
+                     <p class="lead">
+                        Manage all aspects of their events, from ticket sales
+                        and attendee communication to scheduling and logistics,
+                        all in one centralized dashboard. Our user-friendly
+                        interface allows organizers to track registrations, send
+                        automated confirmations and reminders, and easily access
+                        attendee information.
+                     </p>
+                     <div
+                        class="d-flex gap-2 d-md-flex align-items-center justify-content-md-start"
+                     >
+                        <a
+                           href="login.html"
+                           class="main__div--arrow text-decoration-none fw-bolder fs-5"
+                           >LEARN MORE</a
+                        >
+                     </div>
+                  </div>
+                  <div class="col-10 col-sm-8 col-lg-6">
+                     <img
+                        src="../img/home/organiser.png"
+                        class="d-block mx-lg-auto img-fluid"
+                        alt="Bootstrap Themes"
+                        width="700"
+                        height="500"
+                        loading="lazy"
+                     />
+                  </div>
+               </div>
+            </section>
+         </div>
+      </main>
+      <footer
+         class="d-flex flex-wrap justify-content-between align-items-center px-4 py-4 border-top"
+      >
+         <div class="col-md-6 d-flex align-items-center">
+            <a
+               href="home.html"
+               class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1"
+            >
+               <img src="../img/Logo.png" alt="logo" width="35" height="35" />
+            </a>
+            <p class="mb-3 mb-md-0 text-body-secondary">
+               Copyright &copy;
+               <span class="text-body-secondary" id="year"></span>
+               <span class="mb-3 mb-md-0 px-1 text-body-secondary"> | </span>
+               EventifyMIT
+               <span class="mb-3 mb-md-0 px-1 text-body-secondary"> | </span>
+               All rights reserved
+            </p>
+         </div>
+
+         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="ms-3">
+               <a class="text-body-secondary" href="#"
+                  ><img
+                     src="../img/home/twitter.png"
+                     alt="twitter"
+                     width="35"
+                     height="35"
+               /></a>
+            </li>
+            <li class="ms-3">
+               <a class="text-body-secondary" href="#"
+                  ><img
+                     src="../img/home/instagram.png"
+                     alt="twitter"
+                     width="35"
+                     height="35"
+               /></a>
+            </li>
+            <li class="ms-3">
+               <a class="text-body-secondary" href="#"
+                  ><img
+                     src="../img/home/github.png"
+                     alt="twitter"
+                     width="35"
+                     height="35"
+               /></a>
+            </li>
+            <li class="ms-3">
+               <a class="text-body-secondary" href="#"
+                  ><img
+                     src="../img/home/facebook.png"
+                     alt="twitter"
+                     width="35"
+                     height="35"
+               /></a>
+            </li>
+         </ul>
+      </footer>
+   </body>
+</html>
