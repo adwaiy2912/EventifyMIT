@@ -1,0 +1,54 @@
+header {
+   font-family: "Inter";
+   width: 100%;
+   position: sticky;
+   top: 0;
+   background-color: aliceblue;
+   z-index: 10;
+}
+
+.header__login--button {
+   background: linear-gradient(#b085ff, #8645ff);
+}
+
+.header__login--button:hover {
+   background: linear-gradient(#9e6aff, #611dde);
+}
+
+.header__ul {
+   margin-left: 2rem;
+}
+
+.underline-hover {
+   text-decoration: none;
+   font-size: 2rem;
+   color: black;
+   font-weight: bold;
+   position: relative;
+}
+
+.underline-hover::after {
+   content: "";
+   position: absolute;
+   height: 2px;
+   background-color: #8645ff;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   transition: transform 0.75s;
+   transform-origin: bottom right;
+   transform: scaleX(0);
+}
+
+.underline-hover:hover::after {
+   transform-origin: bottom left;
+   transform: scaleX(1);
+}
+
+main {
+   padding: 5%;
+}
+
+footer {
+   background-color: aliceblue;
+}

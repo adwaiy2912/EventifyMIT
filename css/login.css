@@ -1,34 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&family=Nunito+Sans:opsz@6..12&display=swap");
-
-*,
-*::before,
-*::after {
-   margin: 0;
-   padding: 0;
-   box-sizing: border-box;
-}
-
-img {
-   display: block;
-   max-width: 100%;
-   height: auto;
-}
-
-body {
-   min-height: 100vh;
-   max-width: 100vw;
-   font-family: "Inter";
-}
-
-label,
-button {
-   font-family: "Nunito Sans";
-}
-
-.hide {
-   display: none !important;
-}
-
 .rotate180 {
    transform: rotateY(180deg);
 }
