@@ -7,8 +7,7 @@
       <link rel="icon" href="../img/Logo.png" type="image/x-icon" />
       <link rel="stylesheet" href="../css/reset.css" />
       <link rel="stylesheet" href="../css/headerFooter.css" />
-      <link rel="stylesheet" href="../css/minEventCard.css" />
-      <script defer src="../js/minEventCard.js"></script>
+      <link rel="stylesheet" href="../css/eventCard.css" />
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
@@ -51,6 +50,7 @@
                   <a
                      href="find.html"
                      class="underline-hover nav-link px-3 text-black"
+                     style="color: #8645ff !important"
                      >Find Events</a
                   >
                </li>
@@ -70,9 +70,8 @@
                </li>
                <li>
                   <a
-                     href="#"
+                     href="history.html"
                      class="underline-hover nav-link px-3 text-black"
-                     style="color: #8645ff !important"
                      >History</a
                   >
                </li>
@@ -100,125 +99,47 @@
       </header>
 
       <main>
-         <div class="container">
-            <div
-               class="row height d-flex justify-content-center align-items-center"
-            >
-               <div class="col-md-8">
-                  <div class="search">
-                     <img
-                        src="../img/event/searchIcon.png"
-                        alt="find"
-                        width="25"
-                        height="25"
-                     />
-                     <input
-                        type="text"
-                        class="form-control"
-                        placeholder="View past registered events..."
-                     />
-                     <button class="btn btn-primary">Search</button>
+         <div class="card m-3">
+            <img src="../img/extra/attendee.jpg" alt="" class="card__image" />
+            <div class="card__overlay text-end">
+               <div class="card__header text-start">
+                  <img
+                     class="card__thumb"
+                     src="../img/event/concertIcon.png"
+                     alt="concert"
+                  />
+                  <div class="card__header-text">
+                     <h2 class="card__title text-center">Event Name</h2>
+                     <h6 class="card__subtitle mb-2 text-muted text-center">
+                        Event type
+                     </h6>
+                     <span class="card__tagline card__date"
+                        ><b>Date:</b> 01/01/2000</span
+                     >
+                     <span class="card__tagline card__deadline"
+                        ><b>Deadline:</b> 01/01/2000</span
+                     >
+                     <span class="card__tagline card__venue text-end"
+                        ><b>Venue:</b> MIT</span
+                     >
                   </div>
                </div>
+               <p class="card-text p-3 text-start">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Dolores quam doloribus sapiente ipsa et distinctio enim
+                  explicabo, ratione culpa molestias suscipit sequi nulla
+                  dolorem neque voluptates doloremque quidem accusantium
+                  eligendi? Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit.
+               </p>
+               <button class="btn btn-primary card__button d-none">
+                  Register
+               </button>
+               <p class="card__txt fw-bold text-decoration-underline">
+                  Registered
+               </p>
             </div>
          </div>
-
-         <ul class="cards">
-            <li>
-               <a href="#" class="card">
-                  <img
-                     src="../img/extra/attendee.jpg"
-                     alt=""
-                     class="card__image"
-                  />
-                  <div class="card__overlay">
-                     <div class="card__header">
-                        <img
-                           class="card__thumb"
-                           src="../img/event/sportIcon.png"
-                           alt="seminar"
-                        />
-                        <div class="card__header-text">
-                           <h3 class="card__title">Google Seminar</h3>
-                           <span class="card__tagline">Date: 01/01/2000</span>
-                           <span class="card__tagline"
-                              >Deadline: 01/01/2000</span
-                           >
-                        </div>
-                     </div>
-                     <p class="card__description">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Ipsam beatae dicta pariatur praesentium possimus
-                        dignissimos doloribus illo reiciendis voluptatem?
-                     </p>
-                     <button class="card__button btn btn-primary">
-                        View Details
-                     </button>
-                  </div>
-               </a>
-            </li>
-            <li>
-               <a href="#" class="card">
-                  <img
-                     src="../img/extra/attendee2.jpg"
-                     alt=""
-                     class="card__image"
-                  />
-                  <div class="card__overlay">
-                     <div class="card__header">
-                        <img
-                           class="card__thumb"
-                           src="../img/event/speakerIcon.png"
-                           alt="speaker"
-                        />
-                        <div class="card__header-text">
-                           <h3 class="card__title">Google Speaker</h3>
-                           <span class="card__tagline">Date: 01/01/2000</span>
-                           <span class="card__tagline"
-                              >Deadline: 01/01/2000</span
-                           >
-                        </div>
-                     </div>
-                     <p class="card__description">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Ipsam beatae dicta pariatur praesentium.
-                     </p>
-                     <button class="card__button btn btn-primary">
-                        View Details
-                     </button>
-                  </div>
-               </a>
-            </li>
-            <li>
-               <a href="#" class="card">
-                  <img src="../img/extra/hero.jpg" alt="" class="card__image" />
-                  <div class="card__overlay">
-                     <div class="card__header">
-                        <img
-                           class="card__thumb"
-                           src="../img/event/concertIcon.png"
-                           alt="concert"
-                        />
-                        <div class="card__header-text">
-                           <h3 class="card__title">Google Interview Round</h3>
-                           <span class="card__tagline">Date: 01/01/2000</span>
-                           <span class="card__tagline"
-                              >Deadline: 01/01/2000</span
-                           >
-                        </div>
-                     </div>
-                     <p class="card__description">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Ipsam beatae dicta pariatur praesentium possimus
-                        dignissimos doloribus illo reiciendis voluptatem?
-                     </p>
-                     <button class="card__button btn btn-primary">
-                        View Details
-                     </button>
-                  </div>
-               </a>
-            </li>
-         </ul>
       </main>
 
       <footer
