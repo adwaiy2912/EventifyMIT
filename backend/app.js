@@ -4,6 +4,7 @@ const odb = require("./odb");
 
 const app = express();
 app.use(express.static(path.join(__dirname, "..", "public")));
+app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
    res.sendFile(path.join(__dirname, "..", "frontend", "html", "home.html"));
@@ -30,6 +31,10 @@ app.get("/history", (req, res) => {
 });
 app.get("/event", (req, res) => {
    res.sendFile(path.join(__dirname, "..", "frontend", "html", "event.html"));
+});
+
+app.get("/api/users", (req, res) => {
+   res.status(200).json({ hey: "hey hey hey" });
 });
 
 const PORT = process.env.PORT || 3000;
