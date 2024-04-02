@@ -7,8 +7,8 @@
       <link rel="icon" href="../img/Logo.png" type="image/x-icon" />
       <link rel="stylesheet" href="../css/reset.css" />
       <link rel="stylesheet" href="../css/headerFooter.css" />
-      <link rel="stylesheet" href="../css/dashboard.css" />
-      <script defer src="../js/dashboard.js"></script>
+      <link rel="stylesheet" href="../css/minEventCard.css" />
+      <script defer src="../js/minEventCard.js"></script>
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
@@ -43,21 +43,22 @@
                <li>
                   <a
                      href="home.html"
-                     class="underline-hover nav-link px-3 text-black text-black"
+                     class="underline-hover nav-link px-3 text-black"
                      >Home</a
                   >
                </li>
                <li>
                   <a
-                     href="find.html"
+                     href="#"
                      class="underline-hover nav-link px-3 text-black"
+                     style="color: #8645ff !important"
                      >Find Events</a
                   >
                </li>
                <li>
                   <a
                      href="create.html"
-                     class="underline-hover nav-link px-3 text-black d-none"
+                     class="underline-hover nav-link px-3 text-black"
                      >Create Events</a
                   >
                </li>
@@ -77,37 +78,29 @@
                </li>
             </ul>
 
-            <div class="text-end">
-               <button type="button" class="header__login--button btn">
-                  <a href="login.html" class="text-white text-decoration-none"
-                     >LogOut</a
-                  >
-               </button>
-            </div>
+            <a href="dashboard.html">
+               <img
+                  src="../img/home/attendee.png"
+                  alt="User"
+                  width="45"
+                  height="45"
+                  class="bg-white rounded-circle"
+               />
+            </a>
+            <a href="login.html">
+               <img
+                  src="../img/home/organiser.png"
+                  alt="User"
+                  width="45"
+                  height="45"
+                  class="bg-white rounded-circle d-none"
+               />
+            </a>
          </div>
       </header>
 
-      <main>
-         <div class="profile-container">
-            <div class="profile-header">
-               <h1>Palak Agarwal</h1>
-               <p>Attendee</p>
-            </div>
-            <div class="profile-picture">
-               <img src="image.jpg" alt="Profile Picture" />
-            </div>
-            <div class="profile-info">
-               <h2>About Me</h2>
-               <ul>
-                  <li><span>Email:</span> palak.agarwal@example.com</li>
-                  <li><span>Registration No:</span> 123456789</li>
-                  <li><span>Phone:</span> +1234567890</li>
-                  <li><span>Hobbies:</span> Reading, Traveling</li>
-                  <li><span>Address:</span> Active Acres, Kolkata</li>
-               </ul>
-            </div>
-         </div>
-      </main>
+      <main></main>
+      <!--  do changes here -->
 
       <footer
          class="d-flex flex-wrap justify-content-between align-items-center px-4 py-4 border-top"
