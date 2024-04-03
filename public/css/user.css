@@ -30,6 +30,7 @@
 }
 
 .login__div--content {
+   min-height: 550px;
    width: 80vw;
    height: auto;
    height: 75vh;
@@ -95,12 +96,12 @@
 }
 
 .login__form {
-   grid-template: repeat(2, 1.5fr) 0.5fr 1fr / repeat(2, 1fr);
+   grid-template: repeat(2, 1fr) / repeat(2, 1fr);
    gap: 1rem;
 }
 
 .sign__form {
-   grid-template: repeat(3, 1fr) / repeat(2, 1fr);
+   grid-template: repeat(5, 1fr) / repeat(2, 1fr);
    gap: 0.5rem;
 }
 
@@ -137,7 +138,8 @@
 .sign__form--emailInput,
 .sign__form--phoneInput,
 .sign__form--passInput,
-.sign__form--confirmPassInput {
+.sign__form--confirmPassInput,
+.sign__form--radio {
    width: 100%;
    display: flex;
    flex-flow: column wrap;
@@ -156,6 +158,47 @@
    height: 1.5rem;
    font-size: 0.9rem;
    padding: 5px;
+}
+
+.sign__form--radio {
+   display: flex;
+   flex-flow: row wrap;
+   justify-content: space-evenly;
+   align-items: center;
+   gap: 1rem;
+}
+
+.sign__form--radio input {
+   display: none;
+}
+.sign__form--radio label {
+   color: #4285f4;
+   border: 2px solid #4285f4;
+   border-radius: 5px;
+   padding: 0.5rem 1.5rem;
+   cursor: pointer;
+}
+
+.sign__form--radio label::after {
+   content: "";
+}
+.sign__form--radio label::before {
+   content: "";
+   display: inline-flex;
+   height: 20px;
+   width: 20px;
+   border: 5px solid #9ac0ff;
+   border-radius: 50%;
+   margin-right: 10px;
+}
+
+.sign__form--radio input:checked + label {
+   background-color: #4285f4;
+   color: white;
+}
+.sign__form--radio input:checked + label::before {
+   border-color: white;
+   background-color: #1b72ff;
 }
 
 .login__form--email {
@@ -228,6 +271,9 @@
 .sign__form--confirmPass {
    grid-area: 3 / 2 / 4 / 3;
 }
+.sign__form--radio {
+   grid-area: 4 / 1 / 5 / 3;
+}
 
 .login__form--login {
    margin-left: 4rem;
@@ -237,10 +283,10 @@
 }
 
 .sign__form--signUp {
-   margin: 2rem 0 2rem 4rem;
+   margin: 0.5rem 0 2rem 4rem;
 }
 .sign__form--existUser {
-   margin: 2rem 4rem 2rem 0;
+   margin: 0.5rem 4rem 2rem 0;
 }
 
 @media screen and (max-width: 1200px) {
@@ -356,7 +402,7 @@
    }
 
    .sign__form {
-      grid-template: repeat(7, 1fr) / repeat(2, 1fr);
+      grid-template: repeat(8, 1fr) / repeat(2, 1fr);
    }
 
    .sign__form--name {
@@ -376,6 +422,9 @@
    }
    .sign__form--confirmPass {
       grid-area: 6 / 1 / 7 / 3;
+   }
+   .sign__form--radio {
+      grid-area: 7 / 1 / 8 / 3;
    }
 
    .login__form--login {

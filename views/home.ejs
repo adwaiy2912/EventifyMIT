@@ -45,6 +45,7 @@
                      >Home</a
                   >
                </li>
+               <% if (!isAuth) { %>
                <li>
                   <a
                      href="#find-events"
@@ -59,20 +60,38 @@
                      >Create Events</a
                   >
                </li>
+               <% } else { %> <% if (user === 'attendee') { %>
                <li>
                   <a
-                     href="manage"
+                     href="/find"
+                     class="underline-hover nav-link px-3 text-black"
+                     >Find Events</a
+                  >
+               </li>
+               <% } else { %>
+               <li>
+                  <a
+                     href="/create"
+                     class="underline-hover nav-link px-3 text-black"
+                     >Create Events</a
+                  >
+               </li>
+               <% } %>
+               <li>
+                  <a
+                     href="/manage"
                      class="underline-hover nav-link px-3 text-black d-none"
                      >Manage Events</a
                   >
                </li>
                <li>
                   <a
-                     href="history"
+                     href="/history"
                      class="underline-hover nav-link px-3 text-black d-none"
                      >History</a
                   >
                </li>
+               <% } %>
             </ul>
 
             <form
@@ -87,6 +106,7 @@
                />
             </form>
 
+            <% if (!isAuth) { %>
             <div class="text-end">
                <button type="button" class="header__login--button btn">
                   <a href="user" class="text-white text-decoration-none"
@@ -94,6 +114,7 @@
                   >
                </button>
             </div>
+            <% } else { %>
             <a href="dashboard">
                <img
                   src="../img/home/attendee.png"
@@ -112,6 +133,7 @@
                   class="bg-white rounded-circle d-none"
                />
             </a>
+            <% } %>
          </div>
       </header>
       <main>

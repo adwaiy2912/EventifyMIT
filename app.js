@@ -13,11 +13,13 @@ const users = [
    {
       name: "aa",
       email: "a@a",
+      userType: "attendee",
       password: "$2b$10$di1ITxB121VUr9FfJghrv.JucYsyWl7MkVTE.JpKHgfRLAw3rbr7W",
    },
    {
       name: "bb",
       email: "b@b",
+      userType: "organiser",
       password: "$2b$10$YgNPt15so5Qk4Tq04/wB0u4uQowqGiJwmitseddvN26bbE6.ADgbK",
    },
 ];
@@ -68,7 +70,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "..", "frontend")));
+
+app.use(express.static("public"));
+app.set("views", "./views");
+app.set("view engine", "ejs");
 
 app.delete("/logout", (req, res, next) => {
    req.logOut((err) => {
@@ -93,30 +98,31 @@ checkNotAuthenticated = (req, res, next) => {
 };
 
 app.get("/", (req, res) => {
-   res.sendFile(path.join(__dirname, "..", "frontend", "html", "home.html"));
+   res.render("home", {
+      isAuth: req.isAuthenticated(),
+      user: req.body.userType,
+   });
 });
-app.get("/user", (req, res) => {
-   res.sendFile(path.join(__dirname, "..", "frontend", "html", "user.html"));
+app.get("/user", checkNotAuthenticated, (req, res) => {
+   res.render("user", { user: req.body.userType });
 });
 app.get("/dashboard", checkAuthenticated, (req, res) => {
-   res.sendFile(
-      path.join(__dirname, "..", "frontend", "html", "dashboard.html")
-   );
+   res.render("dashboard", { user: req.body.userType });
 });
 app.get("/find", checkAuthenticated, (req, res) => {
-   res.sendFile(path.join(__dirname, "..", "frontend", "html", "find.html"));
+   res.render("find", { user: req.body.userType });
 });
 app.get("/create", checkAuthenticated, (req, res) => {
-   res.sendFile(path.join(__dirname, "..", "frontend", "html", "create.html"));
+   res.render("create", { user: req.body.userType });
 });
 app.get("/manage", checkAuthenticated, (req, res) => {
-   res.sendFile(path.join(__dirname, "..", "frontend", "html", "manage.html"));
+   res.render("manage", { user: req.body.userType });
 });
 app.get("/history", checkAuthenticated, (req, res) => {
-   res.sendFile(path.join(__dirname, "..", "frontend", "html", "history.html"));
+   res.render("history", { user: req.body.userType });
 });
 app.get("/event", checkAuthenticated, (req, res) => {
-   res.sendFile(path.join(__dirname, "..", "frontend", "html", "event.html"));
+   res.render("event", { user: req.body.userType });
 });
 
 /*
@@ -132,29 +138,32 @@ app.post(
       failureFlash: true,
    })
 );
-*/
 
 app.get("/register", (req, res) => {
-   res.sendFile(
-      path.join(__dirname, "..", "frontend", "html", "register.html")
-   );
+   res.render("register");
 });
+*/
 
-app.post("/register", async (req, res) => {
+app.post("/user/signup", async (req, res) => {
    try {
+      console.log(req.body);
+      console.log(req.body.userType);
       const existingUser = users.find((user) => user.email === req.body.email);
+      // const existingUser = use_SQL_to_check_for_exist_User(email);
       if (existingUser) {
-         return res.status(400).send("User with this email already exists.");
+         res.redirect("/user", { message: "Email already in use" });
       }
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       users.push({
          name: req.body.name,
          email: req.body.email,
+         userType: req.body.userType,
          password: hashedPassword,
       });
-      res.redirect("/user");
+      // push data into attendee or organiser table
+      res.redirect("/", { message: "User registered successfully" });
    } catch {
-      res.redirect("/register");
+      res.redirect("/user", { message: "Some error occured" });
    }
    console.log(users);
 });
@@ -163,20 +172,20 @@ app.post("/register", async (req, res) => {
 app.post("/user/login", async (req, res) => {
    try {
       const { email, password } = req.body;
-      const user = null;
-      // const user = use_SQL_to_get_email(email);
-      if (user == null) {
-         return res.status(404).send({});
+      const mail = users.find((user) => user.email === req.body.email);
+      // const mail = use_SQL_to_get_email(email);
+      if (mail == null) {
+         res.redirect("/user", { message: "Email not found" });
       }
-      if (pass === "abc") {
+      if (await bcrypt.compare(password, mail.password)) {
          // if (await bcrypt.compare(use_SQL_to_get_pass(email), password)) {
-         return res.status(200).send({});
+         res.redirect("/");
       } else {
-         return res.status(403).send({});
+         res.redirect("/user", { message: "Invalid email or password" });
       }
    } catch (error) {
       console.error("Login error:", error);
-      return res.status(500).send({});
+      res.redirect("/user", { message: "Some error occured" });
    }
 });
 */
@@ -185,11 +194,10 @@ app.post(
    "/user/login",
    passport.authenticate("local", {
       successRedirect: "/",
-      failureRedirect: "/register",
+      failureRedirect: "/user",
       failureFlash: true,
    })
 );
-
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {

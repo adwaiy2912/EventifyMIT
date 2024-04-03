@@ -80,7 +80,6 @@
                            type="email"
                            id="login__form--input--email"
                            name="email"
-                           value="a@a"
                            required
                         />
                      </div>
@@ -98,7 +97,6 @@
                            type="password"
                            id="login__form--input--pass"
                            name="password"
-                           value="aa"
                            required
                         />
                      </div>
@@ -113,12 +111,15 @@
                   >
                      Login
                   </button>
-                  <button class="login__form--createAcc">Create Account</button>
+                  <button class="login__form--createAcc" type="button">
+                     Create Account
+                  </button>
                </form>
                <form
                   action="/user/signup"
                   method="post"
                   class="sign__form hide"
+                  id="signForm"
                >
                   <div class="sign__form--name">
                      <img
@@ -132,7 +133,7 @@
                         <input
                            type="text"
                            id="sign__form--input--name"
-                           name="sender-name"
+                           name="name"
                            required
                         />
                      </div>
@@ -149,7 +150,7 @@
                         <input
                            type="number"
                            id="sing__form--input--reg_no"
-                           name="sender-reg_no"
+                           name="regNo"
                            required
                         />
                      </div>
@@ -166,7 +167,7 @@
                         <input
                            type="email"
                            id="sign__form--input--email"
-                           name="sender-email"
+                           name="email"
                            required
                         />
                      </div>
@@ -183,6 +184,7 @@
                         <input
                            type="number"
                            id="sign__form--input--phone"
+                           name="phone"
                            required
                         />
                      </div>
@@ -199,7 +201,7 @@
                         <input
                            type="password"
                            id="sign__form--input--pass"
-                           name="sender-password"
+                           name="password"
                            required
                         />
                      </div>
@@ -216,12 +218,33 @@
                         <input
                            type="password"
                            id="sign__form--input--confirm_pass"
-                           name="sender-confirm_pass"
+                           name="confirmPassword"
                            required
                         />
                      </div>
                   </div>
-                  <button class="sign__form--signUp" role="button">
+                  <div class="sign__form--radio">
+                     <input
+                        type="radio"
+                        name="userType"
+                        id="attendee"
+                        value="attendee"
+                        checked="checked"
+                     />
+                     <label for="attendee">Attendee</label>
+                     <input
+                        type="radio"
+                        name="userType"
+                        id="organiser"
+                        value="organiser"
+                     />
+                     <label for="organiser">Organiser</label>
+                  </div>
+                  <button
+                     class="sign__form--signUp"
+                     role="button"
+                     type="submit"
+                  >
                      Sign Up
                   </button>
                   <button class="sign__form--existUser" role="button">
