@@ -1,4 +1,8 @@
 .profile-container {
+   display: flex;
+   flex-flow: column nowrap;
+   justify-content: center;
+   align-items: flex-start;
    max-width: 600px;
    margin: 20px auto;
    padding: 20px;

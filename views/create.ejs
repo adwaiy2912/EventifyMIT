@@ -17,74 +17,83 @@
 
       <main>
          <main>
-            <div class="event-container">
-               <div class="event-info">
-                  <form action="/submit_form" method="post">
-                     <label for="name">Name:</label>
-                     <input type="text" id="name" name="name" required />
+            <div class="event-container d-flex justify-content-center">
+               <form action="/submit_form" method="post" class="eventForm">
+                  <label for="name">Name</label>
+                  <input type="text" id="name" name="name" required />
 
-                     <label for="venue">Venue:</label>
-                     <input type="text" id="venue" name="venue" required />
+                  <label for="description">Description</label>
+                  <textarea
+                     type="text"
+                     id="description"
+                     name="description"
+                     required
+                  ></textarea>
 
-                     <label for="date">Date:</label>
-                     <input type="date" id="date" name="date" required />
+                  <label for="date">Date</label>
+                  <input type="date" id="date" name="date" required />
 
-                     <label for="time">Time:</label>
-                     <input type="time" id="time" name="time" required />
+                  <label for="time">Time</label>
+                  <input type="time" id="time" name="time" required />
 
-                     <label for="duration">Duration:</label>
-                     <input
-                        type="number"
-                        id="duration"
-                        name="duration"
-                        required
-                     />
+                  <label for="venue">Venue</label>
+                  <input type="text" id="venue" name="venue" required />
 
-                     <label for="message">Fee:</label>
-                     <input id="text" id="fee" name="fee" required />
+                  <label for="fee">Fee</label>
+                  <input
+                     id="text"
+                     id="fee"
+                     name="fee"
+                     placeholder="Enter 0 if free"
+                     required
+                  />
 
-                     <label>Event Type:</label>
-                     <div class="checkbox-group">
+                  <label class="eventLabel">Event Type</label>
+                  <div class="checkbox-group">
+                     <div>
                         <input
                            type="checkbox"
-                           id="interest1"
-                           name="Event type"
+                           id="cultural"
+                           name="eventType"
+                           value="cultural"
+                        />
+                        <label for="cultural">Cultural</label>
+                     </div>
+                     <div>
+                        <input
+                           type="checkbox"
+                           id="workshop"
+                           name="eventType"
+                           value="workshop"
+                        />
+                        <label for="workshop">Workshop</label>
+                     </div>
+                     <div>
+                        <input
+                           type="checkbox"
+                           id="sports"
+                           name="eventType"
                            value="sports"
                         />
-                        <label for="interest1">Sports</label>
-                        <input
-                           type="checkbox"
-                           id="interest2"
-                           name="Event type"
-                           value="music"
-                        />
-                        <label for="interest2">Music</label>
-                        <input
-                           type="checkbox"
-                           id="interest3"
-                           name="Event type"
-                           value="dance"
-                        />
-                        <label for="interest3">Dance</label>
-                        <input
-                           type="checkbox"
-                           id="interest3"
-                           name="Event type"
-                           value="debate"
-                        />
-                        <label for="interest3">Debate</label>
-                        <input
-                           type="checkbox"
-                           id="interest3"
-                           name="Event type"
-                           value="sketching"
-                        />
-                        <label for="interest3">Sketching</label>
+                        <label for="sports">Sports</label>
                      </div>
+                     <div>
+                        <input
+                           type="checkbox"
+                           id="talk"
+                           name="eventType"
+                           value="talk"
+                        />
+                        <label for="talk">Talk</label>
+                     </div>
+                  </div>
 
-                     <input type="submit" value="Register" />
-                  </form>
-               </div>
+                  <input
+                     type="submit"
+                     value="Register"
+                     class="btn btn-primary"
+                  />
+               </form>
             </div>
          </main>
       </main>

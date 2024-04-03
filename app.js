@@ -11,20 +11,20 @@ require("dotenv").config();
 
 const users = [
    {
-      name: "aa",
-      email: "a@a",
+      name: "Adwaiy Singh",
+      email: "adwaiy@gmail.com",
       userType: "attendee",
-      regNo: "11",
-      phone: "11",
-      password: "$2b$10$di1ITxB121VUr9FfJghrv.JucYsyWl7MkVTE.JpKHgfRLAw3rbr7W",
+      regNo: "220968424",
+      phone: "9876543210",
+      password: "$2b$10$di1ITxB121VUr9FfJghrv.JucYsyWl7MkVTE.JpKHgfRLAw3rbr7W", // aa
    },
    {
-      name: "bb",
-      email: "b@b",
+      name: "Just a Name",
+      email: "random@mail.com",
       userType: "organiser",
-      regNo: "22",
-      phone: "22",
-      password: "$2b$10$YgNPt15so5Qk4Tq04/wB0u4uQowqGiJwmitseddvN26bbE6.ADgbK",
+      regNo: "1234567890",
+      phone: "0000000000",
+      password: "$2b$10$YgNPt15so5Qk4Tq04/wB0u4uQowqGiJwmitseddvN26bbE6.ADgbK", // bb
    },
 ];
 
@@ -159,12 +159,13 @@ app.post("/user/signup", async (req, res) => {
       console.log(req.body);
       console.log(req.body.userType);
       const existingUser = users.find((user) => user.email === req.body.email);
+      console.log(existingUser);
       // const existingUser = use_SQL_to_check_for_exist_User(email);
       if (existingUser) {
-         res.redirect("/user", { message: "Email already in use" });
+         return res.status(400).redirect("/user");
       }
-      if (req.body.password == req.body.confirmPassword) {
-         res.redirect("/user", { message: "Password not matching" });
+      if (req.body.password !== req.body.confirmPassword) {
+         return res.status(403).redirect("/user");
       }
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       users.push({
@@ -176,9 +177,9 @@ app.post("/user/signup", async (req, res) => {
          password: hashedPassword,
       });
       // push data into attendee or organiser table
-      res.redirect("/home", { message: "User registered successfully" });
+      return res.status(200).redirect("/home");
    } catch {
-      res.redirect("/user", { message: "Some error occured there" });
+      return res.status(500).redirect("/user");
    }
    console.log(users);
 });
