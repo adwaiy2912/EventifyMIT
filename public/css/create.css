@@ -1,1 +1,54 @@
-/* add css here */
+form {
+   width: 600px;
+   padding: 20px;
+   border: 1px solid #ccc;
+   border-radius: 5px;
+   background-color: #f9f9f9;
+}
+
+label {
+   display: block;
+   margin-bottom: 10px;
+   font-weight: bold;
+}
+
+input[type="text"],
+input[type="text"],
+input[type="date"],
+input[type="time"],
+input[type="text"],
+textarea,
+select {
+   width: calc(100% - 22px);
+   padding: 8px;
+   margin-bottom: 10px;
+   border: 1px solid #ccc;
+   border-radius: 3px;
+   box-sizing: border-box;
+}
+
+input[type="submit"] {
+   background-color: #4caf50;
+   color: white;
+   padding: 10px 20px;
+   border: none;
+   border-radius: 3px;
+   cursor: pointer;
+}
+
+input[type="checkbox"] {
+   margin-right: 5px;
+}
+
+.checkbox-group {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+.checkbox-group label {
+   margin-right: 15px;
+}
+
+input[type="submit"]:hover {
+   background-color: #45a049;
+}

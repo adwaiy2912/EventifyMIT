@@ -1,0 +1,89 @@
+<header class="p-3">
+   <div
+      class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+   >
+      <a
+         href="/"
+         class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
+      >
+         <img
+            src="../img/Logo.png"
+            alt="Logo"
+            class="login__div--Logo"
+            width="40"
+            height="40"
+         />
+         <img
+            src="../img/EventifyMIT.png"
+            alt="EventifyMIT"
+            class="login__div--LogoName"
+            width="200"
+            height="30"
+         />
+      </a>
+
+      <ul
+         class="header__ul nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+      >
+         <li>
+            <a href="/" class="underline-hover nav-link px-3 text-black"
+               >Home</a
+            >
+         </li>
+         <% if (user === 'attendee') { %>
+         <li>
+            <a href="/find" class="underline-hover nav-link px-3 text-black"
+               >Find Events</a
+            >
+         </li>
+         <% } else { %>
+         <li>
+            <a href="/create" class="underline-hover nav-link px-3 text-black"
+               >Create Events</a
+            >
+         </li>
+         <% } %>
+         <li>
+            <a href="/manage" class="underline-hover nav-link px-3 text-black"
+               >Manage Events</a
+            >
+         </li>
+         <li>
+            <a href="/history" class="underline-hover nav-link px-3 text-black"
+               >History</a
+            >
+         </li>
+      </ul>
+
+      <form class="header__search col-lg-2 mb-3 mb-lg-0 me-lg-3" role="search">
+         <input
+            type="search"
+            class="form-control form-control-dark text-bg-black"
+            placeholder="Search..."
+            aria-label="Search"
+         />
+      </form>
+
+      <% if (user === 'attendee') { %>
+      <a href="dashboard">
+         <img
+            src="../img/home/attendee.png"
+            alt="User"
+            width="45"
+            height="45"
+            class="bg-white rounded-circle"
+         />
+      </a>
+      <% } else { %>
+      <a href="dashboard">
+         <img
+            src="../img/home/organiser.png"
+            alt="User"
+            width="45"
+            height="45"
+            class="bg-white rounded-circle"
+         />
+      </a>
+      <% } %>
+   </div>
+</header>

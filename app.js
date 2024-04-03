@@ -14,12 +14,16 @@ const users = [
       name: "aa",
       email: "a@a",
       userType: "attendee",
+      regNo: "11",
+      phone: "11",
       password: "$2b$10$di1ITxB121VUr9FfJghrv.JucYsyWl7MkVTE.JpKHgfRLAw3rbr7W",
    },
    {
       name: "bb",
       email: "b@b",
       userType: "organiser",
+      regNo: "22",
+      phone: "22",
       password: "$2b$10$YgNPt15so5Qk4Tq04/wB0u4uQowqGiJwmitseddvN26bbE6.ADgbK",
    },
 ];
@@ -88,41 +92,47 @@ checkAuthenticated = (req, res, next) => {
       return next();
    }
 
-   res.redirect("/user");
+   res.redirect("/");
 };
 checkNotAuthenticated = (req, res, next) => {
    if (req.isAuthenticated()) {
-      return res.redirect("/");
+      return res.redirect("/home");
    }
    next();
 };
 
-app.get("/", (req, res) => {
-   res.render("home", {
-      isAuth: req.isAuthenticated(),
-      user: req.body.userType,
-   });
+app.get("/", checkNotAuthenticated, (req, res) => {
+   res.render("root", {});
+});
+app.get("/home", checkAuthenticated, (req, res) => {
+   res.render("home", { user: req.user.userType });
 });
 app.get("/user", checkNotAuthenticated, (req, res) => {
-   res.render("user", { user: req.body.userType });
+   res.render("user", {});
 });
 app.get("/dashboard", checkAuthenticated, (req, res) => {
-   res.render("dashboard", { user: req.body.userType });
+   res.render("dashboard", {
+      user: req.user.userType,
+      name: req.user.name,
+      email: req.user.email,
+      phone: req.user.phone,
+      regNo: req.user.regNo,
+   });
 });
 app.get("/find", checkAuthenticated, (req, res) => {
-   res.render("find", { user: req.body.userType });
+   res.render("find", { user: req.user.userType });
 });
 app.get("/create", checkAuthenticated, (req, res) => {
-   res.render("create", { user: req.body.userType });
+   res.render("create", { user: req.user.userType });
 });
 app.get("/manage", checkAuthenticated, (req, res) => {
-   res.render("manage", { user: req.body.userType });
+   res.render("manage", { user: req.user.userType });
 });
 app.get("/history", checkAuthenticated, (req, res) => {
-   res.render("history", { user: req.body.userType });
+   res.render("history", { user: req.user.userType });
 });
 app.get("/event", checkAuthenticated, (req, res) => {
-   res.render("event", { user: req.body.userType });
+   res.render("event", { user: req.user.userType });
 });
 
 /*
@@ -153,17 +163,22 @@ app.post("/user/signup", async (req, res) => {
       if (existingUser) {
          res.redirect("/user", { message: "Email already in use" });
       }
+      if (req.body.password == req.body.confirmPassword) {
+         res.redirect("/user", { message: "Password not matching" });
+      }
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       users.push({
          name: req.body.name,
          email: req.body.email,
          userType: req.body.userType,
+         regNo: req.body.regNo,
+         phone: req.body.phone,
          password: hashedPassword,
       });
       // push data into attendee or organiser table
-      res.redirect("/", { message: "User registered successfully" });
+      res.redirect("/home", { message: "User registered successfully" });
    } catch {
-      res.redirect("/user", { message: "Some error occured" });
+      res.redirect("/user", { message: "Some error occured there" });
    }
    console.log(users);
 });
@@ -190,11 +205,15 @@ app.post("/user/login", async (req, res) => {
 });
 */
 
+app.get("/test", async (req, res) => {
+   res.status(200).render(odb.queryTable);
+});
+
 app.post(
    "/user/login",
    passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/user",
+      successRedirect: "/home",
+      failureRedirect: "/",
       failureFlash: true,
    })
 );

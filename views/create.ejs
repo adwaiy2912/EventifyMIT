@@ -7,157 +7,88 @@
       <link rel="icon" href="../img/Logo.png" type="image/x-icon" />
       <link rel="stylesheet" href="../css/reset.css" />
       <link rel="stylesheet" href="../css/headerFooter.css" />
-      <link rel="stylesheet" href="../css/minEventCard.css" />
+      <link rel="stylesheet" href="../css/create.css" />
       <script defer src="../js/minEventCard.js"></script>
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
    <body>
-      <header class="p-3">
-         <div
-            class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
-         >
-            <a
-               href="/"
-               class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
-            >
-               <img
-                  src="../img/Logo.png"
-                  alt="Logo"
-                  class="login__div--Logo"
-                  width="40"
-                  height="40"
-               />
-               <img
-                  src="../img/EventifyMIT.png"
-                  alt="EventifyMIT"
-                  class="login__div--LogoName"
-                  width="200"
-                  height="30"
-               />
-            </a>
+      <%- include("layout/header")%>
 
-            <ul
-               class="header__ul nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
-            >
-               <li>
-                  <a href="/" class="underline-hover nav-link px-3 text-black"
-                     >Home</a
-                  >
-               </li>
-               <li>
-                  <a
-                     href="#"
-                     class="underline-hover nav-link px-3 text-black"
-                     style="color: #8645ff !important"
-                     >Find Events</a
-                  >
-               </li>
-               <li>
-                  <a
-                     href="create"
-                     class="underline-hover nav-link px-3 text-black"
-                     >Create Events</a
-                  >
-               </li>
-               <li>
-                  <a
-                     href="manage"
-                     class="underline-hover nav-link px-3 text-black"
-                     >Manage Events</a
-                  >
-               </li>
-               <li>
-                  <a
-                     href="history"
-                     class="underline-hover nav-link px-3 text-black"
-                     >History</a
-                  >
-               </li>
-            </ul>
+      <main>
+         <main>
+            <div class="event-container">
+               <div class="event-info">
+                  <form action="/submit_form" method="post">
+                     <label for="name">Name:</label>
+                     <input type="text" id="name" name="name" required />
 
-            <a href="dashboard">
-               <img
-                  src="../img/home/attendee.png"
-                  alt="User"
-                  width="45"
-                  height="45"
-                  class="bg-white rounded-circle"
-               />
-            </a>
-            <a href="dashboard">
-               <img
-                  src="../img/home/organiser.png"
-                  alt="User"
-                  width="45"
-                  height="45"
-                  class="bg-white rounded-circle d-none"
-               />
-            </a>
-         </div>
-      </header>
+                     <label for="venue">Venue:</label>
+                     <input type="text" id="venue" name="venue" required />
 
-      <main></main>
-      <!--  do changes here -->
+                     <label for="date">Date:</label>
+                     <input type="date" id="date" name="date" required />
 
-      <footer
-         class="d-flex flex-wrap justify-content-between align-items-center px-4 py-4 border-top"
-      >
-         <div class="col-md-6 d-flex align-items-center">
-            <a
-               href="/"
-               class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1"
-            >
-               <img src="../img/Logo.png" alt="logo" width="35" height="35" />
-            </a>
-            <p class="mb-3 mb-md-0 text-body-secondary">
-               Copyright &copy;
-               <span class="text-body-secondary" id="year"></span>
-               <span class="mb-3 mb-md-0 px-1 text-body-secondary"> | </span>
-               EventifyMIT
-               <span class="mb-3 mb-md-0 px-1 text-body-secondary"> | </span>
-               All rights reserved
-            </p>
-         </div>
+                     <label for="time">Time:</label>
+                     <input type="time" id="time" name="time" required />
 
-         <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-            <li class="ms-3">
-               <a class="text-body-secondary" href="#"
-                  ><img
-                     src="../img/home/twitter.png"
-                     alt="twitter"
-                     width="35"
-                     height="35"
-               /></a>
-            </li>
-            <li class="ms-3">
-               <a class="text-body-secondary" href="#"
-                  ><img
-                     src="../img/home/instagram.png"
-                     alt="twitter"
-                     width="35"
-                     height="35"
-               /></a>
-            </li>
-            <li class="ms-3">
-               <a class="text-body-secondary" href="#"
-                  ><img
-                     src="../img/home/github.png"
-                     alt="twitter"
-                     width="35"
-                     height="35"
-               /></a>
-            </li>
-            <li class="ms-3">
-               <a class="text-body-secondary" href="#"
-                  ><img
-                     src="../img/home/facebook.png"
-                     alt="twitter"
-                     width="35"
-                     height="35"
-               /></a>
-            </li>
-         </ul>
-      </footer>
+                     <label for="duration">Duration:</label>
+                     <input
+                        type="number"
+                        id="duration"
+                        name="duration"
+                        required
+                     />
+
+                     <label for="message">Fee:</label>
+                     <input id="text" id="fee" name="fee" required />
+
+                     <label>Event Type:</label>
+                     <div class="checkbox-group">
+                        <input
+                           type="checkbox"
+                           id="interest1"
+                           name="Event type"
+                           value="sports"
+                        />
+                        <label for="interest1">Sports</label>
+                        <input
+                           type="checkbox"
+                           id="interest2"
+                           name="Event type"
+                           value="music"
+                        />
+                        <label for="interest2">Music</label>
+                        <input
+                           type="checkbox"
+                           id="interest3"
+                           name="Event type"
+                           value="dance"
+                        />
+                        <label for="interest3">Dance</label>
+                        <input
+                           type="checkbox"
+                           id="interest3"
+                           name="Event type"
+                           value="debate"
+                        />
+                        <label for="interest3">Debate</label>
+                        <input
+                           type="checkbox"
+                           id="interest3"
+                           name="Event type"
+                           value="sketching"
+                        />
+                        <label for="interest3">Sketching</label>
+                     </div>
+
+                     <input type="submit" value="Register" />
+                  </form>
+               </div>
+            </div>
+         </main>
+      </main>
+
+      <%- include("layout/footer")%>
    </body>
 </html>
