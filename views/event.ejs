@@ -25,35 +25,37 @@
                      alt="concert"
                   />
                   <div class="card__header-text">
-                     <h2 class="card__title text-center">Event Name</h2>
+                     <h2 class="card__title text-center"><%= name %></h2>
                      <h6 class="card__subtitle mb-2 text-muted text-center">
-                        Event type
+                        <%= type %>
                      </h6>
                      <span class="card__tagline card__date"
-                        ><b>Date:</b> 01/01/2000</span
+                        ><b>Date: </b><%= date + ", " + time %></span
                      >
                      <span class="card__tagline card__deadline"
-                        ><b>Deadline:</b> 01/01/2000</span
+                        ><b>Deadline: </b><%= deadline %></span
                      >
                      <span class="card__tagline card__venue text-end"
-                        ><b>Venue:</b> MIT</span
+                        ><b>Venue:</b> <%= venue %></span
                      >
                   </div>
                </div>
-               <p class="card-text p-3 text-start">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Dolores quam doloribus sapiente ipsa et distinctio enim
-                  explicabo, ratione culpa molestias suscipit sequi nulla
-                  dolorem neque voluptates doloremque quidem accusantium
-                  eligendi? Lorem ipsum dolor sit amet consectetur adipisicing
-                  elit.
-               </p>
-               <button class="btn btn-primary card__button d-none">
-                  Register
-               </button>
+               <p class="card-text p-3 text-start"><%= desc %></p>
+
+               <% if (user === 'ATTENDEE') { %> <% if (status === 1) { %>
                <p class="card__txt fw-bold text-decoration-underline">
                   Registered
                </p>
+               <% } else { %>
+               <button class="btn btn-primary card__button">Register</button>
+               <% } %> <% } else { %>
+               <div class="d-flex justify-content-between w-100 p-4">
+                  <button class="btn btn-secondary">Edit Event</button>
+                  <button class="btn btn-primary" type="submit">
+                     View Details
+                  </button>
+               </div>
+               <% } %>
             </div>
          </div>
       </main>

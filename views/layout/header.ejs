@@ -30,7 +30,7 @@
                >Home</a
             >
          </li>
-         <% if (user === 'attendee') { %>
+         <% if (user === 'ATTENDEE') { %>
          <li>
             <a href="/find" class="underline-hover nav-link px-3 text-black"
                >Find Events</a
@@ -64,7 +64,7 @@
          />
       </form>
 
-      <% if (user === 'attendee') { %>
+      <% if (user === 'ATTENDEE') { %>
       <a href="dashboard">
          <img
             src="../img/home/attendee.png"
@@ -77,7 +77,7 @@
       <% } else { %>
       <a href="dashboard">
          <img
-            src="../img/home/organiser.png"
+            src="../img/home/organizer.png"
             alt="User"
             width="45"
             height="45"
