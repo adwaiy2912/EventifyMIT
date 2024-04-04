@@ -16,7 +16,7 @@ const eventData = require("./eventData.js");
 const dbConfig = {
    user: "SYSTEM",
    password: "tiger",
-   connectString: "tcp://0.tcp.in.ngrok.io:17417/XEPDB1",
+   connectString: "tcp://0.tcp.in.ngrok.io:14527/XEPDB1",
 };
 
 passport.use(
@@ -164,19 +164,20 @@ app.get("/history", checkAuthenticated, (req, res) => {
    res.render("history", { user: req.user[6] });
 });
 
-generateUniqueKey = (email) => {
+generateUniqueKey = (email, length) => {
    const hash = crypto.createHash("sha256");
    hash.update(email);
    const hashedEmail = hash.digest("hex");
    const decimalString = BigInt(`0x${hashedEmail}`).toString();
-   const key = decimalString.slice(0, 38).padStart(38, "0");
+   const key = decimalString.slice(0, length).padStart(length, "0");
    return key;
 };
+
 sqlCheckForExistUser = async (email) => {
    try {
       const connection = await oracledb.getConnection(dbConfig);
       const result = await connection.execute(
-         `SELECT * FROM attendee_organizer_emails WHERE EMAIL = :email`,
+         `SELECT * FROM attendee_organizer_combined WHERE EMAIL = :email`,
          [email]
       );
 
@@ -193,9 +194,14 @@ sqlCheckForExistUser = async (email) => {
 };
 sqlInsertIntoTable = async (data) => {
    try {
-      const table = data[6] === "organizer" ? "ORGANIZERS" : "ATTENDEES";
+      const table =
+         data.type === "organizer"
+            ? "ORGANIZERS"
+            : data.type === "attendee"
+            ? "ATTENDEES"
+            : "";
       const hashedPassword = await bcrypt.hash(data.password, 10);
-      const key = await generateUniqueKey(data.email);
+      const key = await generateUniqueKey(data.email, 20);
       const connection = await oracledb.getConnection(dbConfig);
 
       await connection.execute(
@@ -220,14 +226,18 @@ app.post("/user/signup", async (req, res) => {
       // const userCheck = users.find((user) => user.email === req.body.email);
       const userCheck = await sqlCheckForExistUser(req.body.email);
       if (!userCheck) {
+         console.log("user exists");
          return res.status(400).redirect("/user");
       }
       if (req.body.password !== req.body.confirmPassword) {
+         console.log("user pass wrong");
          return res.status(403).redirect("/user");
       }
       await sqlInsertIntoTable(req.body);
+      console.log("user created");
       return res.status(200).redirect("/home");
    } catch {
+      console.log("error occured");
       return res.status(500).redirect("/user");
    }
    // console.log(users);
@@ -289,6 +299,17 @@ app.post("/user/login", async (req, res) => {
 });
 */
 
+testOracleDBConnection = async () => {
+   try {
+      const connection = await oracledb.getConnection(dbConfig);
+      console.log("Connected to Oracle Database");
+      await connection.close();
+   } catch (error) {
+      console.error("Error connecting to Oracle Database:", error);
+   }
+};
+testOracleDBConnection();
+
 getDate = (timeStamp) => {
    const dateObj = new Date(timeStamp);
    const year = dateObj.getFullYear();
@@ -332,54 +353,212 @@ app.get(
    }
 );
 
-app.get(
-   "/query",
-   // "/org/manage",
-   checkAuthenticated,
-   checkForOrganizer,
-   async (req, res) => {
-      try {
-         const connection = await oracledb.getConnection(dbConfig);
+app.post("/create/event", async (req, res) => {
+   try {
+      const connection = await oracledb.getConnection(dbConfig);
+      // const k = await generateUniqueKey(req.user[2], 4);
+      const k = await generateUniqueKey("abc", 4);
+      const key = "E" + k;
 
-         const result = await connection.execute(
-            `select * from EVENTS where ORGANIZER_ID = (select ORGANIZER_ID from ORGANIZERS where EMAIL = '${req.user[2]}')`
-         );
+      console.log(req.body);
+      const venueName = req.body.venue.substring(0, 16);
+      const venueLoc = req.body.venue.substring(17);
+      const venID = await connection.execute(
+         `SELECT venue_id FROM VENUE WHERE name = '${venueName}' AND location = '${venueLoc}'`
+      );
+      const venueID = venID.rows[0][0];
 
-         await connection.close();
-         res.json(result.rows);
-      } catch (error) {
-         console.error(error);
-         res.status(500).json({ message: "Error fetching data from OracleDB" });
+      let temp = (req.user && req.user[0]) || 123;
+
+      const eveDate = `${req.body.date} 00:00:00`;
+      const eveTime = `2000-01-01 ${req.body.time}:00`;
+      const regDeadline = `${req.body.deadline} 00:00:00`;
+
+      console.log(key + " = " + typeof key);
+      console.log(req.body.name + " = " + typeof req.body.name);
+      console.log(
+         typeof req.body.description + " = " + typeof req.body.description
+      );
+      console.log(req.body.eventType + " = " + typeof req.body.eventType);
+      console.log(venueID + " = " + typeof venueID);
+      console.log(temp + " = " + typeof temp);
+      console.log(eveDate + " = " + typeof eveDate);
+      console.log(eveTime + " = " + typeof eveTime);
+      console.log(regDeadline + " = " + typeof regDeadline);
+
+      console.log("~~~~~");
+
+      /*
+      [Object: null prototype] {
+      name: 'dance',
+      description: 'dancing people',
+      date: '2024-04-09',
+      time: '12:00',
+      venue: 'ACADEMIC BLOCK-4 301',
+      deadline: '2024-04-08',
+      fee: '0',
+      eventType: 'ET1'
       }
+
+      ATTENDEE_ID -> null
+      EVENT_ID -> gen
+      EVENT_NAME -> have
+      EVENT_DESCRIPTION -> have
+      EVENT_TYPE_ID -> have
+      VENUE_ID -> map
+      ORGANIZER_ID -> have
+      EVENT_DATE -> have
+      EVENT_TIME -> have
+      REGISTRATION_DEADLINE -> have
+      REGISTRATION_ID -> null
+      REGISTRATION_DATE -> null
+      PAYMENT_STATUS_ID -> null
+      */
+
+      await connection.execute(`CREATE OR REPLACE PROCEDURE createEvent (
+            v_event_id IN EVENTS.EVENT_ID%TYPE,
+            v_event_name IN EVENTS.EVENT_NAME%TYPE,
+            v_event_description IN EVENTS.EVENT_DESCRIPTION%TYPE,
+            v_event_type_id IN EVENTS.EVENT_TYPE_ID%TYPE,
+            v_venue_id IN EVENTS.VENUE_ID%TYPE,
+            v_organizer_id IN EVENTS.ORGANIZER_ID%TYPE,
+            v_event_date IN EVENTS.EVENT_DATE%TYPE,
+            v_event_time IN EVENTS.EVENT_TIME%TYPE,
+            v_registration_deadline IN EVENTS.REGISTRATION_DEADLINE%TYPE
+         )
+         AS
+         BEGIN
+            INSERT INTO EVENTS (
+               EVENT_ID,
+               EVENT_NAME,
+               EVENT_DESCRIPTION,
+               EVENT_TYPE_ID,
+               VENUE_ID,
+               ORGANIZER_ID,
+               EVENT_DATE,
+               EVENT_TIME,
+               REGISTRATION_DEADLINE
+            ) VALUES (
+               v_event_id,
+               v_event_name,
+               v_event_description,
+               v_event_type_id,
+               v_venue_id,
+               v_organizer_id,
+               v_event_date,
+               v_event_time,
+               v_registration_deadline
+            );
+      
+            DBMS_OUTPUT.PUT_LINE('Event created successfully!');
+         EXCEPTION
+            WHEN OTHERS THEN
+               DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
+         END createEvent;
+         /
+     `);
+
+      const exe = await connection.execute(
+         "select object_name from user_procedures"
+      );
+      console.log(exe.rows);
+
+      await connection.execute(
+         `BEGIN organizer_events ('${key}', '${req.body.name}', '${req.body.description}', '${req.body.eventType}', ${venueID}, ${temp},  SYSDATE, SYSDATE, SYSDATE); END;`
+      );
+      // await connection.execute(
+      //    `INSERT INTO EVENTS
+      //     (event_id, event_name, event_description, event_type_id, venue_id, organizer_id, event_date, event_time, registration_deadline)
+      //     VALUES
+      //     (:key, :name, :description, :eventType, :venueID, :temp, TO_DATE(:eveDate, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(:eveTime, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(:regDeadline, 'YYYY-MM-DD HH24:MI:SS'))`,
+      //    {
+      //       key: { dir: oracledb.BIND_IN, val: key, type: oracledb.STRING },
+      //       name: {
+      //          dir: oracledb.BIND_IN,
+      //          val: req.body.name,
+      //          type: oracledb.DB_TYPE_VARCHAR,
+      //       },
+      //       description: {
+      //          dir: oracledb.BIND_IN,
+      //          val: req.body.description,
+      //          type: oracledb.DB_TYPE_VARCHAR,
+      //       },
+      //       eventType: {
+      //          dir: oracledb.BIND_IN,
+      //          val: req.body.eventType,
+      //          type: oracledb.DB_TYPE_VARCHAR,
+      //       },
+      //       venueID: {
+      //          dir: oracledb.BIND_IN,
+      //          val: venueID,
+      //          type: oracledb.NUMBER,
+      //       },
+      //       temp: { dir: oracledb.BIND_IN, val: temp, type: oracledb.NUMBER },
+      //       eveDate: {
+      //          dir: oracledb.BIND_IN,
+      //          val: eveDate,
+      //          type: oracledb.DATE,
+      //       },
+      //       eveTime: {
+      //          dir: oracledb.BIND_IN,
+      //          val: eveTime,
+      //          type: oracledb.DATE,
+      //       },
+      //       regDeadline: {
+      //          dir: oracledb.BIND_IN,
+      //          val: regDeadline,
+      //          type: oracledb.DATE,
+      //       },
+      //    }
+      // );
+
+      await connection.commit();
+      await connection.close();
+      console.log("user created");
+      return res.status(200).redirect("/home");
+   } catch (error) {
+      console.error(error);
+      console.log("error occured");
+      return res.status(500).redirect("/user");
    }
-);
+});
 
-app.get(
-   "/test",
-   // "/org/manage",
-   // checkAuthenticated,
-   // checkForOrganizer,
-   async (req, res) => {
-      try {
-         const connection = await oracledb.getConnection(dbConfig);
+app.get("/query", async (req, res) => {
+   try {
+      const connection = await oracledb.getConnection(dbConfig);
 
-         const result = await connection.execute(
-            "select * from attendee_organizer_combined"
-         );
+      const result = await connection.execute(
+         `select * from EVENTS where ORGANIZER_ID = (select ORGANIZER_ID from ORGANIZERS where EMAIL = '${req.user[2]}')`
+      );
 
-         // const result = await connection.execute(
-         //    `select * from EVENTS where ORGANIZER_ID = (select ORGANIZER_ID from ORGANIZERS where EMAIL = '${req.user.email}')`
-         // );
-         result.metaData.forEach((data) => console.log(data.name));
-
-         await connection.close();
-         res.json(result.rows);
-      } catch (error) {
-         console.error(error);
-         res.status(500).json({ message: "Error fetching data from OracleDB" });
-      }
+      await connection.close();
+      res.json(result.rows);
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error fetching data from OracleDB" });
    }
-);
+});
+
+app.get("/test", async (req, res) => {
+   try {
+      const connection = await oracledb.getConnection(dbConfig);
+
+      // const result = await connection.execute(
+      //    "select * from attendee_organizer_combined"
+      // );
+
+      const result = await connection.execute("select * from EVENTS");
+
+      result.metaData.forEach((data) => console.log(data.name));
+      result.metaData.forEach((data) => console.log(data.name));
+
+      await connection.close();
+      res.json(result.rows);
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error fetching data from OracleDB" });
+   }
+});
 
 /*
 req.user ->

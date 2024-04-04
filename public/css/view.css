@@ -1,0 +1,108 @@
+#page-content {
+   margin-top: 6rem;
+}
+
+a {
+   color: #448bff;
+   text-decoration: none;
+   background-color: transparent;
+}
+
+a:hover {
+   color: #005ef7;
+   text-decoration: underline;
+}
+
+.block,
+.card {
+   background: #fff;
+   border-width: 0;
+   border-radius: 0.25rem;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+   margin-bottom: 1.5rem;
+}
+
+@media (min-width: 992px) {
+   .page-container {
+      max-width: 1140px;
+      margin: 0 auto;
+   }
+   .page-sidenav {
+      display: block !important;
+   }
+}
+
+.list {
+   background-color: aliceblue;
+   padding-left: 0;
+   padding-right: 0;
+   border-radius: 5px;
+}
+
+.list-item {
+   position: relative;
+   display: -ms-flexbox;
+   display: flex;
+   -ms-flex-direction: row;
+   flex-direction: row;
+   min-width: 0;
+   word-wrap: break-word;
+   border: 1px solid rgb(119, 117, 117);
+   border-radius: 5px;
+}
+
+.status {
+   width: 65%;
+}
+
+.list-row .list-item {
+   width: 100%;
+   -ms-flex-direction: row;
+   flex-direction: row;
+   -ms-flex-align: center;
+   align-items: center;
+   padding: 0.75rem 0.625rem;
+}
+
+.list-row .list-item > * {
+   padding-left: 0.625rem;
+   padding-right: 0.625rem;
+}
+
+.no-wrap {
+   white-space: nowrap;
+}
+
+.text-color {
+   color: #5e676f;
+}
+
+.text-gd {
+   -webkit-background-clip: text;
+   -moz-background-clip: text;
+   background-clip: text;
+   -webkit-text-fill-color: transparent;
+   -moz-text-fill-color: transparent;
+   /*text-fill-color: transparent*/
+}
+
+.text-sm {
+   font-size: 0.825rem;
+}
+
+.h-1x {
+   height: 1.25rem;
+   overflow: hidden;
+   display: -webkit-box;
+   -webkit-line-clamp: 1;
+   -webkit-box-orient: vertical;
+}
+
+.w-48 {
+   width: 48px !important;
+   height: 48px !important;
+}
+
+a:link {
+   text-decoration: none;
+}

@@ -18,9 +18,15 @@
       <main>
          <main>
             <div class="event-container d-flex justify-content-center">
-               <form action="/submit_form" method="post" class="eventForm">
-                  <label for="name">Name</label>
-                  <input type="text" id="name" name="name" required />
+               <form action="/create/event" method="post" class="eventForm">
+                  <label for="name">Event Name</label>
+                  <input
+                     type="text"
+                     id="name"
+                     name="name"
+                     value="MIT Marathon"
+                     required
+                  />
 
                   <label for="description">Description</label>
                   <textarea
@@ -31,60 +37,88 @@
                   ></textarea>
 
                   <label for="date">Date</label>
-                  <input type="date" id="date" name="date" required />
+                  <input
+                     type="date"
+                     id="date"
+                     name="date"
+                     value="2024-04-10"
+                     required
+                  />
 
                   <label for="time">Time</label>
-                  <input type="time" id="time" name="time" required />
+                  <input
+                     type="time"
+                     id="time"
+                     name="time"
+                     value="6:00"
+                     required
+                  />
 
                   <label for="venue">Venue</label>
-                  <input type="text" id="venue" name="venue" required />
+                  <input
+                     type="text"
+                     id="venue"
+                     name="venue"
+                     value="ACADEMIC BLOCK-3 101"
+                     required
+                  />
+
+                  <label for="date">Deadline</label>
+                  <input
+                     type="date"
+                     id="deadline"
+                     value="2024-04-6"
+                     name="deadline"
+                     required
+                  />
 
                   <label for="fee">Fee</label>
                   <input
-                     id="text"
+                     id="number"
                      id="fee"
                      name="fee"
+                     value="0"
                      placeholder="Enter 0 if free"
                      required
                   />
 
                   <label class="eventLabel">Event Type</label>
-                  <div class="checkbox-group">
+                  <div class="radiobox-group">
                      <div>
                         <input
-                           type="checkbox"
+                           type="radio"
                            id="cultural"
                            name="eventType"
-                           value="cultural"
+                           value="ET1"
                         />
                         <label for="cultural">Cultural</label>
                      </div>
                      <div>
                         <input
-                           type="checkbox"
-                           id="workshop"
-                           name="eventType"
-                           value="workshop"
-                        />
-                        <label for="workshop">Workshop</label>
-                     </div>
-                     <div>
-                        <input
-                           type="checkbox"
+                           type="radio"
                            id="sports"
                            name="eventType"
-                           value="sports"
+                           value="ET2"
                         />
                         <label for="sports">Sports</label>
                      </div>
                      <div>
                         <input
-                           type="checkbox"
-                           id="talk"
+                           type="radio"
+                           id="exhibition"
                            name="eventType"
-                           value="talk"
+                           value="ET3"
                         />
-                        <label for="talk">Talk</label>
+                        <label for="exhibition">Exhibition</label>
+                     </div>
+                     <div>
+                        <input
+                           type="radio"
+                           id="workshop"
+                           name="eventType"
+                           value="ET4"
+                        />
+                        <label for="workshop">Workshop</label>
                      </div>
                   </div>
 

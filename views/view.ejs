@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>EventifyMIT</title>
+      <link rel="icon" href="../img/Logo.png" type="image/x-icon" />
+      <link rel="stylesheet" href="../css/reset.css" />
+      <link rel="stylesheet" href="../css/headerFooter.css" />
+      <link rel="stylesheet" href="../css/view.css" />
+      <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
+      <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
+   </head>
+   <body>
+      <%- include("layout/header")%>
+
+      <main>
+         <div
+            class="page-content page-container d-flex flex-column justify-content-center align-items-center"
+            id="page-content"
+         >
+            <div class="list list-row col-sm-6">
+               <div class="list-item">
+                  <a href="#">
+                     <img
+                        src="../img/home/attendee.png"
+                        alt="user"
+                        width="40"
+                        height="40"
+                  /></a>
+                  <div class="flex">
+                     <span class="item-author text-dark">Sam Kuran</span>
+                     <span class="item-except text-muted text-sm h-1x">
+                        220966123
+                     </span>
+                  </div>
+                  <span class="text-muted text-sm text-end status"> Paid </span>
+               </div>
+            </div>
+         </div>
+      </main>
+
+      <%- include("layout/footer")%>
+   </body>
+</html>

@@ -36,18 +36,18 @@ input[type="submit"] {
    margin-bottom: 0;
 }
 
-.checkbox-group {
+.radiobox-group {
    display: flex;
    flex-flow: row wrap;
    justify-content: space-evenly;
    align-items: center;
 }
 
-.checkbox-group input {
+.radiobox-group input {
    width: auto;
 }
 
-.checkbox-group label {
+.radiobox-group label {
    padding-left: 5px;
 }
 
