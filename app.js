@@ -44,6 +44,7 @@ passport.use(
             const user = result.rows[0];
             // password on 4th index; if not work -> prob. view changed
             const isPasswordMatch = await bcrypt.compare(password, user[3]);
+            // const isPasswordMatch = password === user[3];
             if (!isPasswordMatch) {
                return done(null, false, { message: "Password incorrect" });
             }
@@ -163,6 +164,9 @@ app.get("/manage", checkAuthenticated, (req, res) => {
 app.get("/history", checkAuthenticated, (req, res) => {
    res.render("history", { user: req.user[6] });
 });
+app.get("/view", (req, res) => {
+   res.render("view", { user: "ORGANIZER" });
+});
 
 generateUniqueKey = (email, length) => {
    const hash = crypto.createHash("sha256");
@@ -201,7 +205,7 @@ sqlInsertIntoTable = async (data) => {
             ? "ATTENDEES"
             : "";
       const hashedPassword = await bcrypt.hash(data.password, 10);
-      const key = await generateUniqueKey(data.email, 20);
+      const key = await generateUniqueKey(data.email, 10);
       const connection = await oracledb.getConnection(dbConfig);
 
       await connection.execute(
@@ -224,6 +228,7 @@ sqlInsertIntoTable = async (data) => {
 app.post("/user/signup", async (req, res) => {
    try {
       // const userCheck = users.find((user) => user.email === req.body.email);
+      console.log(req.body);
       const userCheck = await sqlCheckForExistUser(req.body.email);
       if (!userCheck) {
          console.log("user exists");
@@ -308,7 +313,7 @@ testOracleDBConnection = async () => {
       console.error("Error connecting to Oracle Database:", error);
    }
 };
-testOracleDBConnection();
+// testOracleDBConnection();
 
 getDate = (timeStamp) => {
    const dateObj = new Date(timeStamp);
@@ -353,6 +358,32 @@ app.get(
    }
 );
 
+/*
+   [Object: null prototype] {
+   name: 'dance',
+   description: 'dancing people',
+   date: '2024-04-09',
+   time: '12:00',
+   venue: 'ACADEMIC BLOCK-4 301',
+   deadline: '2024-04-08',
+   fee: '0',
+   eventType: 'ET1'
+   }
+
+   ATTENDEE_ID -> null
+   EVENT_ID -> gen
+   EVENT_NAME -> have
+   EVENT_DESCRIPTION -> have
+   EVENT_TYPE_ID -> have
+   VENUE_ID -> map
+   ORGANIZER_ID -> have
+   EVENT_DATE -> have
+   EVENT_TIME -> have
+   REGISTRATION_DEADLINE -> have
+   REGISTRATION_ID -> null
+   REGISTRATION_DATE -> null
+   PAYMENT_STATUS_ID -> null
+*/
 app.post("/create/event", async (req, res) => {
    try {
       const connection = await oracledb.getConnection(dbConfig);
@@ -374,89 +405,7 @@ app.post("/create/event", async (req, res) => {
       const eveTime = `2000-01-01 ${req.body.time}:00`;
       const regDeadline = `${req.body.deadline} 00:00:00`;
 
-      console.log(key + " = " + typeof key);
-      console.log(req.body.name + " = " + typeof req.body.name);
-      console.log(
-         typeof req.body.description + " = " + typeof req.body.description
-      );
-      console.log(req.body.eventType + " = " + typeof req.body.eventType);
-      console.log(venueID + " = " + typeof venueID);
-      console.log(temp + " = " + typeof temp);
-      console.log(eveDate + " = " + typeof eveDate);
-      console.log(eveTime + " = " + typeof eveTime);
-      console.log(regDeadline + " = " + typeof regDeadline);
-
       console.log("~~~~~");
-
-      /*
-      [Object: null prototype] {
-      name: 'dance',
-      description: 'dancing people',
-      date: '2024-04-09',
-      time: '12:00',
-      venue: 'ACADEMIC BLOCK-4 301',
-      deadline: '2024-04-08',
-      fee: '0',
-      eventType: 'ET1'
-      }
-
-      ATTENDEE_ID -> null
-      EVENT_ID -> gen
-      EVENT_NAME -> have
-      EVENT_DESCRIPTION -> have
-      EVENT_TYPE_ID -> have
-      VENUE_ID -> map
-      ORGANIZER_ID -> have
-      EVENT_DATE -> have
-      EVENT_TIME -> have
-      REGISTRATION_DEADLINE -> have
-      REGISTRATION_ID -> null
-      REGISTRATION_DATE -> null
-      PAYMENT_STATUS_ID -> null
-      */
-
-      await connection.execute(`CREATE OR REPLACE PROCEDURE createEvent (
-            v_event_id IN EVENTS.EVENT_ID%TYPE,
-            v_event_name IN EVENTS.EVENT_NAME%TYPE,
-            v_event_description IN EVENTS.EVENT_DESCRIPTION%TYPE,
-            v_event_type_id IN EVENTS.EVENT_TYPE_ID%TYPE,
-            v_venue_id IN EVENTS.VENUE_ID%TYPE,
-            v_organizer_id IN EVENTS.ORGANIZER_ID%TYPE,
-            v_event_date IN EVENTS.EVENT_DATE%TYPE,
-            v_event_time IN EVENTS.EVENT_TIME%TYPE,
-            v_registration_deadline IN EVENTS.REGISTRATION_DEADLINE%TYPE
-         )
-         AS
-         BEGIN
-            INSERT INTO EVENTS (
-               EVENT_ID,
-               EVENT_NAME,
-               EVENT_DESCRIPTION,
-               EVENT_TYPE_ID,
-               VENUE_ID,
-               ORGANIZER_ID,
-               EVENT_DATE,
-               EVENT_TIME,
-               REGISTRATION_DEADLINE
-            ) VALUES (
-               v_event_id,
-               v_event_name,
-               v_event_description,
-               v_event_type_id,
-               v_venue_id,
-               v_organizer_id,
-               v_event_date,
-               v_event_time,
-               v_registration_deadline
-            );
-      
-            DBMS_OUTPUT.PUT_LINE('Event created successfully!');
-         EXCEPTION
-            WHEN OTHERS THEN
-               DBMS_OUTPUT.PUT_LINE('An error occurred: ' || SQLERRM);
-         END createEvent;
-         /
-     `);
 
       const exe = await connection.execute(
          "select object_name from user_procedures"
@@ -547,7 +496,7 @@ app.get("/test", async (req, res) => {
       //    "select * from attendee_organizer_combined"
       // );
 
-      const result = await connection.execute("select * from EVENTS");
+      const result = await connection.execute("select * from events");
 
       result.metaData.forEach((data) => console.log(data.name));
       result.metaData.forEach((data) => console.log(data.name));
