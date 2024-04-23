@@ -3,13 +3,10 @@
    "main": "app.js",
    "type": "commonjs",
    "scripts": {
-      "devStart": "nodemon app.js"
+      "devStart": "nodemon src/app.js"
    },
    "dependencies": {
       "bcrypt": "^5.1.1",
-      "body-parser": "^1.20.2",
-      "cookie-parser": "^1.4.6",
-      "cors": "^2.8.5",
       "ejs": "^3.1.9",
       "express": "^4.19.2",
       "express-flash": "^0.0.2",
@@ -18,9 +15,9 @@
       "jsonwebtoken": "^9.0.2",
       "method-override": "^3.0.0",
       "morgan": "^1.10.0",
-      "oracledb": "^6.4.0",
       "passport": "^0.7.0",
-      "passport-local": "^1.0.0"
+      "passport-local": "^1.0.0",
+      "pg": "^8.11.5"
    },
    "devDependencies": {
       "dotenv": "^16.4.5",

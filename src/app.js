@@ -8,16 +8,27 @@ const session = require("express-session");
 const methodOverride = require("method-override");
 const localStrategy = require("passport-local").Strategy;
 require("dotenv").config();
-const oracledb = require("oracledb");
 const crypto = require("crypto");
+const Pool = require("pg").Pool;
 
-const eventData = require("./eventData.js");
+let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const connectionString = `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?sslmode=require&project=${ENDPOINT_ID}`;
 
-const dbConfig = {
-   user: "SYSTEM",
-   password: "tiger",
-   connectString: "tcp://0.tcp.in.ngrok.io:14527/XEPDB1",
-};
+const pool = new Pool({
+   connectionString: connectionString,
+});
+
+async function getPgVersion() {
+   pool.query("select version()", (err, res) => {
+      if (!err) {
+         console.log("PostgreSQL version: ", res.rows[0].version);
+      } else {
+         console.log("Error: ", err);
+      }
+      pool.end();
+   });
+}
+getPgVersion();
 
 passport.use(
    "local-login",
@@ -155,11 +166,17 @@ app.get("/dashboard", checkAuthenticated, (req, res) => {
 app.get("/find", checkAuthenticated, checkForAttendee, (req, res) => {
    res.render("find", { user: req.user[6] });
 });
-app.get("/create", checkAuthenticated, checkForOrganizer, (req, res) => {
-   res.render("create", { user: req.user[6] });
+// app.get("/create", checkAuthenticated, checkForOrganizer, (req, res) => {
+//    res.render("create", { user: req.user[6] });
+// });
+app.get("/create", (req, res) => {
+   res.render("create", { user: "ORGANIZER" });
 });
-app.get("/manage", checkAuthenticated, (req, res) => {
-   res.render("manage", { user: req.user[6] });
+// app.get("/manage", checkAuthenticated, (req, res) => {
+//    res.render("manage", { user: req.user[6] });
+// });
+app.get("/manage", (req, res) => {
+   res.render("manage", { user: "ATTENDEE" });
 });
 app.get("/history", checkAuthenticated, (req, res) => {
    res.render("history", { user: req.user[6] });
@@ -384,93 +401,6 @@ app.get(
    REGISTRATION_DATE -> null
    PAYMENT_STATUS_ID -> null
 */
-app.post("/create/event", async (req, res) => {
-   try {
-      const connection = await oracledb.getConnection(dbConfig);
-      // const k = await generateUniqueKey(req.user[2], 4);
-      const k = await generateUniqueKey("abc", 4);
-      const key = "E" + k;
-
-      console.log(req.body);
-      const venueName = req.body.venue.substring(0, 16);
-      const venueLoc = req.body.venue.substring(17);
-      const venID = await connection.execute(
-         `SELECT venue_id FROM VENUE WHERE name = '${venueName}' AND location = '${venueLoc}'`
-      );
-      const venueID = venID.rows[0][0];
-
-      let temp = (req.user && req.user[0]) || 123;
-
-      const eveDate = `${req.body.date} 00:00:00`;
-      const eveTime = `2000-01-01 ${req.body.time}:00`;
-      const regDeadline = `${req.body.deadline} 00:00:00`;
-
-      console.log("~~~~~");
-
-      const exe = await connection.execute(
-         "select object_name from user_procedures"
-      );
-      console.log(exe.rows);
-
-      await connection.execute(
-         `BEGIN organizer_events ('${key}', '${req.body.name}', '${req.body.description}', '${req.body.eventType}', ${venueID}, ${temp},  SYSDATE, SYSDATE, SYSDATE); END;`
-      );
-      // await connection.execute(
-      //    `INSERT INTO EVENTS
-      //     (event_id, event_name, event_description, event_type_id, venue_id, organizer_id, event_date, event_time, registration_deadline)
-      //     VALUES
-      //     (:key, :name, :description, :eventType, :venueID, :temp, TO_DATE(:eveDate, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(:eveTime, 'YYYY-MM-DD HH24:MI:SS'), TO_DATE(:regDeadline, 'YYYY-MM-DD HH24:MI:SS'))`,
-      //    {
-      //       key: { dir: oracledb.BIND_IN, val: key, type: oracledb.STRING },
-      //       name: {
-      //          dir: oracledb.BIND_IN,
-      //          val: req.body.name,
-      //          type: oracledb.DB_TYPE_VARCHAR,
-      //       },
-      //       description: {
-      //          dir: oracledb.BIND_IN,
-      //          val: req.body.description,
-      //          type: oracledb.DB_TYPE_VARCHAR,
-      //       },
-      //       eventType: {
-      //          dir: oracledb.BIND_IN,
-      //          val: req.body.eventType,
-      //          type: oracledb.DB_TYPE_VARCHAR,
-      //       },
-      //       venueID: {
-      //          dir: oracledb.BIND_IN,
-      //          val: venueID,
-      //          type: oracledb.NUMBER,
-      //       },
-      //       temp: { dir: oracledb.BIND_IN, val: temp, type: oracledb.NUMBER },
-      //       eveDate: {
-      //          dir: oracledb.BIND_IN,
-      //          val: eveDate,
-      //          type: oracledb.DATE,
-      //       },
-      //       eveTime: {
-      //          dir: oracledb.BIND_IN,
-      //          val: eveTime,
-      //          type: oracledb.DATE,
-      //       },
-      //       regDeadline: {
-      //          dir: oracledb.BIND_IN,
-      //          val: regDeadline,
-      //          type: oracledb.DATE,
-      //       },
-      //    }
-      // );
-
-      await connection.commit();
-      await connection.close();
-      console.log("user created");
-      return res.status(200).redirect("/home");
-   } catch (error) {
-      console.error(error);
-      console.log("error occured");
-      return res.status(500).redirect("/user");
-   }
-});
 
 app.get("/query", async (req, res) => {
    try {
