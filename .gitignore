@@ -3,6 +3,8 @@
 
 .env
 node_modules/
+
 /extras
 request.rest
 *.txt
+ToDo.md
