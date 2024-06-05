@@ -14,4 +14,6 @@ router.post(
    })
 );
 
+router.post("/create", userController.create);
+
 module.exports = router;

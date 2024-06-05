@@ -25,24 +25,33 @@
                      alt="concert"
                   />
                   <div class="card__header-text">
-                     <h2 class="card__title text-center"><%= name %></h2>
+                     <h2 class="card__title text-center">
+                        <%= event.event_name %>
+                     </h2>
                      <h6 class="card__subtitle mb-2 text-muted text-center">
-                        <%= type %>
+                        <%= event.event_type_id %>
                      </h6>
                      <span class="card__tagline card__date"
-                        ><b>Date: </b><%= date + ", " + time %></span
+                        ><b>Date: </b><%=
+                        event.event_date.toISOString().slice(0, 10) + ", " +
+                        event.event_time %></span
                      >
                      <span class="card__tagline card__deadline"
-                        ><b>Deadline: </b><%= deadline %></span
+                        ><b>Deadline: </b><%=
+                        event.registration_deadline.toISOString().slice(0, 10)
+                        %></span
                      >
                      <span class="card__tagline card__venue text-end"
-                        ><b>Venue:</b> <%= venue %></span
+                        ><b>Venue:</b> <%= event.venue_id %></span
                      >
                   </div>
                </div>
-               <p class="card-text p-3 text-start"><%= desc %></p>
+               <p class="card-text p-3 text-start">
+                  <%= event.event_description %>
+               </p>
 
-               <% if (user === 'ATTENDEE') { %> <% if (status === 1) { %>
+               <% if (user === 'ATTENDEE') { %> <% if (status === "REGISTER") {
+               %>
                <p class="card__txt fw-bold text-decoration-underline">
                   Registered
                </p>

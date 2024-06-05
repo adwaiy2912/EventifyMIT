@@ -33,15 +33,6 @@ app.set("view engine", "ejs");
 app.use("/", indexRoutes);
 app.use("/user", userRoutes);
 
-app.delete("/logout", (req, res, next) => {
-   req.logOut((err) => {
-      if (err) {
-         return next(err);
-      }
-      res.redirect("/");
-   });
-});
-
 getPgVersion();
 
 const PORT = process.env.PORT || 3000;

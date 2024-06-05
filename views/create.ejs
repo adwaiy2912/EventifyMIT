@@ -18,15 +18,9 @@
       <main>
          <main>
             <div class="event-container d-flex justify-content-center">
-               <form action="/create/event" method="post" class="eventForm">
+               <form action="/user/create" method="post" class="eventForm">
                   <label for="name">Event Name</label>
-                  <input
-                     type="text"
-                     id="name"
-                     name="name"
-                     value="MIT Marathon"
-                     required
-                  />
+                  <input type="text" id="name" name="name" required />
 
                   <label for="description">Description</label>
                   <textarea
@@ -37,90 +31,41 @@
                   ></textarea>
 
                   <label for="date">Date</label>
-                  <input
-                     type="date"
-                     id="date"
-                     name="date"
-                     value="2024-04-10"
-                     required
-                  />
+                  <input type="date" id="date" name="date" required />
 
                   <label for="time">Time</label>
-                  <input
-                     type="time"
-                     id="time"
-                     name="time"
-                     value="6:00"
-                     required
-                  />
+                  <input type="time" id="time" name="time" required />
 
                   <label for="venue">Venue</label>
                   <input
                      type="text"
                      id="venue"
                      name="venue"
-                     value="ACADEMIC BLOCK-3 101"
+                     placeholder="ACADEMIC BLOCK-X XXX"
                      required
                   />
 
                   <label for="date">Deadline</label>
-                  <input
-                     type="date"
-                     id="deadline"
-                     value="2024-04-6"
-                     name="deadline"
-                     required
-                  />
+                  <input type="date" id="deadline" name="deadline" required />
 
                   <label for="fee">Fee</label>
                   <input
                      id="number"
                      id="fee"
                      name="fee"
-                     value="0"
                      placeholder="Enter 0 if free"
                      required
                   />
 
-                  <label class="eventLabel">Event Type</label>
-                  <div class="radiobox-group">
-                     <div>
-                        <input
-                           type="radio"
-                           id="cultural"
-                           name="eventType"
-                           value="ET1"
-                        />
-                        <label for="cultural">Cultural</label>
-                     </div>
-                     <div>
-                        <input
-                           type="radio"
-                           id="sports"
-                           name="eventType"
-                           value="ET2"
-                        />
-                        <label for="sports">Sports</label>
-                     </div>
-                     <div>
-                        <input
-                           type="radio"
-                           id="exhibition"
-                           name="eventType"
-                           value="ET3"
-                        />
-                        <label for="exhibition">Exhibition</label>
-                     </div>
-                     <div>
-                        <input
-                           type="radio"
-                           id="workshop"
-                           name="eventType"
-                           value="ET4"
-                        />
-                        <label for="workshop">Workshop</label>
-                     </div>
-                  </div>
+                  <label class="eventType">Event Type</label>
+                  <select name="eventType" id="eventType" class="form-select">
+                     <option selected disabled>Choose an Event Type</option>
+                     <% eventTypes.forEach((event) => { %>
+                     <option value="<%= event.event_type_id %>">
+                        <%= event.event_type_name %>
+                     </option>
+                     <% }); %>
+                  </select>
 
                   <input
                      type="submit"

@@ -5,6 +5,7 @@
 node_modules/
 
 /extras
+/others
 request.rest
 *.txt
 ToDo.md
