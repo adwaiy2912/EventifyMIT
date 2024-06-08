@@ -44,7 +44,7 @@
             <li>
                <div class="card">
                   <img
-                     src="<%= getMinEventCardBgSrc(event.event_type_id)%>"
+                     src="<%= getEventBgSrc(event.event_type_id, event.event_name)%>"
                      alt=""
                      class="card__image"
                   />
@@ -52,7 +52,7 @@
                      <div class="card__header">
                         <img
                            class="card__thumb"
-                           src="<%= getMinEventCardIconSrc(event.event_type_id)%>"
+                           src="<%= getEventIconSrc(event.event_type_id)%>"
                            alt=""
                         />
                         <div class="card__header-text">

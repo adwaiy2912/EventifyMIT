@@ -1,8 +1,9 @@
 const {
-   sqlCheckForExistUser,
    sqlCreateUser,
    sqlCreateEvent,
-} = require("../models/userModels");
+   sqlCreateRegistration,
+} = require("../models/userCreateModels");
+const { sqlCheckForExistUser } = require("../models/utilsModels");
 
 const { generateUniqueString, getVenueID } = require("../utils/userUtils");
 
@@ -42,6 +43,28 @@ exports.create = async (req, res) => {
       return res.status(200).redirect("/home");
    } catch {
       console.log("error occured");
-      return res.status(500).redirect("/user");
+      return res.status(500).redirect("/");
+   }
+};
+
+exports.register = async (req, res) => {
+   try {
+      let { eventID, userID, paymentStatus } = req.body;
+      if (paymentStatus === "PENDING") {
+         await paymentAPI(req.body);
+      }
+      if (paymentStatus === "FAILED") {
+         console.log("payment failed");
+         return res.status(400).redirect("/home");
+      }
+      await sqlCreateRegistration(eventID, userID, paymentStatus);
+
+      console.log("user registered");
+      const redirectUrl = req.get("referer") || "/home";
+      console.log(redirectUrl);
+      return res.status(200).redirect(redirectUrl);
+   } catch {
+      console.log("error occured");
+      return res.status(500).redirect("/home");
    }
 };

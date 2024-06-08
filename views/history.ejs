@@ -23,7 +23,7 @@
                <div class="col-md-8">
                   <div class="search">
                      <img
-                        src="../img/event/searchIcon.png"
+                        src="../img/minEventCard/searchIcon.png"
                         alt="find"
                         width="25"
                         height="25"
@@ -31,7 +31,7 @@
                      <input
                         type="text"
                         class="form-control"
-                        placeholder="View past registered events..."
+                        placeholder="Search and view your event history..."
                      />
                      <button class="btn btn-primary">Search</button>
                   </div>
@@ -40,10 +40,11 @@
          </div>
 
          <ul class="cards">
+            <% events.forEach(event => { %>
             <li>
-               <a href="#" class="card">
+               <div class="card">
                   <img
-                     src="../img/extra/attendee.jpg"
+                     src="<%= getEventBgSrc(event.event_type_id, event.event_name)%>"
                      alt=""
                      class="card__image"
                   />
@@ -51,89 +52,38 @@
                      <div class="card__header">
                         <img
                            class="card__thumb"
-                           src="../img/event/sportIcon.png"
-                           alt="seminar"
+                           src="<%= getEventIconSrc(event.event_type_id)%>"
+                           alt=""
                         />
                         <div class="card__header-text">
-                           <h3 class="card__title">Google Seminar</h3>
-                           <span class="card__tagline">Date: 01/01/2000</span>
+                           <h3 class="card__title"><%= event.event_name %></h3>
                            <span class="card__tagline"
-                              >Deadline: 01/01/2000</span
+                              >Date: <%= event.event_date.toISOString().slice(0,
+                              10) %></span
+                           >
+                           <span class="card__tagline"
+                              >Time: <%= event.event_time %></span
+                           >
+                           <span class="card__tagline"
+                              >Deadline: <%=
+                              event.registration_deadline.toISOString().slice(0,
+                              10) %></span
                            >
                         </div>
                      </div>
                      <p class="card__description">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Ipsam beatae dicta pariatur praesentium possimus
-                        dignissimos doloribus illo reiciendis voluptatem?
+                        <%= event.event_description.substring(0, 100) %>
                      </p>
-                     <button class="card__button btn btn-primary">
+                     <button
+                        class="card__button btn btn-primary"
+                        onclick="redirectToEvent('<%= event.event_id %>')"
+                     >
                         View Details
                      </button>
                   </div>
-               </a>
+               </div>
             </li>
-            <li>
-               <a href="#" class="card">
-                  <img
-                     src="../img/extra/attendee2.jpg"
-                     alt=""
-                     class="card__image"
-                  />
-                  <div class="card__overlay">
-                     <div class="card__header">
-                        <img
-                           class="card__thumb"
-                           src="../img/event/speakerIcon.png"
-                           alt="speaker"
-                        />
-                        <div class="card__header-text">
-                           <h3 class="card__title">Google Speaker</h3>
-                           <span class="card__tagline">Date: 01/01/2000</span>
-                           <span class="card__tagline"
-                              >Deadline: 01/01/2000</span
-                           >
-                        </div>
-                     </div>
-                     <p class="card__description">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Ipsam beatae dicta pariatur praesentium.
-                     </p>
-                     <button class="card__button btn btn-primary">
-                        View Details
-                     </button>
-                  </div>
-               </a>
-            </li>
-            <li>
-               <a href="#" class="card">
-                  <img src="../img/extra/hero.jpg" alt="" class="card__image" />
-                  <div class="card__overlay">
-                     <div class="card__header">
-                        <img
-                           class="card__thumb"
-                           src="../img/event/concertIcon.png"
-                           alt="concert"
-                        />
-                        <div class="card__header-text">
-                           <h3 class="card__title">Google Interview Round</h3>
-                           <span class="card__tagline">Date: 01/01/2000</span>
-                           <span class="card__tagline"
-                              >Deadline: 01/01/2000</span
-                           >
-                        </div>
-                     </div>
-                     <p class="card__description">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Ipsam beatae dicta pariatur praesentium possimus
-                        dignissimos doloribus illo reiciendis voluptatem?
-                     </p>
-                     <button class="card__button btn btn-primary">
-                        View Details
-                     </button>
-                  </div>
-               </a>
-            </li>
+            <% }); %>
          </ul>
       </main>
 

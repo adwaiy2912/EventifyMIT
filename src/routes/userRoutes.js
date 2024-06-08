@@ -16,4 +16,15 @@ router.post(
 
 router.post("/create", userController.create);
 
+router.post("/register", userController.register);
+
+router.delete("/logout", (req, res, next) => {
+   req.logOut((err) => {
+      if (err) {
+         return next(err);
+      }
+      res.redirect("/");
+   });
+});
+
 module.exports = router;

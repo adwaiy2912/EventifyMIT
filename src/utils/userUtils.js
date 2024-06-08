@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { sqlGetVenueID } = require("../models/userModels");
+const { sqlGetVenueID, sqlGetVenue } = require("../models/userGetModels");
 
 getUserType = (user) =>
    user.attendee_id === undefined ? "ORGANIZER" : "ATTENDEE";
@@ -30,8 +30,17 @@ getVenueID = async (venue) => {
    return result.rows[0].venue_id;
 };
 
+getVenue = async (venueID) => {
+   const result = await sqlGetVenue(venueID);
+   if (result.name === result.location) {
+      return result.name;
+   }
+   return `${result.name} ${result.location}`;
+};
+
 module.exports = {
    getUserType,
    generateUniqueString,
    getVenueID,
+   getVenue,
 };

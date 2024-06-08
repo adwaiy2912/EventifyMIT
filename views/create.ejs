@@ -16,65 +16,59 @@
       <%- include("layout/header")%>
 
       <main>
-         <main>
-            <div class="event-container d-flex justify-content-center">
-               <form action="/user/create" method="post" class="eventForm">
-                  <label for="name">Event Name</label>
-                  <input type="text" id="name" name="name" required />
+         <div class="event-container d-flex justify-content-center">
+            <form action="/user/create" method="post" class="eventForm">
+               <label for="name">Event Name</label>
+               <input type="text" id="name" name="name" required />
 
-                  <label for="description">Description</label>
-                  <textarea
-                     type="text"
-                     id="description"
-                     name="description"
-                     required
-                  ></textarea>
+               <label for="description">Description</label>
+               <textarea
+                  type="text"
+                  id="description"
+                  name="description"
+                  required
+               ></textarea>
 
-                  <label for="date">Date</label>
-                  <input type="date" id="date" name="date" required />
+               <label for="date">Date</label>
+               <input type="date" id="date" name="date" required />
 
-                  <label for="time">Time</label>
-                  <input type="time" id="time" name="time" required />
+               <label for="time">Time</label>
+               <input type="time" id="time" name="time" required />
 
-                  <label for="venue">Venue</label>
-                  <input
-                     type="text"
-                     id="venue"
-                     name="venue"
-                     placeholder="ACADEMIC BLOCK-X XXX"
-                     required
-                  />
+               <label for="venue">Venue</label>
+               <input
+                  type="text"
+                  id="venue"
+                  name="venue"
+                  placeholder="ACADEMIC BLOCK-X XXX"
+                  required
+               />
 
-                  <label for="date">Deadline</label>
-                  <input type="date" id="deadline" name="deadline" required />
+               <label for="date">Deadline</label>
+               <input type="date" id="deadline" name="deadline" required />
 
-                  <label for="fee">Fee</label>
-                  <input
-                     id="number"
-                     id="fee"
-                     name="fee"
-                     placeholder="Enter 0 if free"
-                     required
-                  />
+               <label for="fee">Fee</label>
+               <input
+                  id="number"
+                  id="fee"
+                  name="fee"
+                  placeholder="Enter 0 if free"
+                  required
+               />
 
-                  <label class="eventType">Event Type</label>
-                  <select name="eventType" id="eventType" class="form-select">
-                     <option selected disabled>Choose an Event Type</option>
-                     <% eventTypes.forEach((event) => { %>
-                     <option value="<%= event.event_type_id %>">
-                        <%= event.event_type_name %>
-                     </option>
-                     <% }); %>
-                  </select>
+               <label class="eventType">Event Type</label>
+               <select name="eventType" id="eventType" class="form-select">
+                  <option selected disabled>Choose an Event Type</option>
+                  <% eventTypes.forEach((event) => { %>
+                  <option value="<%= event.event_type_id %>">
+                     <%= event.event_type_name %>
+                  </option>
+                  <% }); %>
+               </select>
 
-                  <input
-                     type="submit"
-                     value="Register"
-                     class="btn btn-primary"
-                  />
-               </form>
-            </div>
-         </main>
+               <input type="submit" value="Register" class="btn btn-primary" />
+            </form>
+         </div>
       </main>
 
       <%- include("layout/footer")%>

@@ -9,6 +9,7 @@
       <link rel="stylesheet" href="../css/headerFooter.css" />
       <link rel="stylesheet" href="../css/eventCard.css" />
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
+      <script defer src="../js/eventCard.js"></script>
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
    <body>
@@ -16,12 +17,16 @@
 
       <main>
          <div class="card m-3">
-            <img src="../img/extra/attendee.jpg" alt="" class="card__image" />
+            <img
+               src="<%= getEventBgSrc(event.event_type_id, event.event_name)%>"
+               alt=""
+               class="card__image"
+            />
             <div class="card__overlay text-end">
                <div class="card__header text-start">
                   <img
                      class="card__thumb"
-                     src="../img/event/concertIcon.png"
+                     src="<%= getEventIconSrc(event.event_type_id)%>"
                      alt="concert"
                   />
                   <div class="card__header-text">
@@ -29,7 +34,7 @@
                         <%= event.event_name %>
                      </h2>
                      <h6 class="card__subtitle mb-2 text-muted text-center">
-                        <%= event.event_type_id %>
+                        <%= eventType %>
                      </h6>
                      <span class="card__tagline card__date"
                         ><b>Date: </b><%=
@@ -42,7 +47,11 @@
                         %></span
                      >
                      <span class="card__tagline card__venue text-end"
-                        ><b>Venue:</b> <%= event.venue_id %></span
+                        ><b>Venue:</b> <%= venue %></span
+                     >
+                     <span class="card__tagline card__fees text-end"
+                        ><b>Fees:</b> <% if (event.fees === 0) { %> Free <% }
+                        else { %> &#8377;<%= event.fees %> <% } %></span
                      >
                   </div>
                </div>
@@ -56,7 +65,15 @@
                   Registered
                </p>
                <% } else { %>
-               <button class="btn btn-primary card__button">Register</button>
+               <button
+                  class="btn btn-primary card__button"
+                  id="registerToEvent"
+                  data-event-id="<%= event.event_id %>"
+                  data-user-id="<%= attendeeID %>"
+                  data-event-fees="<%= event.fees %>"
+               >
+                  Register
+               </button>
                <% } %> <% } else { %>
                <div class="d-flex justify-content-between w-100 p-4">
                   <button class="btn btn-secondary">Edit Event</button>
