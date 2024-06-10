@@ -26,7 +26,8 @@ main {
 }
 
 .card__image {
-   width: 100%;
+   height: 90%;
+   width: auto;
    object-fit: cover;
    transition: all 0.25s;
 }
@@ -123,7 +124,8 @@ main {
    overflow: hidden;
 }
 
-.card__button,
 .card__txt {
-   margin: 0em 3rem 1.5rem 1rem;
+   margin: 0;
+   padding: 0;
+   align-self: end;
 }

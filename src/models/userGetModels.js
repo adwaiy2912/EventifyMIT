@@ -67,7 +67,7 @@ sqlGetVenue = async (ID) => {
 sqlGetOrganizerUpcommingEvents = async (ID) => {
    try {
       const result = await pool.query(
-         `SELECT * FROM EVENTS WHERE ORGANIZER_ID = $1 WHERE event_date >= NOW()`,
+         `SELECT * FROM EVENTS WHERE ORGANIZER_ID = $1 AND event_date >= NOW()`,
          [ID]
       );
       return result.rows;
@@ -91,7 +91,7 @@ sqlGetAttendeeUpcommingEvents = async (ID) => {
 sqlGetOrganizerPreviousEvents = async (ID) => {
    try {
       const result = await pool.query(
-         `SELECT * FROM EVENTS WHERE ORGANIZER_ID = $1 WHERE event_date < NOW()`,
+         `SELECT * FROM EVENTS WHERE ORGANIZER_ID = $1 AND event_date < NOW()`,
          [ID]
       );
       return result.rows;

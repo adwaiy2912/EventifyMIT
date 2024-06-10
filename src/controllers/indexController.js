@@ -14,7 +14,11 @@ const {
    sqlGetOrganizerPreviousEvents,
    sqlGetAttendeePreviousEvents,
 } = require("../models/userGetModels");
-const { getUserType, getVenue } = require("../utils/userUtils");
+const {
+   getUserType,
+   getVenue,
+   checkEventClosed,
+} = require("../utils/userUtils");
 
 exports.dashboard =
    (checkAuthenticated,
@@ -80,7 +84,7 @@ exports.create =
       });
    });
 
-exports.find_ID =
+exports.eventID =
    (checkAuthenticated,
    checkForAttendee,
    async (req, res) => {
@@ -90,7 +94,9 @@ exports.find_ID =
          attendeeID: req.user.attendee_id,
          event,
          eventType: await sqlGetEventType(event.event_type_id),
+         eventTypes: await sqlEventTypes(),
          venue: await getVenue(event.venue_id),
+         eventClosed: checkEventClosed(event.registration_deadline),
          status: await sqlGetRegistrationStatus(
             req.params.id,
             req.user.attendee_id

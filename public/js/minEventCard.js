@@ -1,3 +1,3 @@
 redirectToEvent = (eventID) => {
-   window.location.href = `/find/${eventID}`;
+   window.location.href = `/event/${eventID}`;
 };

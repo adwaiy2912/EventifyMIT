@@ -18,6 +18,8 @@ router.post("/create", userController.create);
 
 router.post("/register", userController.register);
 
+router.post("/update", userController.update);
+
 router.delete("/logout", (req, res, next) => {
    req.logOut((err) => {
       if (err) {

@@ -2,10 +2,6 @@ header {
    position: fixed;
 }
 
-.header__ul li:nth-child(1) a {
-   color: #8645ff !important;
-}
-
 main {
    padding: 0;
 }

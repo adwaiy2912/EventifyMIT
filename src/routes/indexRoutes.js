@@ -36,6 +36,6 @@ router.get("/view", (req, res) => {
    res.render("view", { user: "ORGANIZER" });
 });
 
-router.get("/find/:id", indexController.find_ID);
+router.get("/event/:id", indexController.eventID);
 
 module.exports = router;

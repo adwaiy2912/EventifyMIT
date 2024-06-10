@@ -8,7 +8,6 @@
       <link rel="stylesheet" href="../css/reset.css" />
       <link rel="stylesheet" href="../css/headerFooter.css" />
       <link rel="stylesheet" href="../css/dashboard.css" />
-      <script defer src="../js/dashboard.js"></script>
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
@@ -53,8 +52,15 @@
                method="post"
                class="d-flex justify-content-between w-100"
             >
-               <button class="btn btn-secondary">Edit</button>
-               <button class="btn btn-primary" type="submit">Log Out</button>
+               <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop"
+               >
+                  Edit
+               </button>
+               <button type="submit" class="btn btn-primary">Log Out</button>
             </form>
          </div>
       </main>

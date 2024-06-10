@@ -36,3 +36,9 @@ input[type="submit"] {
 input[type="submit"]:hover {
    background-color: #5b14df;
 }
+
+@media (min-width: 990px) {
+   .formMargin {
+      margin: 0rem 4.5rem;
+   }
+}

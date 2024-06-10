@@ -1,0 +1,116 @@
+<div
+   class="modal fade"
+   id="staticBackdrop"
+   data-bs-backdrop="static"
+   data-bs-keyboard="false"
+   tabindex="-1"
+   aria-labelledby="staticBackdropLabel"
+   aria-hidden="true"
+>
+   <div
+      class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+   >
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+               Edit Event Details
+            </h1>
+            <button
+               type="button"
+               class="btn-close"
+               data-bs-dismiss="modal"
+               aria-label="Close"
+            ></button>
+         </div>
+         <div class="modal-body">
+            <form class="eventForm formMargin" id="editEventForm">
+               <label for="name">Event Name</label>
+               <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value="<%= event.event_name %>"
+               />
+
+               <label for="description">Description</label>
+               <textarea type="text" id="description" name="description">
+<%= event.event_description %></textarea
+               >
+
+               <label for="date">Date</label>
+               <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  value="<%= event.event_date.toISOString().slice(0, 10) %>"
+               />
+
+               <label for="time">Time</label>
+               <input
+                  type="time"
+                  id="time"
+                  name="time"
+                  value="<%= event.event_time.slice(0, 5) %>"
+               />
+
+               <label for="venue">Venue</label>
+               <input
+                  type="text"
+                  id="venue"
+                  name="venue"
+                  value="<%= venue %>"
+               />
+
+               <label for="date">Deadline</label>
+               <input
+                  type="date"
+                  id="deadline"
+                  name="deadline"
+                  value="<%= event.registration_deadline.toISOString().slice(0, 10) %>"
+               />
+
+               <label for="fee">Fee</label>
+               <input
+                  id="number"
+                  id="fee"
+                  name="fee"
+                  value="<%= event.fees %>"
+               />
+
+               <label class="eventType">Event Type</label>
+               <select name="eventType" id="eventType" class="form-select">
+                  <option selected disabled>Choose an Event Type</option>
+                  <% eventTypes.forEach((ET) => { %> <% if (ET.event_type_name
+                  === eventType) { %>
+                  <option value="<%= event.event_type_id %>" selected>
+                     <%= ET.event_type_name %>
+                  </option>
+                  <% } else { %>
+                  <option value="<%= event.event_type_id %>">
+                     <%= ET.event_type_name %>
+                  </option>
+                  <% } %> <% }); %>
+               </select>
+               <input
+                  type="hidden"
+                  id="event_id"
+                  name="event_id"
+                  value="<%= event.event_id %>"
+               />
+            </form>
+         </div>
+         <div class="modal-footer d-flex justify-content-between w-100">
+            <button
+               type="button"
+               class="btn btn-secondary"
+               data-bs-dismiss="modal"
+            >
+               Close
+            </button>
+            <button type="button" class="btn btn-primary" id="submitEventForm">
+               Save Changes
+            </button>
+         </div>
+      </div>
+   </div>
+</div>

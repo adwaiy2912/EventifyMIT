@@ -26,31 +26,54 @@
          class="header__ul nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
       >
          <li>
-            <a href="/" class="underline-hover nav-link px-3 text-black"
+            <a
+               href="/"
+               class="underline-hover nav-link px-3 text-black"
+               id="header__ul--li--home"
                >Home</a
             >
          </li>
          <% if (user === 'ATTENDEE') { %>
          <li>
-            <a href="/find" class="underline-hover nav-link px-3 text-black"
-               >Find Events</a
+            <a
+               href="/find"
+               class="underline-hover nav-link px-3 text-black"
+               id="header__ul--li--find"
+               >Find</a
             >
          </li>
          <% } else { %>
          <li>
-            <a href="/create" class="underline-hover nav-link px-3 text-black"
-               >Create Events</a
+            <a
+               href="/create"
+               class="underline-hover nav-link px-3 text-black"
+               id="header__ul--li--create"
+               >Create</a
             >
          </li>
          <% } %>
          <li>
-            <a href="/manage" class="underline-hover nav-link px-3 text-black"
-               >Manage Events</a
+            <a
+               href="/manage"
+               class="underline-hover nav-link px-3 text-black"
+               id="header__ul--li--manage"
+               >Manage</a
             >
          </li>
          <li>
-            <a href="/history" class="underline-hover nav-link px-3 text-black"
+            <a
+               href="/history"
+               class="underline-hover nav-link px-3 text-black"
+               id="header__ul--li--history"
                >History</a
+            >
+         </li>
+         <li>
+            <a
+               href="/"
+               class="underline-hover nav-link px-3 text-black"
+               id="header__ul--li--history"
+               >Contact</a
             >
          </li>
       </ul>
@@ -87,3 +110,17 @@
       <% } %>
    </div>
 </header>
+
+<script>
+   const pathname = window.location.pathname;
+   const pathMap = {
+      "/find": "header__ul--li--find",
+      "/create": "header__ul--li--create",
+      "/manage": "header__ul--li--manage",
+      "/history": "header__ul--li--history",
+   };
+   const path = pathMap[pathname] || "header__ul--li--home";
+
+   document.getElementById(path).classList.remove("text-black");
+   document.getElementById(path).style.color = "#8645ff";
+</script>

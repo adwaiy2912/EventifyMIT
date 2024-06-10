@@ -38,9 +38,16 @@ getVenue = async (venueID) => {
    return `${result.name} ${result.location}`;
 };
 
+checkEventClosed = (registerDeadline) => {
+   const currentDate = new Date();
+   const registerDate = new Date(registerDeadline);
+   return currentDate > registerDate;
+};
+
 module.exports = {
    getUserType,
    generateUniqueString,
    getVenueID,
    getVenue,
+   checkEventClosed,
 };
