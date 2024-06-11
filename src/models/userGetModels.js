@@ -64,6 +64,20 @@ sqlGetVenue = async (ID) => {
       throw error;
    }
 };
+sqlGetPassword = async (ID, user) => {
+   try {
+      const table = user + "S";
+      const colID = user + "_ID";
+      const result = await pool.query(
+         `SELECT PASSWORD FROM ${table} WHERE ${colID} = $1`,
+         [ID]
+      );
+      return result.rows[0].password;
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
 sqlGetOrganizerUpcommingEvents = async (ID) => {
    try {
       const result = await pool.query(
@@ -119,6 +133,7 @@ module.exports = {
    sqlGetRegistrationStatus,
    sqlGetEventType,
    sqlGetVenue,
+   sqlGetPassword,
    sqlGetOrganizerUpcommingEvents,
    sqlGetAttendeeUpcommingEvents,
    sqlGetOrganizerPreviousEvents,

@@ -1,9 +1,15 @@
+const bcrypt = require("bcrypt");
 const {
    sqlCreateUser,
    sqlCreateEvent,
    sqlCreateRegistration,
 } = require("../models/userCreateModels");
-const { sqlUpdateEvent } = require("../models/userUpdateModels");
+const { sqlGetPassword } = require("../models/userGetModels");
+const {
+   sqlUpdateEvent,
+   sqlUpdateProfile,
+   sqlUpdatePassword,
+} = require("../models/userUpdateModels");
 const { sqlCheckForExistUser } = require("../models/utilsModels");
 
 const { generateUniqueString, getVenueID } = require("../utils/userUtils");
@@ -22,7 +28,7 @@ exports.signup = async (req, res) => {
          return res.redirect(400, "/user");
       }
       if (req.body.password !== req.body.confirmPassword) {
-         console.log("user pass wrong");
+         console.log("user password not matching");
          return res.redirect(403, "/user");
       }
       await sqlCreateUser(req.body);
@@ -69,13 +75,50 @@ exports.register = async (req, res) => {
    }
 };
 
-exports.update = async (req, res) => {
+exports.updateEvent = async (req, res) => {
    try {
       const venueID = await getVenueID(req.body.venue);
       await sqlUpdateEvent(req.body, venueID);
       console.log("event updated");
       const redirectUrl = req.get("referer") || "/home";
       return res.redirect(201, redirectUrl);
+   } catch {
+      console.log("error occured");
+      return res.redirect(500, "/home");
+   }
+};
+
+exports.updateProfile = async (req, res) => {
+   try {
+      await sqlUpdateProfile(req.body);
+      console.log("profile updated");
+      const redirectUrl = req.get("referer") || "/home";
+      return res.redirect(200, redirectUrl);
+   } catch {
+      console.log("error occured");
+      return res.redirect(500, "/home");
+   }
+};
+
+exports.updatePassword = async (req, res) => {
+   try {
+      const isPasswordMatch = await bcrypt.compare(
+         req.body.oldPassword,
+         await sqlGetPassword(req.body.id, req.body.user)
+      );
+
+      if (!isPasswordMatch) {
+         console.log("old password incorrect");
+         return res.redirect(403, "/home");
+      }
+      if (req.body.newPassword !== req.body.confirmNewPassword) {
+         console.log("new password not matching");
+         return res.redirect(403, "/home");
+      }
+      await sqlUpdatePassword(req.body);
+      console.log("password updated");
+      const redirectUrl = req.get("referer") || "/home";
+      return res.redirect(200, redirectUrl);
    } catch {
       console.log("error occured");
       return res.redirect(500, "/home");

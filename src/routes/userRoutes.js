@@ -18,7 +18,11 @@ router.post("/create", userController.create);
 
 router.post("/register", userController.register);
 
-router.post("/update", userController.update);
+router.post("/update/event", userController.updateEvent);
+
+router.post("/update/profile", userController.updateProfile);
+
+router.post("/update/password", userController.updatePassword);
 
 router.delete("/logout", (req, res, next) => {
    req.logOut((err) => {

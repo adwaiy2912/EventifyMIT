@@ -1,0 +1,135 @@
+<div
+   class="modal fade"
+   id="staticBackdrop"
+   data-bs-backdrop="static"
+   data-bs-keyboard="false"
+   tabindex="-1"
+   aria-labelledby="staticBackdropLabel"
+   aria-hidden="true"
+>
+   <div
+      class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+   >
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalToggleLabel">
+               Edit User Details
+            </h1>
+            <button
+               type="button"
+               class="btn-close"
+               data-bs-dismiss="modal"
+               aria-label="Close"
+            ></button>
+         </div>
+         <div class="modal-body">
+            <form class="eventForm formMargin" id="editProfileForm">
+               <label for="name">Name</label>
+               <input type="text" id="name" name="name" value="<%= name %>" />
+               <label for="email">Email</label>
+               <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  value="<%= email %>"
+               />
+               <label for="phone">Phone</label>
+               <input
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value="<%= phone %>"
+               />
+               <input type="hidden" id="id" name="id" value="<%= ID %>" />
+               <input type="hidden" id="user" name="user" value="<%= user %>" />
+            </form>
+         </div>
+         <div class="modal-footer d-flex justify-content-between w-100">
+            <button
+               class="btn btn-secondary"
+               data-bs-target="#staticBackdrop2"
+               data-bs-toggle="modal"
+            >
+               Click to edit password
+            </button>
+            <button
+               type="button"
+               class="btn btn-primary"
+               id="submitProfileForm"
+            >
+               Save Changes
+            </button>
+         </div>
+      </div>
+   </div>
+</div>
+<div
+   class="modal fade"
+   id="staticBackdrop2"
+   data-bs-backdrop="static"
+   data-bs-keyboard="false"
+   tabindex="-1"
+   aria-labelledby="staticBackdropLabel"
+   aria-hidden="true"
+>
+   <div
+      class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+   >
+      <div class="modal-content">
+         <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">
+               Edit Password
+            </h1>
+            <button
+               type="button"
+               class="btn-close"
+               data-bs-dismiss="modal"
+               aria-label="Close"
+            ></button>
+         </div>
+         <div class="modal-body">
+            <form class="eventForm formMargin" id="editPasswordForm">
+               <label for="oldPassword">Old Password</label>
+               <input
+                  type="password"
+                  id="oldPassword"
+                  name="oldPassword"
+                  required
+               />
+               <label for="newPassword">New Password</label>
+               <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  required
+               />
+               <label for="confirmNewPassword">Confirm New Password</label>
+               <input
+                  type="password"
+                  id="confirmNewPassword"
+                  name="confirmNewPassword"
+                  required
+               />
+               <input type="hidden" id="id" name="id" value="<%= ID %>" />
+               <input type="hidden" id="user" name="user" value="<%= user %>" />
+            </form>
+         </div>
+         <div class="modal-footer d-flex justify-content-between w-100">
+            <button
+               class="btn btn-secondary"
+               data-bs-target="#staticBackdrop"
+               data-bs-toggle="modal"
+            >
+               Go Back
+            </button>
+            <button
+               type="button"
+               class="btn btn-primary"
+               id="submitPasswordForm"
+            >
+               Save New Password
+            </button>
+         </div>
+      </div>
+   </div>
+</div>

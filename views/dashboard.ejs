@@ -8,6 +8,8 @@
       <link rel="stylesheet" href="../css/reset.css" />
       <link rel="stylesheet" href="../css/headerFooter.css" />
       <link rel="stylesheet" href="../css/dashboard.css" />
+      <link rel="stylesheet" href="../css/create.css" />
+      <script defer src="../js/dashboard.js"></script>
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
@@ -47,11 +49,7 @@
                   <li><span>Phone:</span> <%= phone %></li>
                </ul>
             </div>
-            <form
-               action="/user/logout?_method=DELETE"
-               method="post"
-               class="d-flex justify-content-between w-100"
-            >
+            <div class="d-flex justify-content-between w-100">
                <button
                   type="button"
                   class="btn btn-secondary"
@@ -60,9 +58,19 @@
                >
                   Edit
                </button>
-               <button type="submit" class="btn btn-primary">Log Out</button>
-            </form>
+               <form
+                  id="logoutForm"
+                  action="/user/logout?_method=DELETE"
+                  method="post"
+                  style="display: none"
+               ></form>
+               <button type="button" id="logoutButton" class="btn btn-primary">
+                  Log Out
+               </button>
+            </div>
          </div>
+
+         <%- include("layout/editProfileModal")%>
       </main>
 
       <%- include("layout/footer")%>
