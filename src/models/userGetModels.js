@@ -40,6 +40,30 @@ sqlGetRegistrationStatus = async (eventID, attendeeID) => {
       throw error;
    }
 };
+sqlGetEventRegistrations = async (ID) => {
+   try {
+      const result = await pool.query(
+         `SELECT * FROM REGISTRATIONS WHERE EVENT_ID = $1`,
+         [ID]
+      );
+      return result.rows;
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+sqlGetAttendeeData = async (IDs) => {
+   try {
+      const result = await pool.query(
+         `SELECT ATTENDEE_ID, NAME, EMAIL, PHONE FROM ATTENDEES WHERE ATTENDEE_ID = ANY($1)`,
+         [IDs]
+      );
+      return result.rows;
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
 sqlGetEventType = async (ID) => {
    try {
       const result = await pool.query(
@@ -131,6 +155,8 @@ module.exports = {
    sqlGetVenueID,
    sqlGetEventDetails,
    sqlGetRegistrationStatus,
+   sqlGetEventRegistrations,
+   sqlGetAttendeeData,
    sqlGetEventType,
    sqlGetVenue,
    sqlGetPassword,

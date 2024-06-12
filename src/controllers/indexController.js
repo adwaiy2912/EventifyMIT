@@ -18,6 +18,7 @@ const {
    getUserType,
    getVenue,
    checkEventClosed,
+   getRegistrationData,
 } = require("../utils/userUtils");
 
 exports.dashboard =
@@ -101,5 +102,18 @@ exports.eventID =
             req.params.id,
             req.user.attendee_id
          ),
+      });
+   });
+
+exports.viewID =
+   (checkAuthenticated,
+   checkForOrganizer,
+   async (req, res) => {
+      const event = await sqlGetEventDetails(req.params.id);
+      const registrationsData = await getRegistrationData(req.params.id);
+      res.render("view", {
+         user: getUserType(req.user),
+         event,
+         registrationsData,
       });
    });

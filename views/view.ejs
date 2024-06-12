@@ -8,6 +8,7 @@
       <link rel="stylesheet" href="../css/reset.css" />
       <link rel="stylesheet" href="../css/headerFooter.css" />
       <link rel="stylesheet" href="../css/view.css" />
+      <script defer src="../js/view.js"></script>
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
@@ -19,86 +20,121 @@
             class="page-content page-container d-flex flex-column justify-content-center align-items-center"
             id="page-content"
          >
+            <h1><%= event.event_name %></h1>
+            <h2 class="text-muted mb-4">Registrations</h2>
             <div class="list list-row col-sm-6">
-               <div class="list-item">
-                  <a href="#">
-                     <img
-                        src="../img/home/attendee.png"
-                        alt="user"
-                        width="40"
-                        height="40"
-                  /></a>
+               <% registrationsData.forEach(attendee => { %>
+               <div
+                  type="button"
+                  class="list-item m-1 gap-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#staticBackdrop"
+                  data-user-name="<%= attendee.name %>"
+                  data-user-id="<%= attendee.attendee_id %>"
+                  data-user-email="<%= attendee.email %>"
+                  data-user-phone="<%= attendee.phone %>"
+                  data-user-payStatus="<%= attendee.payment_status %>"
+                  data-user-regDate="<%= attendee.registration_date.toISOString().slice(0,
+                  10) %>"
+               >
+                  <img
+                     src="../img/home/attendee.png"
+                     alt="user"
+                     width="40"
+                     height="40"
+                     class="ms-1"
+                  />
                   <div class="flex">
-                     <span class="item-author text-dark">Sam Kuran</span>
+                     <span class="item-author text-dark no-wrap"
+                        ><%= attendee.name %></span
+                     >
                      <span class="item-except text-muted text-sm h-1x">
-                        220966123
+                        <%= attendee.attendee_id %>
                      </span>
                   </div>
-                  <span class="text-muted text-sm text-end status"> Paid </span>
+                  <span class="text-muted text-sm text-end status me-3">
+                     <%= attendee.payment_status %>
+                  </span>
                </div>
-               <div class="list-item">
-                  <a href="#">
-                     <img
-                        src="../img/home/attendee.png"
-                        alt="user"
-                        width="40"
-                        height="40"
-                  /></a>
-                  <div class="flex">
-                     <span class="item-author text-dark">Rahul Singh</span>
-                     <span class="item-except text-muted text-sm h-1x">
-                        220361221
-                     </span>
+               <% }); %>
+            </div>
+         </div>
+
+         <div
+            class="modal fade"
+            id="staticBackdrop"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="staticBackdropLabel"
+            aria-hidden="true"
+         >
+            <div class="modal-dialog">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                        Attendee Details
+                     </h1>
+                     <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                     ></button>
                   </div>
-                  <span class="text-muted text-sm text-end status"> Paid </span>
-               </div>
-               <div class="list-item">
-                  <a href="#">
-                     <img
-                        src="../img/home/attendee.png"
-                        alt="user"
-                        width="40"
-                        height="40"
-                  /></a>
-                  <div class="flex">
-                     <span class="item-author text-dark">Rohit Shah</span>
-                     <span class="item-except text-muted text-sm h-1x">
-                        223162124
-                     </span>
+                  <div class="modal-body">
+                     <p class="text-muted fw-light">
+                        Name:
+                        <span
+                           class="text-dark fw-semibold"
+                           id="modal-name"
+                        ></span>
+                     </p>
+                     <p class="text-muted fw-light">
+                        Attendee ID:
+                        <span
+                           class="text-dark fw-semibold"
+                           id="modal-attendeeID"
+                        ></span>
+                     </p>
+                     <p class="text-muted fw-light">
+                        Email:
+                        <span
+                           class="text-dark fw-semibold"
+                           id="modal-email"
+                        ></span>
+                     </p>
+                     <p class="text-muted fw-light">
+                        Phone:
+                        <span
+                           class="text-dark fw-semibold"
+                           id="modal-phone"
+                        ></span>
+                     </p>
+                     <p class="text-muted fw-light">
+                        Payment Status:
+                        <span
+                           class="text-dark fw-semibold"
+                           id="modal-payStatus"
+                        ></span>
+                     </p>
+                     <p class="text-muted fw-light">
+                        Registration Date:
+                        <span
+                           class="text-dark fw-semibold"
+                           id="modal-regDate"
+                        ></span>
+                     </p>
                   </div>
-                  <span class="text-muted text-sm text-end status"> Paid </span>
-               </div>
-               <div class="list-item">
-                  <a href="#">
-                     <img
-                        src="../img/home/attendee.png"
-                        alt="user"
-                        width="40"
-                        height="40"
-                  /></a>
-                  <div class="flex">
-                     <span class="item-author text-dark">Aditya Raj</span>
-                     <span class="item-except text-muted text-sm h-1x">
-                        231293137
-                     </span>
+                  <div class="modal-footer">
+                     <button
+                        type="button"
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal"
+                     >
+                        Close
+                     </button>
                   </div>
-                  <span class="text-muted text-sm text-end status"> Paid </span>
-               </div>
-               <div class="list-item">
-                  <a href="#">
-                     <img
-                        src="../img/home/attendee.png"
-                        alt="user"
-                        width="40"
-                        height="40"
-                  /></a>
-                  <div class="flex">
-                     <span class="item-author text-dark">Sam Kuran</span>
-                     <span class="item-except text-muted text-sm h-1x">
-                        220966123
-                     </span>
-                  </div>
-                  <span class="text-muted text-sm text-end status"> Paid </span>
                </div>
             </div>
          </div>

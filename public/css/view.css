@@ -1,5 +1,5 @@
-#page-content {
-   margin-top: 6rem;
+img {
+   padding: 0 !important;
 }
 
 a {
@@ -32,13 +32,6 @@ a:hover {
    }
 }
 
-.list {
-   background-color: aliceblue;
-   padding-left: 0;
-   padding-right: 0;
-   border-radius: 5px;
-}
-
 .list-item {
    position: relative;
    display: -ms-flexbox;
@@ -47,12 +40,13 @@ a:hover {
    flex-direction: row;
    min-width: 0;
    word-wrap: break-word;
+   background-color: aliceblue;
    border: 1px solid rgb(119, 117, 117);
    border-radius: 5px;
 }
 
 .status {
-   width: 65%;
+   width: 100%;
 }
 
 .list-row .list-item {
@@ -62,11 +56,6 @@ a:hover {
    -ms-flex-align: center;
    align-items: center;
    padding: 0.75rem 0.625rem;
-}
-
-.list-row .list-item > * {
-   padding-left: 0.625rem;
-   padding-right: 0.625rem;
 }
 
 .no-wrap {

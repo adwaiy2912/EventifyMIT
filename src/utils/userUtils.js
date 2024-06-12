@@ -1,5 +1,10 @@
 const crypto = require("crypto");
-const { sqlGetVenueID, sqlGetVenue } = require("../models/userGetModels");
+const {
+   sqlGetVenueID,
+   sqlGetVenue,
+   sqlGetEventRegistrations,
+   sqlGetAttendeeData,
+} = require("../models/userGetModels");
 
 getUserType = (user) =>
    user.attendee_id === undefined ? "ORGANIZER" : "ATTENDEE";
@@ -44,10 +49,31 @@ checkEventClosed = (registerDeadline) => {
    return currentDate > registerDate;
 };
 
+getRegistrationData = async (eventID) => {
+   const registrations = await sqlGetEventRegistrations(eventID);
+   const attendeeIDs = registrations.map(
+      (registration) => registration.attendee_id
+   );
+   const attendeeData = await sqlGetAttendeeData(attendeeIDs);
+
+   const attendeeMap = attendeeData.reduce((map, attendee) => {
+      map[attendee.attendee_id] = attendee;
+      return map;
+   }, {});
+
+   return registrations.map((event) => {
+      return {
+         ...event,
+         ...attendeeMap[event.attendee_id],
+      };
+   });
+};
+
 module.exports = {
    getUserType,
    generateUniqueString,
    getVenueID,
    getVenue,
    checkEventClosed,
+   getRegistrationData,
 };

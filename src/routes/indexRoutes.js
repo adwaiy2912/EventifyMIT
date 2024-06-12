@@ -38,4 +38,6 @@ router.get("/view", (req, res) => {
 
 router.get("/event/:id", indexController.eventID);
 
+router.get("/view/:id", indexController.viewID);
+
 module.exports = router;
