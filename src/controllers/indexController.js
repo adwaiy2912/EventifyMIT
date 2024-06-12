@@ -4,15 +4,20 @@ const {
    checkForAttendee,
    checkForOrganizer,
 } = require("../middleware/authMiddleware");
-const { sqlFindEvents, sqlEventTypes } = require("../models/indexModels");
 const {
+   sqlGetAttendeeUpcommingEvents,
+   sqlGetAttendeePreviousEvents,
+} = require("../models/attendeeGetModels");
+const {
+   sqlGetOrganizerUpcommingEvents,
+   sqlGetOrganizerPreviousEvents,
+} = require("../models/organizerGetModels");
+const {
+   sqlGetEventTypes,
    sqlGetEventDetails,
    sqlGetEventType,
+   sqlGetFindEvents,
    sqlGetRegistrationStatus,
-   sqlGetOrganizerUpcommingEvents,
-   sqlGetAttendeeUpcommingEvents,
-   sqlGetOrganizerPreviousEvents,
-   sqlGetAttendeePreviousEvents,
 } = require("../models/userGetModels");
 const {
    getUserType,
@@ -37,9 +42,9 @@ exports.find =
    (checkAuthenticated,
    checkForAttendee,
    async (req, res) => {
-      res.render("find", {
+      res.render("findEvents", {
          user: getUserType(req.user),
-         events: await sqlFindEvents(),
+         events: await sqlGetFindEvents(),
       });
    });
 
@@ -53,7 +58,7 @@ exports.manage =
       } else {
          events = await sqlGetOrganizerUpcommingEvents(req.user.organizer_id);
       }
-      res.render("manage", {
+      res.render("manageEvents", {
          user,
          events,
       });
@@ -79,9 +84,9 @@ exports.create =
    (checkAuthenticated,
    checkForOrganizer,
    async (req, res) => {
-      res.render("create", {
+      res.render("createEvent", {
          user: getUserType(req.user),
-         eventTypes: await sqlEventTypes(),
+         eventTypes: await sqlGetEventTypes(),
       });
    });
 
@@ -90,12 +95,12 @@ exports.eventID =
    checkForAttendee,
    async (req, res) => {
       const event = await sqlGetEventDetails(req.params.id);
-      res.render("event", {
+      res.render("eventCard", {
          user: getUserType(req.user),
          attendeeID: req.user.attendee_id,
          event,
          eventType: await sqlGetEventType(event.event_type_id),
-         eventTypes: await sqlEventTypes(),
+         eventTypes: await sqlGetEventTypes(),
          venue: await getVenue(event.venue_id),
          eventClosed: checkEventClosed(event.registration_deadline),
          status: await sqlGetRegistrationStatus(
@@ -111,7 +116,7 @@ exports.viewID =
    async (req, res) => {
       const event = await sqlGetEventDetails(req.params.id);
       const registrationsData = await getRegistrationData(req.params.id);
-      res.render("view", {
+      res.render("viewRegistrations", {
          user: getUserType(req.user),
          event,
          registrationsData,

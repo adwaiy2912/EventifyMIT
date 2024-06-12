@@ -19,7 +19,7 @@ router.get("/home", checkAuthenticated, (req, res) => {
 });
 
 router.get("/user", checkNotAuthenticated, (req, res) => {
-   res.render("user", {});
+   res.render("login_signup", {});
 });
 
 router.get("/dashboard", indexController.dashboard);
@@ -31,10 +31,6 @@ router.get("/create", indexController.create);
 router.get("/manage", indexController.manage);
 
 router.get("/history", indexController.history);
-
-router.get("/view", (req, res) => {
-   res.render("view", { user: "ORGANIZER" });
-});
 
 router.get("/event/:id", indexController.eventID);
 

@@ -1,10 +1,10 @@
 const crypto = require("crypto");
 const {
    sqlGetVenueID,
-   sqlGetVenue,
    sqlGetEventRegistrations,
    sqlGetAttendeeData,
-} = require("../models/userGetModels");
+} = require("../models/organizerGetModels");
+const { sqlGetVenue } = require("../models/userGetModels");
 
 getUserType = (user) =>
    user.attendee_id === undefined ? "ORGANIZER" : "ATTENDEE";
