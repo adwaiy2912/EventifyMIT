@@ -47,10 +47,14 @@
    list-style-type: none;
 }
 
-.card {
+.cards li {
    position: relative;
    display: block;
    height: 100%;
+   width: clamp(325px, 30%, 450px) !important;
+}
+
+.card {
    overflow: hidden;
    text-decoration: none;
    border-radius: calc(var(--curve) * 1px) !important;

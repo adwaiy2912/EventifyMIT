@@ -17,12 +17,12 @@ const { generateUniqueString, getVenueID } = require("../utils/userUtils");
 exports.signup = async (req, res) => {
    try {
       // const userCheck = users.find((user) => user.email === req.body.email);
-      console.log(req.body);
       const userEmailCheck = await sqlCheckForExistUser(
          "email",
          req.body.email
       );
       const userIDCheck = await sqlCheckForExistUser("ID", req.body.regNo);
+
       if (userEmailCheck || userIDCheck) {
          console.log(userEmailCheck || userIDCheck);
          return res.redirect(400, "/user");
@@ -32,20 +32,22 @@ exports.signup = async (req, res) => {
          return res.redirect(403, "/user");
       }
       await sqlCreateUser(req.body);
+
       console.log("user created");
       return res.redirect(201, "/home");
    } catch {
       console.log("error occured");
-      return res.redirect(500, "/user");
+      return res.redirect(500, "/");
    }
 };
 
 exports.create = async (req, res) => {
    try {
-      console.log(req.body);
       const eventID = generateUniqueString(10);
       const venueID = await getVenueID(req.body.venue);
+
       await sqlCreateEvent(req.body, eventID, venueID, req.user.organizer_id);
+
       console.log("event created");
       return res.redirect(201, "/home");
    } catch {
@@ -57,6 +59,8 @@ exports.create = async (req, res) => {
 exports.register = async (req, res) => {
    try {
       let { eventID, userID, paymentStatus } = req.body;
+      const redirectUrl = req.get("referer") || "/home";
+
       if (paymentStatus === "PENDING") {
          await paymentAPI(req.body);
       }
@@ -67,7 +71,6 @@ exports.register = async (req, res) => {
       await sqlCreateRegistration(eventID, userID, paymentStatus);
 
       console.log("user registered");
-      const redirectUrl = req.get("referer") || "/home";
       return res.redirect(200, redirectUrl);
    } catch {
       console.log("error occured");
@@ -78,9 +81,11 @@ exports.register = async (req, res) => {
 exports.updateEvent = async (req, res) => {
    try {
       const venueID = await getVenueID(req.body.venue);
-      await sqlUpdateEvent(req.body, venueID);
-      console.log("event updated");
       const redirectUrl = req.get("referer") || "/home";
+
+      await sqlUpdateEvent(req.body, venueID);
+
+      console.log("event updated");
       return res.redirect(201, redirectUrl);
    } catch {
       console.log("error occured");
@@ -90,9 +95,11 @@ exports.updateEvent = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
    try {
-      await sqlUpdateProfile(req.body);
-      console.log("profile updated");
       const redirectUrl = req.get("referer") || "/home";
+
+      await sqlUpdateProfile(req.body);
+
+      console.log("profile updated");
       return res.redirect(200, redirectUrl);
    } catch {
       console.log("error occured");
@@ -102,6 +109,7 @@ exports.updateProfile = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
    try {
+      const redirectUrl = req.get("referer") || "/home";
       const isPasswordMatch = await bcrypt.compare(
          req.body.oldPassword,
          await sqlGetPassword(req.body.id, req.body.user)
@@ -116,8 +124,8 @@ exports.updatePassword = async (req, res) => {
          return res.redirect(403, "/home");
       }
       await sqlUpdatePassword(req.body);
+
       console.log("password updated");
-      const redirectUrl = req.get("referer") || "/home";
       return res.redirect(200, redirectUrl);
    } catch {
       console.log("error occured");

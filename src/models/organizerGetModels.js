@@ -69,10 +69,24 @@ sqlGetEventRegistrations = async (ID) => {
    }
 };
 
+sqlGetOrganizerID = async (eventID) => {
+   try {
+      const result = await pool.query(
+         `SELECT ORGANIZER_ID FROM EVENTS WHERE EVENT_ID = $1`,
+         [eventID]
+      );
+      return result.rows[0].organizer_id;
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+
 module.exports = {
    sqlGetVenueID,
    sqlGetAttendeeData,
    sqlGetOrganizerUpcommingEvents,
    sqlGetOrganizerPreviousEvents,
    sqlGetEventRegistrations,
+   sqlGetOrganizerID,
 };

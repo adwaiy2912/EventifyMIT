@@ -1,3 +1,4 @@
+const { sqlGetOrganizerID } = require("../models/organizerGetModels");
 const { getUserType } = require("../utils/userUtils");
 
 checkAuthenticated = (req, res, next) => {
@@ -28,9 +29,21 @@ checkForAttendee = (req, res, next) => {
    res.redirect("/home");
 };
 
+checkForOrganizerID = async (req, res, next) => {
+   if (
+      getUserType(req.user) === "ATTENDEE" ||
+      (getUserType(req.user) === "ORGANIZER" &&
+         req.user.organizer_id === (await sqlGetOrganizerID(req.params.id)))
+   ) {
+      return next();
+   }
+   res.redirect("/home");
+};
+
 module.exports = {
    checkAuthenticated,
    checkNotAuthenticated,
    checkForOrganizer,
    checkForAttendee,
+   checkForOrganizerID,
 };

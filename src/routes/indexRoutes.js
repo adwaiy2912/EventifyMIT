@@ -5,6 +5,7 @@ const {
    checkNotAuthenticated,
    checkForAttendee,
    checkForOrganizer,
+   checkForOrganizerID,
 } = require("../middleware/authMiddleware");
 const indexController = require("../controllers/indexController");
 const { getUserType } = require("../utils/userUtils");
@@ -22,18 +23,33 @@ router.get("/user", checkNotAuthenticated, (req, res) => {
    res.render("login_signup", {});
 });
 
-router.get("/dashboard", indexController.dashboard);
+router.get("/dashboard", checkAuthenticated, indexController.dashboard);
 
-router.get("/find", indexController.find);
+router.get("/find", checkAuthenticated, checkForAttendee, indexController.find);
 
-router.get("/create", indexController.create);
+router.get(
+   "/create",
+   checkAuthenticated,
+   checkForOrganizer,
+   indexController.create
+);
 
-router.get("/manage", indexController.manage);
+router.get("/manage", checkAuthenticated, indexController.manage);
 
-router.get("/history", indexController.history);
+router.get("/history", checkAuthenticated, indexController.history);
 
-router.get("/event/:id", indexController.eventID);
+router.get(
+   "/event/:id",
+   checkAuthenticated,
+   checkForOrganizerID,
+   indexController.eventID
+);
 
-router.get("/view/:id", indexController.viewID);
+router.get(
+   "/view/:id",
+   checkAuthenticated,
+   checkForOrganizer,
+   indexController.viewID
+);
 
 module.exports = router;
