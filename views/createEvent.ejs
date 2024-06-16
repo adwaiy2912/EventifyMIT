@@ -8,8 +8,8 @@
       <link rel="stylesheet" href="../css/reset.css" />
       <link rel="stylesheet" href="../css/headerFooter.css" />
       <link rel="stylesheet" href="../css/create.css" />
-      <script defer src="../js/minEventCard.js"></script>
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
+      <script defer src="../js/formSubmit.js"></script>
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
    <body>
@@ -17,7 +17,7 @@
 
       <main>
          <div class="event-container d-flex justify-content-center">
-            <form action="/user/create" method="post" class="eventForm">
+            <form class="eventForm" id="eventForm">
                <label for="name">Event Name</label>
                <input type="text" id="name" name="name" required />
 
@@ -66,7 +66,12 @@
                   <% }); %>
                </select>
 
-               <input type="submit" value="Create" class="btn btn-primary" />
+               <input
+                  type="submit"
+                  value="Create"
+                  class="btn btn-primary"
+                  onclick="formSubmit('eventForm', '/user/create')"
+               />
             </form>
          </div>
       </main>

@@ -1,18 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 const userController = require("../controllers/userController");
+
+router.post("/login", userController.login);
 
 router.post("/signup", userController.signup);
 
-router.post(
-   "/login",
-   passport.authenticate("local-login", {
-      successRedirect: "/home",
-      failureRedirect: "/",
-      failureFlash: true,
-   })
-);
+router.delete("/logout", userController.logout);
 
 router.post("/create", userController.create);
 
@@ -23,14 +17,5 @@ router.post("/update/event", userController.updateEvent);
 router.post("/update/profile", userController.updateProfile);
 
 router.post("/update/password", userController.updatePassword);
-
-router.delete("/logout", (req, res, next) => {
-   req.logOut((err) => {
-      if (err) {
-         return next(err);
-      }
-      res.redirect("/");
-   });
-});
 
 module.exports = router;

@@ -40,8 +40,18 @@
                   name="phone"
                   value="<%= phone %>"
                />
-               <input type="hidden" id="id" name="id" value="<%= ID %>" />
-               <input type="hidden" id="user" name="user" value="<%= user %>" />
+               <input
+                  type="hidden"
+                  id="idDetails"
+                  name="id"
+                  value="<%= ID %>"
+               />
+               <input
+                  type="hidden"
+                  id="userDetails"
+                  name="user"
+                  value="<%= user %>"
+               />
             </form>
          </div>
          <div class="modal-footer d-flex justify-content-between w-100">
@@ -56,6 +66,7 @@
                type="button"
                class="btn btn-primary"
                id="submitProfileForm"
+               onclick="formSubmit('editProfileForm', '/user/update/profile')"
             >
                Save Changes
             </button>
@@ -110,8 +121,18 @@
                   name="confirmNewPassword"
                   required
                />
-               <input type="hidden" id="id" name="id" value="<%= ID %>" />
-               <input type="hidden" id="user" name="user" value="<%= user %>" />
+               <input
+                  type="hidden"
+                  id="idPassword"
+                  name="id"
+                  value="<%= ID %>"
+               />
+               <input
+                  type="hidden"
+                  id="userPassword"
+                  name="user"
+                  value="<%= user %>"
+               />
             </form>
          </div>
          <div class="modal-footer d-flex justify-content-between w-100">
@@ -126,6 +147,7 @@
                type="button"
                class="btn btn-primary"
                id="submitPasswordForm"
+               onclick="formSubmit('editPasswordForm', '/user/update/password')"
             >
                Save New Password
             </button>

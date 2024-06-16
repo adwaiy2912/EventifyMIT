@@ -22,7 +22,7 @@ sqlCheckForExistUser = async (field, value) => {
       if (result1.rows.length === 0 && result2.rows.length === 0) {
          return;
       } else {
-         return `${field} already exists`;
+         return value;
       }
    } catch (error) {
       console.error(error);

@@ -25,7 +25,9 @@ module.exports = function (passport) {
 
                if (result1.rows.length === 0 && result2.rows.length === 0) {
                   return done(null, false, {
+                     status: 404,
                      message: "No user with that email",
+                     redirectUrl: "/user",
                   });
                }
 
@@ -36,18 +38,34 @@ module.exports = function (passport) {
                );
                // const isPasswordMatch = password === user[3];
                if (!isPasswordMatch) {
-                  return done(null, false, { message: "Password incorrect" });
+                  return done(null, false, {
+                     status: 403,
+                     message: "Password incorrect",
+                     redirectUrl: "/user",
+                  });
                }
 
-               return done(null, user);
+               return done(null, user, {
+                  status: 200,
+                  message: "Login successful",
+                  redirectUrl: "/home",
+               });
             } catch (error) {
-               return done(error);
+               return done(error, false, {
+                  status: 500,
+                  message: "Failed to login",
+                  redirectUrl: "/",
+               });
             }
          }
       )
    );
    passport.serializeUser((user, done) => {
-      done(null, user.email);
+      done(null, user.email, {
+         status: 200,
+         message: "Logged in serialized",
+         redirectUrl: "/home",
+      });
    });
    passport.deserializeUser(async (email, done) => {
       // const user = users.find((user) => user.email === email);
@@ -63,14 +81,24 @@ module.exports = function (passport) {
 
          if (result1.rows.length === 0 && result2.rows.length === 0) {
             return done(null, false, {
+               status: 404,
                message: "No user with that email",
+               redirectUrl: "/user",
             });
          }
 
          const user = result1.rows[0] || result2.rows[0];
-         return done(null, user);
+         return done(null, user, {
+            status: 404,
+            message: "Logged in deserialised",
+            redirectUrl: "/home",
+         });
       } catch (error) {
-         return done(error);
+         return done(error, false, {
+            status: 500,
+            message: "Failed to deserialize user",
+            redirectUrl: "/",
+         });
       }
    });
 };

@@ -25,14 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify(data),
          })
-            .then((response) => {
-               if (response.status === 200) {
-                  window.location.href = window.location.href;
-               } else {
-                  window.location.href = "/home";
-               }
+            .then((response) => response.json())
+            .then((data) => {
+               alert(data.message);
+               window.location.href = data.redirectUrl;
             })
             .catch((error) => {
+               alert(error);
                console.log(`An error occured, ${error}`);
             });
       });

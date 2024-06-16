@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 const {
    sqlCreateUser,
    sqlCreateEvent,
@@ -14,6 +15,18 @@ const { sqlCheckForExistUser } = require("../models/utilsModels");
 
 const { generateUniqueString, getVenueID } = require("../utils/userUtils");
 
+exports.login = (req, res, next) => {
+   passport.authenticate("local-login", (err, user, info) => {
+      const { status, message, redirectUrl } = info;
+      if (err || !user) {
+         return res.status(status).json({ message, redirectUrl });
+      }
+      req.logIn(user, (err) => {
+         return res.status(status).json({ message, redirectUrl });
+      });
+   })(req, res, next);
+};
+
 exports.signup = async (req, res) => {
    try {
       // const userCheck = users.find((user) => user.email === req.body.email);
@@ -22,23 +35,38 @@ exports.signup = async (req, res) => {
          req.body.email
       );
       const userIDCheck = await sqlCheckForExistUser("ID", req.body.regNo);
+      const userIdentifier = userEmailCheck || userIDCheck;
 
-      if (userEmailCheck || userIDCheck) {
-         console.log(userEmailCheck || userIDCheck);
-         return res.redirect(400, "/user");
+      if (userIdentifier) {
+         return res.status(400).json({
+            message: `${userIdentifier} aready in use`,
+            redirectUrl: "/user",
+         });
       }
       if (req.body.password !== req.body.confirmPassword) {
-         console.log("user password not matching");
-         return res.redirect(403, "/user");
+         return res
+            .status(403)
+            .json({ message: "Password not matching", redirectUrl: "/user" });
       }
       await sqlCreateUser(req.body);
 
-      console.log("user created");
-      return res.redirect(201, "/home");
+      return res
+         .status(201)
+         .json({ message: "User created successfully", redirectUrl: "/home" });
    } catch {
-      console.log("error occured");
-      return res.redirect(500, "/");
+      return res
+         .status(500)
+         .json({ message: "Failed to create user", redirectUrl: "/" });
    }
+};
+
+exports.logout = (req, res, next) => {
+   req.logOut((err) => {
+      if (err) {
+         return next(err);
+      }
+      res.redirect("/");
+   });
 };
 
 exports.create = async (req, res) => {
@@ -48,11 +76,13 @@ exports.create = async (req, res) => {
 
       await sqlCreateEvent(req.body, eventID, venueID, req.user.organizer_id);
 
-      console.log("event created");
-      return res.redirect(201, "/home");
+      return res
+         .status(201)
+         .json({ message: "Event created successfully", redirectUrl: "/home" });
    } catch {
-      console.log("error occured");
-      return res.redirect(500, "/");
+      return res
+         .status(500)
+         .json({ message: "Failed to create event", redirectUrl: "/home" });
    }
 };
 
@@ -65,16 +95,21 @@ exports.register = async (req, res) => {
          await paymentAPI(req.body);
       }
       if (paymentStatus === "FAILED") {
-         console.log("payment failed");
-         return res.redirect(400, "/home");
+         return res
+            .status(400)
+            .json({ message: "Payment Failed", redirectUrl });
       }
       await sqlCreateRegistration(eventID, userID, paymentStatus);
 
-      console.log("user registered");
-      return res.redirect(200, redirectUrl);
+      return res.status(200).json({
+         message: "Registration successful",
+         redirectUrl,
+      });
    } catch {
-      console.log("error occured");
-      return res.redirect(500, "/home");
+      return res.status(500).json({
+         message: "Failed to register to event",
+         redirectUrl: "/home",
+      });
    }
 };
 
@@ -85,11 +120,14 @@ exports.updateEvent = async (req, res) => {
 
       await sqlUpdateEvent(req.body, venueID);
 
-      console.log("event updated");
-      return res.redirect(201, redirectUrl);
+      return res
+         .status(200)
+         .json({ message: "Event updated successfully", redirectUrl });
    } catch {
-      console.log("error occured");
-      return res.redirect(500, "/home");
+      return res.status(500).json({
+         message: "Failed to update event",
+         redirectUrl: "/home",
+      });
    }
 };
 
@@ -99,11 +137,14 @@ exports.updateProfile = async (req, res) => {
 
       await sqlUpdateProfile(req.body);
 
-      console.log("profile updated");
-      return res.redirect(200, redirectUrl);
+      return res
+         .status(200)
+         .json({ message: "Profile updated successfully", redirectUrl });
    } catch {
-      console.log("error occured");
-      return res.redirect(500, "/home");
+      return res.status(500).json({
+         message: "Failed to update profile",
+         redirectUrl: "/home",
+      });
    }
 };
 
@@ -116,19 +157,27 @@ exports.updatePassword = async (req, res) => {
       );
 
       if (!isPasswordMatch) {
-         console.log("old password incorrect");
-         return res.redirect(403, "/home");
+         return res.status(403).json({
+            message: "Old password is incorrect",
+            redirectUrl,
+         });
       }
       if (req.body.newPassword !== req.body.confirmNewPassword) {
-         console.log("new password not matching");
-         return res.redirect(403, "/home");
+         return res.status(403).json({
+            message: "New password not matching",
+            redirectUrl,
+         });
       }
       await sqlUpdatePassword(req.body);
 
-      console.log("password updated");
-      return res.redirect(200, redirectUrl);
+      return res.status(200).json({
+         message: "Password updated successfully",
+         redirectUrl,
+      });
    } catch {
-      console.log("error occured");
-      return res.redirect(500, "/home");
+      return res.status(500).json({
+         message: "Failed to update password",
+         redirectUrl,
+      });
    }
 };

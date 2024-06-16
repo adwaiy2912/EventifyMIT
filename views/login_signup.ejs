@@ -7,7 +7,8 @@
       <link rel="icon" href="../img/Logo.png" type="image/x-icon" />
       <link rel="stylesheet" href="../css/reset.css" />
       <link rel="stylesheet" href="../css/user.css" />
-      <script defer src="../js/user.js"></script>
+      <script defer src="../js/login_signup.js"></script>
+      <script defer src="../js/formSubmit.js"></script>
       <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
       <script defer src="../bootstrap-5.3.3/js/bootstrap.js"></script>
    </head>
@@ -61,12 +62,7 @@
                   height="400"
                   class="login__div--img hide"
                />
-               <form
-                  action="/user/login"
-                  method="POST"
-                  class="login__form"
-                  id="loginForm"
-               >
+               <form class="login__form" id="loginForm">
                   <div class="login__form--email">
                      <img
                         src="../img/login/user.png"
@@ -107,7 +103,8 @@
                   <button
                      class="login__form--login"
                      role="button"
-                     type="submit"
+                     type="button"
+                     onclick="formSubmit('loginForm', '/user/login')"
                   >
                      Login
                   </button>
@@ -115,12 +112,7 @@
                      Create Account
                   </button>
                </form>
-               <form
-                  action="/user/signup"
-                  method="post"
-                  class="sign__form hide"
-                  id="signForm"
-               >
+               <form class="sign__form hide" id="signForm">
                   <div class="sign__form--name">
                      <img
                         src="../img/login/user.png"
@@ -243,7 +235,8 @@
                   <button
                      class="sign__form--signUp"
                      role="button"
-                     type="submit"
+                     type="button"
+                     onclick="formSubmit('signForm', '/user/signup')"
                   >
                      Sign Up
                   </button>
