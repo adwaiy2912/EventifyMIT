@@ -13,9 +13,19 @@ const {
 } = require("../models/userUpdateModels");
 const { sqlCheckForExistUser } = require("../models/utilsModels");
 
+const {
+   loginValidator,
+   signupValidator,
+   createValidator,
+} = require("../utils/formValidator");
 const { generateUniqueString, getVenueID } = require("../utils/userUtils");
 
 exports.login = (req, res, next) => {
+   const notValid = loginValidator(req.body);
+   if (notValid) {
+      return res.status(400).json({ message: notValid, redirectUrl: "/user" });
+   }
+
    passport.authenticate("local-login", (err, user, info) => {
       const { status, message, redirectUrl } = info;
       if (err || !user) {
@@ -29,7 +39,13 @@ exports.login = (req, res, next) => {
 
 exports.signup = async (req, res) => {
    try {
-      // const userCheck = users.find((user) => user.email === req.body.email);
+      const notValid = signupValidator(req.body);
+      if (notValid) {
+         return res
+            .status(400)
+            .json({ message: notValid, redirectUrl: "/user" });
+      }
+
       const userEmailCheck = await sqlCheckForExistUser(
          "email",
          req.body.email
@@ -42,11 +58,6 @@ exports.signup = async (req, res) => {
             message: `${userIdentifier} aready in use`,
             redirectUrl: "/user",
          });
-      }
-      if (req.body.password !== req.body.confirmPassword) {
-         return res
-            .status(403)
-            .json({ message: "Password not matching", redirectUrl: "/user" });
       }
       await sqlCreateUser(req.body);
 
@@ -71,6 +82,13 @@ exports.logout = (req, res, next) => {
 
 exports.create = async (req, res) => {
    try {
+      const notValid = createValidator(req.body);
+      if (notValid) {
+         return res
+            .status(400)
+            .json({ message: notValid, redirectUrl: "/create" });
+      }
+
       const eventID = generateUniqueString(10);
       const venueID = await getVenueID(req.body.venue);
 

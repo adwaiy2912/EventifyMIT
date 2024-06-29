@@ -12,6 +12,7 @@ formSubmit = (form, uri) => {
    })
       .then((response) => response.json())
       .then((data) => {
+         console.log(data);
          alert(data.message);
          window.location.href = data.redirectUrl;
       })
