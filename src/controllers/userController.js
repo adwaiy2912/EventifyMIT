@@ -5,8 +5,9 @@ const {
    sqlCreateEvent,
    sqlCreateRegistration,
 } = require("../models/userCreateModels");
-const { sqlGetPassword } = require("../models/userGetModels");
+const { sqlGetOTP, sqlGetPassword } = require("../models/userGetModels");
 const {
+   sqlUpdateVerifiedStatus,
    sqlUpdateEvent,
    sqlUpdateProfile,
    sqlUpdatePassword,
@@ -19,6 +20,8 @@ const {
    createValidator,
 } = require("../utils/formValidator");
 const { generateUniqueString, getVenueID } = require("../utils/userUtils");
+
+const { sendEmailOTP, sendPhoneOTP } = require("../utils/sendOTP");
 
 exports.login = (req, res, next) => {
    const notValid = loginValidator(req.body);
@@ -61,9 +64,21 @@ exports.signup = async (req, res) => {
       }
       await sqlCreateUser(req.body);
 
-      return res
-         .status(201)
-         .json({ message: "User created successfully", redirectUrl: "/home" });
+      await sendEmailOTP(
+         req.body.email,
+         "Email Verification",
+         "Verify your email with the code below."
+      );
+      await sendPhoneOTP(
+         req.body.phone,
+         "Verify your phone with the code below."
+      );
+
+      return res.status(201).json({
+         message:
+            "User created successfully. Verify your email and phone to login",
+         redirectUrl: "/verifyOTP",
+      });
    } catch {
       return res
          .status(500)
@@ -78,6 +93,42 @@ exports.logout = (req, res, next) => {
       }
       res.redirect("/");
    });
+};
+
+exports.verifyOTP = async (req, res) => {
+   try {
+      const { type, otp } = req.body;
+
+      const result = await sqlGetOTP(req.user.email, req.user.phone, type);
+
+      const matchOTP = await bcrypt.compare(otp, result.otp_code.toString());
+      const expiredOTP = result.expires_at < new Date(Date.now() - 30 * 60000);
+
+      if (!matchOTP) {
+         return res.status(403).json({
+            message: `Invalid OTP`,
+            redirectUrl: "/verifyOTP",
+         });
+      }
+      if (expiredOTP) {
+         return res.status(403).json({
+            message: `OTP expired`,
+            redirectUrl: "/verifyOTP",
+         });
+      }
+
+      await sqlUpdateVerifiedStatus(req.user, type);
+
+      return res.status(200).json({
+         message: `OTP verified successfully`,
+         redirectUrl: "/verifyOTP",
+      });
+   } catch {
+      return res.status(500).json({
+         message: "Failed to verify OTP",
+         redirectUrl: "/verifyOTP",
+      });
+   }
 };
 
 exports.create = async (req, res) => {

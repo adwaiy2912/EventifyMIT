@@ -1,0 +1,53 @@
+section {
+   width: 100%;
+   min-height: 100vh;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-flow: row wrap;
+}
+
+.sec--div {
+   background-color: aliceblue;
+   border-radius: 25px;
+   max-width: 600px;
+   text-align: center;
+}
+
+#otp-form-email,
+#otp-form-phone {
+   width: 100%;
+   display: flex;
+   gap: 20px;
+   align-items: center;
+   justify-content: center;
+}
+
+:is(#otp-form-email, #otp-form-phone) input {
+   border: none;
+   color: black;
+   font-size: 32px;
+   text-align: center;
+   padding: 10px;
+   width: 100%;
+   max-width: 70px;
+   height: 70px;
+   border-radius: 4px;
+   outline: 2px solid rgb(187, 187, 187);
+}
+
+:is(#otp-form-email, #otp-form-phone) input:focus-visible {
+   outline: 2px solid royalblue;
+}
+
+:is(#otp-form-email, #otp-form-phone) input.filled {
+   outline: 2px solid rgb(7, 192, 99);
+}
+
+.resend {
+   background-color: transparent;
+   border: none;
+   font-weight: 600;
+   color: #3dafe1;
+   cursor: pointer;
+}

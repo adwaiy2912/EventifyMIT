@@ -8,6 +8,8 @@ router.post("/signup", userController.signup);
 
 router.delete("/logout", userController.logout);
 
+router.post("/verifyOTP", userController.verifyOTP);
+
 router.post("/create", userController.create);
 
 router.post("/register", userController.register);

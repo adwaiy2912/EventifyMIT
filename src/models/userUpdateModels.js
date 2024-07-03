@@ -1,6 +1,31 @@
 const bcrypt = require("bcrypt");
 const { pool } = require("../config/postgres");
 
+const { sqlGetVerifiedStatus } = require("./userGetModels");
+const { getUserType } = require("../utils/userUtils");
+
+sqlUpdateVerifiedStatus = async (user, type) => {
+   try {
+      const userType = getUserType(user);
+      const table = userType + "S";
+      const ID = userType + "_ID";
+
+      let newStatus = "BOTH_VERIFIED";
+      const status = await sqlGetVerifiedStatus(user.email, userType);
+      if (status === "UNVERIFIED") {
+         newStatus = type === "email" ? "EMAIL_VERIFIED" : "PHONE_VERIFIED";
+      }
+
+      await pool.query(
+         `UPDATE ${table} SET VERIFIED_STATUS = $1 WHERE ${ID} = $2`,
+         [newStatus, user[ID.toLowerCase()]]
+      );
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+
 sqlUpdateEvent = async (data, venueID) => {
    try {
       await pool.query(
@@ -55,6 +80,7 @@ sqlUpdatePassword = async (data) => {
 };
 
 module.exports = {
+   sqlUpdateVerifiedStatus,
    sqlUpdateEvent,
    sqlUpdateProfile,
    sqlUpdatePassword,

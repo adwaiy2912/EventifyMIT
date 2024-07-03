@@ -1,7 +1,8 @@
 const { sqlGetOrganizerID } = require("../models/organizerGetModels");
+const { sqlGetVerifiedStatus } = require("../models/userGetModels");
 const { getUserType } = require("../utils/userUtils");
 
-checkAuthenticated = (req, res, next) => {
+checkAuthenticated = async (req, res, next) => {
    if (req.isAuthenticated()) {
       return next();
    }
@@ -13,6 +14,16 @@ checkNotAuthenticated = (req, res, next) => {
       return res.redirect("/home");
    }
    next();
+};
+
+checkVerified = async (req, res, next) => {
+   if (
+      (await sqlGetVerifiedStatus(req.user.email, getUserType(req.user))) ===
+      "BOTH_VERIFIED"
+   ) {
+      return next();
+   }
+   res.redirect("/verifyOTP");
 };
 
 checkForOrganizer = (req, res, next) => {
@@ -43,6 +54,7 @@ checkForOrganizerID = async (req, res, next) => {
 module.exports = {
    checkAuthenticated,
    checkNotAuthenticated,
+   checkVerified,
    checkForOrganizer,
    checkForAttendee,
    checkForOrganizerID,

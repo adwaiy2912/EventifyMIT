@@ -1,6 +1,18 @@
 const bcrypt = require("bcrypt");
 const { pool } = require("../config/postgres");
 
+sqlCreateEmailOTP = async (email, otp) => {
+   try {
+      const hashedOTP = await bcrypt.hash(otp.toString(), 10);
+      await pool.query(`INSERT INTO OTP (EMAIL, OTP_CODE) VALUES ($1, $2)`, [
+         email,
+         hashedOTP,
+      ]);
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
 sqlCreateUser = async (data) => {
    try {
       const table =
@@ -71,6 +83,7 @@ sqlCreateRegistration = async (eventID, attendeeID, paymentStatus) => {
 };
 
 module.exports = {
+   sqlCreateEmailOTP,
    sqlCreateUser,
    sqlCreateEvent,
    sqlCreateVenueID,

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>EventifyMIT</title>
+      <link rel="icon" href="../img/Logo.png" type="image/x-icon" />
+      <link rel="stylesheet" href="../css/reset.css" />
+      <link rel="stylesheet" href="../css/headerFooter.css" />
+      <link rel="stylesheet" href="../css/otp.css" />
+      <link rel="stylesheet" href="../bootstrap-5.3.3/css/bootstrap.css" />
+      <script defer src="../js/formSubmit.js"></script>
+      <script defer src="../js/otp.js"></script>
+   </head>
+   <body>
+      <%- include("layout/header")%>
+
+      <main style="padding: 0">
+         <section>
+            <div class="sec--div m-5 p-5">
+               <h3 class="fs-2 fw-semibold p-2">Email Verification</h3>
+               <p class="fs-5 text-secondary text-start py-3">
+                  <% if (status !== 'EMAIL_VERIFIED') { %> Enter the OTP you
+                  received to <% } else { %> Email already verified. <% } %>
+                  <br />
+                  <span class="fw-bold text-black"><%= email %></span>
+               </p>
+               <form id="otp-form-email">
+                  <% for (let i = 0; i < 6; i++) { %> <% if (status !==
+                  'EMAIL_VERIFIED') { %>
+                  <input type="text" class="otp-input" maxlength="1" />
+                  <% } else { %>
+                  <input type="text" class="otp-input" maxlength="1" disabled />
+                  <% } %> <% } %>
+               </form>
+               <div class="d-flex justify-content-between pt-5">
+                  <% if (status !== 'EMAIL_VERIFIED') { %>
+                  <button class="resend">Resend OTP &nbsp;></button>
+                  <button class="btn btn-primary verify-btn" id="verifyEmail">
+                     Verify Email
+                  </button>
+                  <% } else { %>
+                  <button class="btn btn-success" disabled>
+                     Email Verified
+                  </button>
+                  <% } %>
+               </div>
+            </div>
+            <div class="sec--div m-5 p-5">
+               <h3 class="fs-2 fw-semibold p-2">Phone Verification</h3>
+               <p class="fs-5 text-secondary text-start py-3">
+                  <% if (status !== 'PHONE_VERIFIED') { %> Enter the OTP you
+                  received to <% } else { %> Phone already verified. <% } %>
+                  <br />
+                  <span class="fw-bold text-black"><%= phone %></span>
+               </p>
+               <form id="otp-form-phone">
+                  <% for (let i = 0; i < 6; i++) { %> <% if (status !==
+                  'PHONE_VERIFIED') { %>
+                  <input type="text" class="otp-input" maxlength="1" />
+                  <% } else { %>
+                  <input type="text" class="otp-input" maxlength="1" disabled />
+                  <% } %> <% } %>
+               </form>
+               <div class="d-flex justify-content-between pt-5">
+                  <% if (status !== 'PHONE_VERIFIED') { %>
+                  <button class="resend">Resend OTP &nbsp;></button>
+                  <button class="btn btn-primary verify-btn" id="verifyPhone">
+                     Verify Phone
+                  </button>
+                  <% } else { %>
+                  <button class="btn btn-success" disabled>
+                     Phone Verified
+                  </button>
+                  <% } %>
+               </div>
+            </div>
+         </section>
+      </main>
+
+      <%- include("layout/footer")%>
+   </body>
+</html>

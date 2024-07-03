@@ -1,5 +1,40 @@
 const { pool } = require("../config/postgres");
 
+sqlGetVerifiedStatus = async (email, table) => {
+   try {
+      table += "S";
+      const result = await pool.query(
+         `SELECT VERIFIED_STATUS FROM ${table} WHERE EMAIL = $1`,
+         [email]
+      );
+      return result.rows[0].verified_status;
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+
+sqlGetOTP = async (email, phone, type) => {
+   try {
+      if (type === "email") {
+         const result = await pool.query(
+            `SELECT OTP_CODE FROM OTP WHERE EMAIL = $1`,
+            [email]
+         );
+         return result.rows[0];
+      } else {
+         const result = await pool.query(
+            `SELECT OTP_CODE FROM OTP WHERE PHONE = $1`,
+            [phone]
+         );
+         return result.rows[0];
+      }
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+
 sqlGetEventTypes = async () => {
    try {
       const result = await pool.query(`SELECT * FROM EVENT_TYPES`);
@@ -90,6 +125,8 @@ sqlGetPassword = async (ID, user) => {
 };
 
 module.exports = {
+   sqlGetVerifiedStatus,
+   sqlGetOTP,
    sqlGetEventTypes,
    sqlGetFindEvents,
    sqlGetEventDetails,
