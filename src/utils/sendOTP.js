@@ -1,6 +1,13 @@
-const { sqlDeleteEmailOTP } = require("../models/userDeleteModels");
-const { sqlCreateEmailOTP } = require("../models/userCreateModels");
+const {
+   sqlDeleteEmailOTP,
+   sqlDeletePhoneOTP,
+} = require("../models/userDeleteModels");
+const {
+   sqlCreateEmailOTP,
+   sqlCreatePhoneOTP,
+} = require("../models/userCreateModels");
 const { sendMail } = require("./sendMail");
+const { sendSMS } = require("./sendPhone");
 
 const generateOTP = () => {
    try {
@@ -36,22 +43,18 @@ const sendEmailOTP = async (email, subject, message, duration = 30) => {
    }
 };
 
-const sendPhoneOTP = async (phone, message, duration = 30) => {
+const sendPhoneOTP = async (phone, duration = 30) => {
    try {
-      if (!phone || !message) {
-         throw new Error("Phone and Message are required");
+      if (!phone) {
+         throw new Error("Phone is required");
       }
-      //  Delete existing OTP
       await sqlDeletePhoneOTP(phone);
 
       const otp = generateOTP();
+      const message = `${otp} is your EventifyMIT verification code. This code expires in ${duration} minutes.`;
 
-      //  Send OTP to phone
-      //  Twilio API or any other service can be used to send OTP to phone
-      //  For now, we will just log the OTP
-      console.log(otp);
+      await sendSMS(phone, message);
 
-      //  Save OTP to database
       await sqlCreatePhoneOTP(phone, otp);
    } catch (error) {
       throw error;

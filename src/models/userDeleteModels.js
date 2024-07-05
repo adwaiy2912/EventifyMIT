@@ -9,4 +9,13 @@ sqlDeleteEmailOTP = async (email) => {
    }
 };
 
-module.exports = { sqlDeleteEmailOTP };
+sqlDeletePhoneOTP = async (phone) => {
+   try {
+      await pool.query(`DELETE FROM OTP WHERE PHONE = $1`, [phone]);
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
+
+module.exports = { sqlDeleteEmailOTP, sqlDeletePhoneOTP };

@@ -66,13 +66,10 @@ exports.signup = async (req, res) => {
 
       await sendEmailOTP(
          req.body.email,
-         "Email Verification",
+         "EventifyMIT Email Verification",
          "Verify your email with the code below."
       );
-      await sendPhoneOTP(
-         req.body.phone,
-         "Verify your phone with the code below."
-      );
+      // await sendPhoneOTP(req.body.phone);
 
       return res.status(201).json({
          message:
@@ -112,7 +109,7 @@ exports.verifyOTP = async (req, res) => {
       }
       if (expiredOTP) {
          return res.status(403).json({
-            message: `OTP expired`,
+            message: `OTP expired. Resend OTP to verify`,
             redirectUrl: "/verifyOTP",
          });
       }

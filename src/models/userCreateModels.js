@@ -13,6 +13,18 @@ sqlCreateEmailOTP = async (email, otp) => {
       throw error;
    }
 };
+sqlCreatePhoneOTP = async (phone, otp) => {
+   try {
+      const hashedOTP = await bcrypt.hash(otp.toString(), 10);
+      await pool.query(`INSERT INTO OTP (PHONE, OTP_CODE) VALUES ($1, $2)`, [
+         phone,
+         hashedOTP,
+      ]);
+   } catch (error) {
+      console.error(error);
+      throw error;
+   }
+};
 sqlCreateUser = async (data) => {
    try {
       const table =
@@ -84,6 +96,7 @@ sqlCreateRegistration = async (eventID, attendeeID, paymentStatus) => {
 
 module.exports = {
    sqlCreateEmailOTP,
+   sqlCreatePhoneOTP,
    sqlCreateUser,
    sqlCreateEvent,
    sqlCreateVenueID,
