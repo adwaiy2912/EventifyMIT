@@ -1,5 +1,4 @@
 const { sqlGetOrganizerID } = require("../models/organizerGetModels");
-const { sqlGetVerifiedStatus } = require("../models/userGetModels");
 const { getUserType } = require("../utils/userUtils");
 
 checkAuthenticated = async (req, res, next) => {
@@ -17,10 +16,7 @@ checkNotAuthenticated = (req, res, next) => {
 };
 
 checkVerified = async (req, res, next) => {
-   if (
-      (await sqlGetVerifiedStatus(req.user.email, getUserType(req.user))) ===
-      "BOTH_VERIFIED"
-   ) {
+   if (req.user.verified_status === "BOTH_VERIFIED") {
       return next();
    }
    res.redirect("/verifyOTP");

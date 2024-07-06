@@ -1,3 +1,23 @@
+const fetchData = async (url, data) => {
+   try {
+      const response = await fetch(url, {
+         method: "POST",
+         headers: {
+            "Content-Type": "application/json",
+         },
+         body: JSON.stringify(data),
+      });
+      const res = await response.json();
+      alert(res.message);
+      if (res.redirectUrl) {
+         window.location.href = res.redirectUrl;
+      }
+   } catch (error) {
+      alert("An error occurred: " + error);
+      console.error("An error occurred:", error);
+   }
+};
+
 const isAllInputFilled = (inputs) => {
    return Array.from(inputs).every((item) => item.value);
 };
@@ -13,25 +33,7 @@ const verifyOTP = (inputs, type) => {
       const otp = getOtpText(inputs);
       const data = { type, otp };
 
-      fetch("/user/verifyOTP", {
-         method: "POST",
-         headers: {
-            "Content-Type": "application/json",
-         },
-         body: JSON.stringify(data),
-      })
-         .then((response) => response.json())
-         .then((data) => {
-            console.log(data);
-            alert(data.message);
-            if (data.redirectUrl) {
-               window.location.href = data.redirectUrl;
-            }
-         })
-         .catch((error) => {
-            alert("An error occurred: " + error);
-            console.error("An error occurred:", error);
-         });
+      fetchData("/user/verifyOTP", data);
    }
 };
 const toggleFilledClass = (field) => {
@@ -44,7 +46,8 @@ const toggleFilledClass = (field) => {
 
 const emailForm = document.querySelector("#otp-form-email");
 const emailVerifyBtn = document.querySelector("#verifyEmail");
-if (emailForm && emailVerifyBtn) {
+const emailResendBtn = document.querySelector("#resendEmail");
+if (emailForm && emailVerifyBtn && emailResendBtn) {
    const emailInputs = emailForm.querySelectorAll(".otp-input");
 
    emailForm.addEventListener("input", (e) => {
@@ -92,11 +95,15 @@ if (emailForm && emailVerifyBtn) {
    emailVerifyBtn.addEventListener("click", () => {
       verifyOTP(emailInputs, "email");
    });
+   emailResendBtn.addEventListener("click", () => {
+      fetchData("/user/resendOTP", { type: "email" });
+   });
 }
 
 const phoneForm = document.querySelector("#otp-form-phone");
 const phoneVerifyBtn = document.querySelector("#verifyPhone");
-if (phoneForm && phoneVerifyBtn) {
+const phoneResendBtn = document.querySelector("#resendPhone");
+if (phoneForm && phoneVerifyBtn && phoneResendBtn) {
    const phoneInputs = phoneForm.querySelectorAll(".otp-input");
 
    phoneForm.addEventListener("input", (e) => {
@@ -143,5 +150,8 @@ if (phoneForm && phoneVerifyBtn) {
    });
    phoneVerifyBtn.addEventListener("click", () => {
       verifyOTP(phoneInputs, "phone");
+   });
+   phoneResendBtn.addEventListener("click", () => {
+      fetchData("/user/resendOTP", { type: "phone" });
    });
 }

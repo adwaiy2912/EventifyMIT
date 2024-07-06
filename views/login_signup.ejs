@@ -62,7 +62,11 @@
                   height="400"
                   class="login__div--img hide"
                />
-               <form class="login__form" id="loginForm">
+               <form
+                  class="login__form"
+                  id="loginForm"
+                  onsubmit="event.preventDefault(); formSubmit('loginForm', '/user/login');"
+               >
                   <div class="login__form--email">
                      <img
                         src="../img/login/user.png"
@@ -98,19 +102,18 @@
                   <button class="login__form--forgotPass" role="button">
                      Forgot Password?
                   </button>
-                  <button
-                     class="login__form--login"
-                     role="button"
-                     type="button"
-                     onclick="formSubmit('loginForm', '/user/login')"
-                  >
+                  <button class="login__form--login" type="submit">
                      Login
                   </button>
                   <button class="login__form--createAcc" type="button">
                      Create Account
                   </button>
                </form>
-               <form class="sign__form hide" id="signForm">
+               <form
+                  class="sign__form hide"
+                  id="signForm"
+                  onsubmit="event.preventDefault(); formSubmit('signForm', '/user/signup');"
+               >
                   <div class="sign__form--name">
                      <img
                         src="../img/login/user.png"
@@ -224,12 +227,7 @@
                      />
                      <label for="organizer">Organizer</label>
                   </div>
-                  <button
-                     class="sign__form--signUp"
-                     role="button"
-                     type="button"
-                     onclick="formSubmit('signForm', '/user/signup')"
-                  >
+                  <button class="sign__form--signUp" type="submit">
                      Sign Up
                   </button>
                   <button class="sign__form--existUser" role="button">

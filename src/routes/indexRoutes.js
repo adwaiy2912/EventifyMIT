@@ -23,21 +23,7 @@ router.get("/user", checkNotAuthenticated, (req, res) => {
    res.render("login_signup", {});
 });
 
-router.get("/verifyOTP", checkAuthenticated, async (req, res) => {
-   const status = await sqlGetVerifiedStatus(
-      req.user.email,
-      getUserType(req.user)
-   );
-   if (status === "BOTH_VERIFIED") {
-      return res.redirect("/home");
-   }
-   res.render("verifyOTP", {
-      status,
-      email: req.user.email,
-      phone: req.user.phone,
-      user: getUserType(req.user),
-   });
-});
+router.get("/verifyOTP", checkAuthenticated, indexController.verifyOTP);
 
 router.get("/dashboard", checkAuthenticated, indexController.dashboard);
 

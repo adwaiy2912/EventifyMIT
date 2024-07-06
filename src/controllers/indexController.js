@@ -20,6 +20,18 @@ const {
    getRegistrationData,
 } = require("../utils/userUtils");
 
+exports.verifyOTP = async (req, res) => {
+   if (req.user.verified_status === "BOTH_VERIFIED") {
+      return res.redirect("/home");
+   }
+   res.render("verifyOTP", {
+      status: req.user.verified_status,
+      email: req.user.email,
+      phone: req.user.phone,
+      user: getUserType(req.user),
+   });
+};
+
 exports.dashboard = (req, res) => {
    res.render("dashboard", {
       ID: req.user.attendee_id || req.user.organizer_id,

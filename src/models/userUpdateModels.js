@@ -48,14 +48,14 @@ sqlUpdateEvent = async (data, venueID) => {
    }
 };
 
-sqlUpdateProfile = async (data) => {
+sqlUpdateProfile = async (data, verifiedStatus) => {
    try {
       const table = data.user + "S";
       const ID = data.user + "_ID";
 
       await pool.query(
-         `UPDATE ${table} SET NAME = $1, EMAIL = $2, PHONE = $3 WHERE ${ID} = $4`,
-         [data.name, data.email, data.phone, data.id]
+         `UPDATE ${table} SET NAME = $1, EMAIL = $2, PHONE = $3, VERIFIED_STATUS = $4 WHERE ${ID} = $5`,
+         [data.name, data.email, data.phone, verifiedStatus, data.id]
       );
    } catch (error) {
       console.error(error);

@@ -35,7 +35,9 @@
                </form>
                <div class="d-flex justify-content-between pt-5">
                   <% if (status !== 'EMAIL_VERIFIED') { %>
-                  <button class="resend">Resend OTP &nbsp;></button>
+                  <button class="resend" id="resendEmail">
+                     Resend OTP &nbsp;>
+                  </button>
                   <button class="btn btn-primary verify-btn" id="verifyEmail">
                      Verify Email
                   </button>
@@ -64,7 +66,9 @@
                </form>
                <div class="d-flex justify-content-between pt-5">
                   <% if (status !== 'PHONE_VERIFIED') { %>
-                  <button class="resend">Resend OTP &nbsp;></button>
+                  <button class="resend" id="resendPhone">
+                     Resend OTP &nbsp;>
+                  </button>
                   <button class="btn btn-primary verify-btn" id="verifyPhone">
                      Verify Phone
                   </button>

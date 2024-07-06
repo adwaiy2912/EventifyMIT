@@ -64,17 +64,13 @@ exports.signup = async (req, res) => {
       }
       await sqlCreateUser(req.body);
 
-      await sendEmailOTP(
-         req.body.email,
-         "EventifyMIT Email Verification",
-         "Verify your email with the code below."
-      );
+      await sendEmailOTP(req.body.email);
       // await sendPhoneOTP(req.body.phone);
 
       return res.status(201).json({
          message:
-            "User created successfully. Verify your email and phone to login",
-         redirectUrl: "/verifyOTP",
+            "User created successfully. Login to verify your email and phone",
+         redirectUrl: "/user",
       });
    } catch {
       return res
@@ -123,6 +119,29 @@ exports.verifyOTP = async (req, res) => {
    } catch {
       return res.status(500).json({
          message: "Failed to verify OTP",
+         redirectUrl: "/verifyOTP",
+      });
+   }
+};
+
+exports.resendOTP = async (req, res) => {
+   try {
+      const { type } = req.body;
+
+      if (type === "email") {
+         await sendEmailOTP(req.body.email);
+      }
+      if (type === "phone") {
+         await sendPhoneOTP(req.user.phone);
+      }
+
+      return res.status(200).json({
+         message: `OTP resent successfully. Check your ${type} for the OTP`,
+         redirectUrl: "/verifyOTP",
+      });
+   } catch {
+      return res.status(500).json({
+         message: "Failed to resend OTP",
          redirectUrl: "/verifyOTP",
       });
    }
@@ -201,7 +220,36 @@ exports.updateProfile = async (req, res) => {
    try {
       const redirectUrl = req.get("referer") || "/home";
 
-      await sqlUpdateProfile(req.body);
+      let verifiedStatus = req.user.verified_status;
+      const { email, phone } = req.body;
+
+      /*
+      if (req.user.email !== email && req.user.phone !== phone) {
+         verifiedStatus = "UNVERIFIED";
+      } else if (req.user.email !== email) {
+         verifiedStatus = "PHONE_VERIFIED";
+      } else if (req.user.phone !== phone) {
+         verifiedStatus = "EMAIL_VERIFIED";
+      }
+      */
+      if (req.user.email !== email) {
+         verifiedStatus = "PHONE_VERIFIED";
+      }
+
+      if (
+         verifiedStatus === "UNVERIFIED" ||
+         verifiedStatus === "EMAIL_VERIFIED"
+      ) {
+         await sendPhoneOTP(phone);
+      }
+      if (
+         verifiedStatus === "UNVERIFIED" ||
+         verifiedStatus === "PHONE_VERIFIED"
+      ) {
+         await sendEmailOTP(email);
+      }
+
+      await sqlUpdateProfile(req.body, verifiedStatus);
 
       return res
          .status(200)

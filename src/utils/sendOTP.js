@@ -18,9 +18,9 @@ const generateOTP = () => {
    }
 };
 
-const sendEmailOTP = async (email, subject, message, duration = 30) => {
+const sendEmailOTP = async (email, duration = 30) => {
    try {
-      if (!email || !subject || !message) {
+      if (!email) {
          throw new Error("Email, Subject and Message are required");
       }
       await sqlDeleteEmailOTP(email);
@@ -30,8 +30,8 @@ const sendEmailOTP = async (email, subject, message, duration = 30) => {
       const mailOptions = {
          from: `"EventifyMIT" <${process.env.SMTP_EMAIL}>`,
          to: email,
-         subject,
-         html: `<p>${message}</p>
+         subject: "EventifyMIT Email Verification",
+         html: `<p>Verify your email with the code below.</p>
          <p style="color:tomato; font-size: 25px; letter-spacing:2px;">${otp}</p>
          <p> This code <b>expires in ${duration} minutes</b></p>`,
       };
