@@ -6,9 +6,6 @@ const {
 } = require("../models/organizerGetModels");
 const { sqlGetVenue } = require("../models/userGetModels");
 
-getUserType = (user) =>
-   user.attendee_id === undefined ? "ORGANIZER" : "ATTENDEE";
-
 generateUniqueString = (length) => {
    if (length <= 0) {
       throw new Error("Length must be a positive integer");
@@ -17,6 +14,17 @@ generateUniqueString = (length) => {
    const bytes = crypto.randomBytes(Math.ceil(length / 2));
    const uniqueString = bytes.toString("hex").slice(0, length);
    return uniqueString;
+};
+
+getTable = (userType) => {
+   switch (userType) {
+      case "organizer":
+         return "ORGANIZERS";
+      case "attendee":
+         return "ATTENDEES";
+      default:
+         throw new Error("Invalid user type");
+   }
 };
 
 getVenueID = async (venue) => {
@@ -70,7 +78,7 @@ getRegistrationData = async (eventID) => {
 };
 
 module.exports = {
-   getUserType,
+   getTable,
    generateUniqueString,
    getVenueID,
    getVenue,

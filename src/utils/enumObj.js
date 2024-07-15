@@ -1,0 +1,30 @@
+const USERTYPE = Object.freeze({
+   ATTENDEE: "ATTENDEE",
+   ORGANIZER: "ORGANIZER",
+});
+
+const USERFIELD = Object.freeze({
+   ID: "ID",
+   EMAIL: "email",
+   PHONE: "phone",
+});
+
+const VERIFIEDSTATUS = Object.freeze({
+   BOTH_VERIFIED: "BOTH_VERIFIED",
+   EMAIL_VERIFIED: "EMAIL_VERIFIED",
+   PHONE_VERIFIED: "PHONE_VERIFIED",
+   UNVERIFIED: "UNVERIFIED",
+});
+
+REGISTRATIONSTATUS = Object.freeze({
+   REGISTERED: "REGISTERED",
+   UNREGISTERED: "UNREGISTERED",
+   WAITLISTED: "WAITLISTED",
+});
+
+module.exports = {
+   USERTYPE,
+   USERFIELD,
+   VERIFIEDSTATUS,
+   REGISTRATIONSTATUS,
+};

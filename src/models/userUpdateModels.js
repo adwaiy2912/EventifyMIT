@@ -1,25 +1,22 @@
 const bcrypt = require("bcrypt");
 const { pool } = require("../config/postgres");
-
-const { sqlGetVerifiedStatus } = require("./userGetModels");
-const { getUserType } = require("../utils/userUtils");
+const { USERTYPE, VERIFIEDSTATUS } = require("../utils/enumObj");
 
 sqlUpdateVerifiedStatus = async (user, type) => {
    try {
-      const userType = getUserType(user);
-      const table = userType + "S";
-      const ID = userType + "_ID";
-
-      let newStatus = "BOTH_VERIFIED";
-      const status = await sqlGetVerifiedStatus(user.email, userType);
-      if (status === "UNVERIFIED") {
-         newStatus = type === "email" ? "EMAIL_VERIFIED" : "PHONE_VERIFIED";
+      let newStatus = VERIFIEDSTATUS.BOTH_VERIFIED;
+      const status = user.verified_status;
+      if (status === VERIFIEDSTATUS.UNVERIFIED) {
+         newStatus =
+            type === "email"
+               ? VERIFIEDSTATUS.EMAIL_VERIFIED
+               : VERIFIEDSTATUS.PHONE_VERIFIED;
       }
 
-      await pool.query(
-         `UPDATE ${table} SET VERIFIED_STATUS = $1 WHERE ${ID} = $2`,
-         [newStatus, user[ID.toLowerCase()]]
-      );
+      await pool.query(`UPDATE USERS SET VERIFIED_STATUS = $1 WHERE ID = $2`, [
+         newStatus,
+         user.id,
+      ]);
    } catch (error) {
       console.error(error);
       throw error;
@@ -50,11 +47,8 @@ sqlUpdateEvent = async (data, venueID) => {
 
 sqlUpdateProfile = async (data, verifiedStatus) => {
    try {
-      const table = data.user + "S";
-      const ID = data.user + "_ID";
-
       await pool.query(
-         `UPDATE ${table} SET NAME = $1, EMAIL = $2, PHONE = $3, VERIFIED_STATUS = $4 WHERE ${ID} = $5`,
+         `UPDATE USERS SET NAME = $1, EMAIL = $2, PHONE = $3, VERIFIED_STATUS = $4 WHERE ID = $5`,
          [data.name, data.email, data.phone, verifiedStatus, data.id]
       );
    } catch (error) {
@@ -65,11 +59,9 @@ sqlUpdateProfile = async (data, verifiedStatus) => {
 
 sqlUpdatePassword = async (data) => {
    try {
-      const table = data.user + "S";
-      const ID = data.user + "_ID";
       const hashedPassword = await bcrypt.hash(data.newPassword, 10);
 
-      await pool.query(`UPDATE ${table} SET PASSWORD = $1 WHERE ${ID} = $2`, [
+      await pool.query(`UPDATE USERS SET PASSWORD = $1 WHERE ID = $2`, [
          hashedPassword,
          data.id,
       ]);

@@ -1,5 +1,5 @@
 const { sqlGetOrganizerID } = require("../models/organizerGetModels");
-const { getUserType } = require("../utils/userUtils");
+const { USERTYPE, VERIFIEDSTATUS } = require("../utils/enumObj");
 
 checkAuthenticated = async (req, res, next) => {
    if (req.isAuthenticated()) {
@@ -16,21 +16,21 @@ checkNotAuthenticated = (req, res, next) => {
 };
 
 checkVerified = async (req, res, next) => {
-   if (req.user.verified_status === "BOTH_VERIFIED") {
+   if (req.user.verified_status === VERIFIEDSTATUS.BOTH_VERIFIED) {
       return next();
    }
    res.redirect("/verifyOTP");
 };
 
 checkForOrganizer = (req, res, next) => {
-   if (getUserType(req.user) === "ORGANIZER") {
+   if (req.user.user_type === USERTYPE.ORGANIZER) {
       return next();
    }
    res.redirect("/home");
 };
 
 checkForAttendee = (req, res, next) => {
-   if (getUserType(req.user) === "ATTENDEE") {
+   if (req.user.user_type === USERTYPE.ATTENDEE) {
       return next();
    }
    res.redirect("/home");
@@ -38,8 +38,8 @@ checkForAttendee = (req, res, next) => {
 
 checkForOrganizerID = async (req, res, next) => {
    if (
-      getUserType(req.user) === "ATTENDEE" ||
-      (getUserType(req.user) === "ORGANIZER" &&
+      req.user.user_type === USERTYPE.ATTENDEE ||
+      (req.user.user_type === USERTYPE.ORGANIZER &&
          req.user.organizer_id === (await sqlGetOrganizerID(req.params.id)))
    ) {
       return next();

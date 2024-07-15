@@ -6,6 +6,8 @@ router.post("/login", userController.login);
 
 router.post("/signup", userController.signup);
 
+router.post("/forgotPassword", userController.forgotPassword);
+
 router.delete("/logout", userController.logout);
 
 router.post("/verifyOTP", userController.verifyOTP);

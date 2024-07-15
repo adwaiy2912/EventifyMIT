@@ -1,18 +1,5 @@
 const { pool } = require("../config/postgres");
-
-sqlGetVerifiedStatus = async (email, table) => {
-   try {
-      table += "S";
-      const result = await pool.query(
-         `SELECT VERIFIED_STATUS FROM ${table} WHERE EMAIL = $1`,
-         [email]
-      );
-      return result.rows[0].verified_status;
-   } catch (error) {
-      console.error(error);
-      throw error;
-   }
-};
+const { REGISTRATIONSTATUS } = require("../utils/enumObj");
 
 sqlGetOTP = async (email, phone, type) => {
    try {
@@ -76,7 +63,9 @@ sqlGetRegistrationStatus = async (eventID, attendeeID) => {
          `SELECT * FROM REGISTRATIONS WHERE EVENT_ID = $1 AND ATTENDEE_ID = $2`,
          [eventID, attendeeID]
       );
-      return result.rows.length !== 0 ? "REGISTER" : "UNREGISTER";
+      return result.rows.length !== 0
+         ? REGISTRATIONSTATUS.REGISTERED
+         : REGISTRATIONSTATUS.UNREGISTERED;
    } catch (error) {
       console.error(error);
       throw error;
@@ -109,12 +98,10 @@ sqlGetVenue = async (ID) => {
    }
 };
 
-sqlGetPassword = async (ID, user) => {
+sqlGetPassword = async (ID) => {
    try {
-      const table = user + "S";
-      const colID = user + "_ID";
       const result = await pool.query(
-         `SELECT PASSWORD FROM ${table} WHERE ${colID} = $1`,
+         `SELECT PASSWORD FROM USERS WHERE ID = $1`,
          [ID]
       );
       return result.rows[0].password;
@@ -125,7 +112,6 @@ sqlGetPassword = async (ID, user) => {
 };
 
 module.exports = {
-   sqlGetVerifiedStatus,
    sqlGetOTP,
    sqlGetEventTypes,
    sqlGetFindEvents,

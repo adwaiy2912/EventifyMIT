@@ -19,6 +19,7 @@ const {
    signupValidator,
    createValidator,
 } = require("../utils/formValidator");
+const { USERFIELD, VERIFIEDSTATUS } = require("../utils/enumObj");
 const { generateUniqueString, getVenueID } = require("../utils/userUtils");
 
 const { sendEmailOTP, sendPhoneOTP } = require("../utils/sendOTP");
@@ -50,10 +51,13 @@ exports.signup = async (req, res) => {
       }
 
       const userEmailCheck = await sqlCheckForExistUser(
-         "email",
+         USERFIELD.EMAIL,
          req.body.email
       );
-      const userIDCheck = await sqlCheckForExistUser("ID", req.body.regNo);
+      const userIDCheck = await sqlCheckForExistUser(
+         USERFIELD.ID,
+         req.body.regNo
+      );
       const userIdentifier = userEmailCheck || userIDCheck;
 
       if (userIdentifier) {
@@ -76,6 +80,37 @@ exports.signup = async (req, res) => {
       return res
          .status(500)
          .json({ message: "Failed to create user", redirectUrl: "/" });
+   }
+};
+
+exports.forgotPassword = async (req, res) => {
+   try {
+      const { email, phone } = req.body;
+
+      const userEmailCheck = await sqlCheckForExistUser(USERFIELD.EMAIL, email);
+      const userPhoneCheck = await sqlCheckForExistUser(USERFIELD.PHONE, phone);
+
+      const userIdentifier = userEmailCheck || userPhoneCheck;
+
+      if (!userIdentifier) {
+         return res.status(400).json({
+            message: `User not found`,
+            redirectUrl: "/user",
+         });
+      }
+
+      await sendEmailOTP(email);
+      await sendPhoneOTP(phone);
+
+      return res.status(200).json({
+         message: `OTP sent successfully. Check your email and phone for the OTP`,
+         redirectUrl: "/user",
+      });
+   } catch {
+      return res.status(500).json({
+         message: "Failed to reset password",
+         redirectUrl: "/user",
+      });
    }
 };
 
@@ -128,10 +163,10 @@ exports.resendOTP = async (req, res) => {
    try {
       const { type } = req.body;
 
-      if (type === "email") {
+      if (type === USERFIELD.EMAIL) {
          await sendEmailOTP(req.body.email);
       }
-      if (type === "phone") {
+      if (type === USERFIELD.PHONE) {
          await sendPhoneOTP(req.user.phone);
       }
 
@@ -233,19 +268,13 @@ exports.updateProfile = async (req, res) => {
       }
       */
       if (req.user.email !== email) {
-         verifiedStatus = "PHONE_VERIFIED";
+         verifiedStatus = VERIFIEDSTATUS.PHONE_VERIFIED;
       }
 
-      if (
-         verifiedStatus === "UNVERIFIED" ||
-         verifiedStatus === "EMAIL_VERIFIED"
-      ) {
+      if (verifiedStatus !== VERIFIEDSTATUS.PHONE_VERIFIED) {
          await sendPhoneOTP(phone);
       }
-      if (
-         verifiedStatus === "UNVERIFIED" ||
-         verifiedStatus === "PHONE_VERIFIED"
-      ) {
+      if (verifiedStatus !== VERIFIEDSTATUS.EMAIL_VERIFIED) {
          await sendEmailOTP(email);
       }
 
@@ -267,7 +296,7 @@ exports.updatePassword = async (req, res) => {
       const redirectUrl = req.get("referer") || "/home";
       const isPasswordMatch = await bcrypt.compare(
          req.body.oldPassword,
-         await sqlGetPassword(req.body.id, req.body.user)
+         await sqlGetPassword(req.body.id)
       );
 
       if (!isPasswordMatch) {

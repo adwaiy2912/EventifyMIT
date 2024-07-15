@@ -211,6 +211,8 @@
 
 .login__form--forgotPass {
    grid-area: 3 / 1 / 4 / 3;
+   text-align: center;
+   color: black;
    text-decoration: underline;
    font-size: 0.85rem;
    padding-bottom: 1rem;

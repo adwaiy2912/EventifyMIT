@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const { pool } = require("../config/postgres");
+const { getTable } = require("../utils/userUtils");
 
 sqlCreateEmailOTP = async (email, otp) => {
    try {
@@ -27,12 +28,7 @@ sqlCreatePhoneOTP = async (phone, otp) => {
 };
 sqlCreateUser = async (data) => {
    try {
-      const table =
-         data.type === "organizer"
-            ? "ORGANIZERS"
-            : data.type === "attendee"
-            ? "ATTENDEES"
-            : "";
+      const table = getTable(data.userType);
       const ID = table.slice(0, -1) + "_ID";
       const hashedPassword = await bcrypt.hash(data.password, 10);
 

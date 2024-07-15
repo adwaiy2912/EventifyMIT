@@ -13,17 +13,12 @@ module.exports = function (passport) {
          },
          async (req, email, password, done) => {
             try {
-               // const user = users.find((user) => user.email === email);
-               const result1 = await pool.query(
-                  "SELECT * FROM ORGANIZERS WHERE email = $1",
-                  [email]
-               );
-               const result2 = await pool.query(
-                  "SELECT * FROM ATTENDEES WHERE email = $1",
+               const result = await pool.query(
+                  "SELECT * FROM USERS WHERE email = $1",
                   [email]
                );
 
-               if (result1.rows.length === 0 && result2.rows.length === 0) {
+               if (result.rows.length === 0) {
                   return done(null, false, {
                      status: 404,
                      message: "No user with that email",
@@ -31,12 +26,11 @@ module.exports = function (passport) {
                   });
                }
 
-               const user = result1.rows[0] || result2.rows[0];
+               const user = result.rows[0];
                const isPasswordMatch = await bcrypt.compare(
                   password,
                   user.password
                );
-               // const isPasswordMatch = password === user[3];
                if (!isPasswordMatch) {
                   return done(null, false, {
                      status: 403,
@@ -68,18 +62,13 @@ module.exports = function (passport) {
       });
    });
    passport.deserializeUser(async (email, done) => {
-      // const user = users.find((user) => user.email === email);
       try {
-         const result1 = await pool.query(
-            "SELECT * FROM ORGANIZERS WHERE email = $1",
-            [email]
-         );
-         const result2 = await pool.query(
-            "SELECT * FROM ATTENDEES WHERE email = $1",
+         const result = await pool.query(
+            "SELECT * FROM USERS WHERE email = $1",
             [email]
          );
 
-         if (result1.rows.length === 0 && result2.rows.length === 0) {
+         if (result.rows.length === 0) {
             return done(null, false, {
                status: 404,
                message: "No user with that email",
@@ -87,7 +76,7 @@ module.exports = function (passport) {
             });
          }
 
-         const user = result1.rows[0] || result2.rows[0];
+         const user = result.rows[0];
          return done(null, user, {
             status: 404,
             message: "Logged in deserialised",

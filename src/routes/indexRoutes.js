@@ -3,12 +3,12 @@ const router = express.Router();
 const {
    checkAuthenticated,
    checkNotAuthenticated,
-   checkForAttendee,
+   checkVerified,
    checkForOrganizer,
+   checkForAttendee,
    checkForOrganizerID,
 } = require("../middleware/authMiddleware");
 const indexController = require("../controllers/indexController");
-const { getUserType } = require("../utils/userUtils");
 const { getEventIconSrc, getEventBgSrc } = require("../utils/minEventCard");
 
 router.get("/", checkNotAuthenticated, (req, res) => {
@@ -16,7 +16,7 @@ router.get("/", checkNotAuthenticated, (req, res) => {
 });
 
 router.get("/home", checkAuthenticated, checkVerified, (req, res) => {
-   res.render("home", { user: getUserType(req.user) });
+   res.render("home", { user: req.user.user_type });
 });
 
 router.get("/user", checkNotAuthenticated, (req, res) => {
