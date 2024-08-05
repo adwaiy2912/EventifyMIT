@@ -6,7 +6,7 @@ const methodOverride = require("method-override");
 require("dotenv").config();
 
 require("./config/passport")(passport);
-const { getPgVersion } = require("./config/postgres");
+const { authSequelize } = require("./config/sequelize");
 const indexRoutes = require("./routes/indexRoutes");
 const userRoutes = require("./routes/userRoutes");
 
@@ -33,7 +33,7 @@ app.set("view engine", "ejs");
 app.use("/", indexRoutes);
 app.use("/user", userRoutes);
 
-getPgVersion();
+authSequelize();
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
