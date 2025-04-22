@@ -1,30 +1,37 @@
-const USERTYPE = Object.freeze({
+const USER_TYPE = Object.freeze({
    ATTENDEE: "ATTENDEE",
    ORGANIZER: "ORGANIZER",
 });
 
-const USERFIELD = Object.freeze({
+const USER_FIELD = Object.freeze({
    ID: "ID",
    EMAIL: "email",
    PHONE: "phone",
 });
 
-const VERIFIEDSTATUS = Object.freeze({
+const VERIFIED_STATUS = Object.freeze({
    BOTH_VERIFIED: "BOTH_VERIFIED",
    EMAIL_VERIFIED: "EMAIL_VERIFIED",
    PHONE_VERIFIED: "PHONE_VERIFIED",
    UNVERIFIED: "UNVERIFIED",
 });
 
-REGISTRATIONSTATUS = Object.freeze({
+REGISTRATION_STATUS = Object.freeze({
    REGISTERED: "REGISTERED",
    UNREGISTERED: "UNREGISTERED",
    WAITLISTED: "WAITLISTED",
 });
 
+PAYMENT_STATUS = Object.freeze({
+   PENDING: "PENDING",
+   SUCCESS: "SUCCESS",
+   FAILED: "FAILED",
+});
+
 module.exports = {
-   USERTYPE,
-   USERFIELD,
-   VERIFIEDSTATUS,
-   REGISTRATIONSTATUS,
+   USER_TYPE,
+   USER_FIELD,
+   VERIFIED_STATUS,
+   REGISTRATION_STATUS,
+   PAYMENT_STATUS,
 };

@@ -13,14 +13,22 @@ transporter.verify((error) => {
    if (error) {
       console.log(error);
    } else {
-      console.log("Server is ready to take messages");
+      console.log("✉️ Server is ready to take messages");
    }
 });
 
 const sendMail = async (mailOptions) => {
    try {
-      await transporter.sendMail(mailOptions);
+      const info = await transporter.sendMail(mailOptions);
+
+      console.log("Mail sent: %s", info.messageId);
+      // For Ethereal accounts only
+      const previewURL = require("nodemailer").getTestMessageUrl(info);
+      if (previewURL) {
+         console.log("Preview URL: %s", previewURL);
+      }
    } catch (error) {
+      console.error("Error occurred while sending email:", error.message);
       throw error;
    }
 };

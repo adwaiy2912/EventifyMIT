@@ -62,7 +62,7 @@ exports.signup = async (req, res) => {
 
       if (userIdentifier) {
          return res.status(400).json({
-            message: `${userIdentifier} aready in use`,
+            message: `${userIdentifier} already in use`,
             redirectUrl: "/user",
          });
       }

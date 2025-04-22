@@ -79,7 +79,7 @@ module.exports = function (passport) {
          const user = result.rows[0];
          return done(null, user, {
             status: 404,
-            message: "Logged in deserialised",
+            message: "Logged in deserialized",
             redirectUrl: "/home",
          });
       } catch (error) {
