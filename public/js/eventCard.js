@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch((error) => {
                alert(error);
-               console.log(`An error occured, ${error}`);
+               console.log(`An error occurred, ${error}`);
             });
       });
    }

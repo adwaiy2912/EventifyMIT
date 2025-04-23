@@ -1,6 +1,4 @@
-const { Event } = require("../models/event");
-const { EventType } = require("../models/eventType");
-const { Venue } = require("../models/venue");
+const { Event, EventType, Venue } = require("../models/index");
 
 const { findAllEvents } = require("../services/find");
 const {
@@ -14,11 +12,11 @@ const {
 const { eventRegistrationStatus } = require("../services/event");
 const { viewEventRegistrations } = require("../services/view");
 
-const { USERTYPE, VERIFIEDSTATUS } = require("../utils/constants");
+const { USER_TYPE, VERIFIED_STATUS } = require("../utils/constants");
 const { checkEventClosed } = require("../utils/helper");
 
 exports.verifyOTP = async (req, res) => {
-   if (req.user.verified_status === VERIFIEDSTATUS.BOTH_VERIFIED) {
+   if (req.user.verified_status === VERIFIED_STATUS.BOTH_VERIFIED) {
       return res.redirect("/home");
    }
    res.render("verifyOTP", {
@@ -40,7 +38,7 @@ exports.dashboard = (req, res) => {
 };
 
 exports.find = async (req, res) => {
-   const events = findAllEvents();
+   const events = await findAllEvents();
 
    res.render("findEvents", {
       user: req.user.user_type,
@@ -50,7 +48,7 @@ exports.find = async (req, res) => {
 
 exports.manage = async (req, res) => {
    const events =
-      req.user.user_type === USERTYPE.ATTENDEE
+      req.user.user_type === USER_TYPE.ATTENDEE
          ? await manageAttendeeUpcomingEvents(req.user.id)
          : await manageOrganizerUpcomingEvents(req.user.id);
 
@@ -62,7 +60,7 @@ exports.manage = async (req, res) => {
 
 exports.history = async (req, res) => {
    const events =
-      req.user.user_type === USERTYPE.ATTENDEE
+      req.user.user_type === USER_TYPE.ATTENDEE
          ? await historyAttendeePreviousEvents(req.user.id)
          : await historyOrganizerPreviousEvents(req.user.id);
 
@@ -82,7 +80,9 @@ exports.create = async (req, res) => {
 exports.eventID = async (req, res) => {
    const event = await Event.findByPk(req.params.id);
    if (!event) {
-      return res.status(404).send("Event not found");
+      return res
+         .status(404)
+         .json({ message: "Event not found", redirectUrl: "/home" });
    }
 
    res.render("eventCard", {
@@ -100,7 +100,10 @@ exports.eventID = async (req, res) => {
 exports.viewID = async (req, res) => {
    const event = await Event.findByPk(req.params.id);
    if (!event) {
-      return res.status(404).send("Event not found");
+      return res.status(404).json({
+         message: "Event not found",
+         redirectUrl: "/home",
+      });
    }
    const registrationsData = await viewEventRegistrations(req.params.id);
 

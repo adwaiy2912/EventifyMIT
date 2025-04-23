@@ -1,10 +1,12 @@
-const sequelize = require("./sequelize");
-const User = require("../models/user");
-const Event = require("../models/event");
-const Venue = require("../models/venue");
-const EventType = require("../models/eventType");
-const Registration = require("../models/registration");
-const OTP = require("../models/otp");
+const {
+   sequelize,
+   User,
+   Event,
+   Venue,
+   EventType,
+   Registration,
+   OTP,
+} = require("../models/index");
 
 async function syncSequelize() {
    try {
@@ -21,8 +23,24 @@ async function syncSequelize() {
       ]);
 
       console.log("📊 Database & tables created!");
+
+      // await printTopRows();
    } catch (error) {
       console.error("Error during syncSequelize:", error);
+   }
+}
+
+async function printTopRows() {
+   try {
+      const tables = { User, Event, Venue, EventType, Registration, OTP };
+
+      for (const [name, model] of Object.entries(tables)) {
+         const rows = await model.findAll({ limit: 5 });
+         console.log(`\n📋 Top 5 rows from ${name}:`);
+         console.table(rows.map((row) => row.get({ plain: true })));
+      }
+   } catch (error) {
+      console.error("Error printing table rows:", error);
    }
 }
 

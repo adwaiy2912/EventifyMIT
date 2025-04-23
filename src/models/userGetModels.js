@@ -1,5 +1,5 @@
 const { pool } = require("../config/postgres");
-const { REGISTRATIONSTATUS } = require("../utils/constants");
+const { REGISTRATION_STATUS } = require("../utils/constants");
 
 sqlGetOTP = async (email, phone, type) => {
    try {
@@ -64,8 +64,8 @@ sqlGetRegistrationStatus = async (eventID, attendeeID) => {
          [eventID, attendeeID]
       );
       return result.rows.length !== 0
-         ? REGISTRATIONSTATUS.REGISTERED
-         : REGISTRATIONSTATUS.UNREGISTERED;
+         ? REGISTRATION_STATUS.REGISTERED
+         : REGISTRATION_STATUS.UNREGISTERED;
    } catch (error) {
       console.error(error);
       throw error;

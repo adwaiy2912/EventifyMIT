@@ -1,7 +1,7 @@
 const localStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const { pool } = require("./postgres");
-const User = require("../models/user");
+const { User } = require("../models/index");
 
 module.exports = function (passport) {
    passport.use(
@@ -42,7 +42,6 @@ module.exports = function (passport) {
 
                return done(null, user, {
                   status: 200,
-                  message: "Login successful",
                   redirectUrl: "/home",
                });
             } catch (error) {
@@ -56,12 +55,18 @@ module.exports = function (passport) {
       )
    );
    passport.serializeUser((user, done) => {
-      done(null, user.email);
+      done(null, user.email, {
+         status: 200,
+         message: "Logged in serialized",
+         redirectUrl: "/home",
+      });
    });
    passport.deserializeUser(async (email, done) => {
       try {
          const user = await User.findOne({
-            email,
+            where: {
+               email,
+            },
          });
 
          if (!user) {
@@ -72,9 +77,17 @@ module.exports = function (passport) {
             });
          }
 
-         return done(null, user);
+         return done(null, user, {
+            status: 404,
+            message: "Logged in deserialized",
+            redirectUrl: "/home",
+         });
       } catch (error) {
-         return done(error, false);
+         return done(error, false, {
+            status: 500,
+            message: "Failed to deserialize user",
+            redirectUrl: "/",
+         });
       }
    });
 };

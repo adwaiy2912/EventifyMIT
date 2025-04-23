@@ -1,5 +1,4 @@
-const { Op } = require("sequelize");
-const { Registration } = require("../models/registration");
+const { Registration } = require("../models/index");
 const { REGISTRATION_STATUS } = require("../utils/constants");
 
 eventRegistrationStatus = async (eventId, userId) => {

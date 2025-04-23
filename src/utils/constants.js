@@ -16,13 +16,13 @@ const VERIFIED_STATUS = Object.freeze({
    UNVERIFIED: "UNVERIFIED",
 });
 
-REGISTRATION_STATUS = Object.freeze({
+const REGISTRATION_STATUS = Object.freeze({
    REGISTERED: "REGISTERED",
    UNREGISTERED: "UNREGISTERED",
    WAITLISTED: "WAITLISTED",
 });
 
-PAYMENT_STATUS = Object.freeze({
+const PAYMENT_STATUS = Object.freeze({
    PENDING: "PENDING",
    SUCCESS: "SUCCESS",
    FAILED: "FAILED",

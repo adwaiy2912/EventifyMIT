@@ -1,16 +1,16 @@
 const bcrypt = require("bcrypt");
 const { pool } = require("../config/postgres");
-const { USERTYPE, VERIFIEDSTATUS } = require("../utils/constants");
+const { USER_TYPE, VERIFIED_STATUS } = require("../utils/constants");
 
 sqlUpdateVerifiedStatus = async (user, type) => {
    try {
-      let newStatus = VERIFIEDSTATUS.BOTH_VERIFIED;
+      let newStatus = VERIFIED_STATUS.BOTH_VERIFIED;
       const status = user.verified_status;
-      if (status === VERIFIEDSTATUS.UNVERIFIED) {
+      if (status === VERIFIED_STATUS.UNVERIFIED) {
          newStatus =
             type === "email"
-               ? VERIFIEDSTATUS.EMAIL_VERIFIED
-               : VERIFIEDSTATUS.PHONE_VERIFIED;
+               ? VERIFIED_STATUS.EMAIL_VERIFIED
+               : VERIFIED_STATUS.PHONE_VERIFIED;
       }
 
       await pool.query(`UPDATE USERS SET VERIFIED_STATUS = $1 WHERE ID = $2`, [

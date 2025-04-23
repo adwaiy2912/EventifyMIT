@@ -6,6 +6,8 @@ const {
 } = require("../models/organizerGetModels");
 const { sqlGetVenue } = require("../models/userGetModels");
 
+const { Venue } = require("../models/venue");
+
 generateUniqueString = (length) => {
    if (length <= 0) {
       throw new Error("Length must be a positive integer");
@@ -27,30 +29,36 @@ getTable = (userType) => {
    }
 };
 
-getVenueID = async (venue) => {
-   let result;
+const getVenueID = async (venue) => {
    venue = venue.toUpperCase();
+   let name, location;
+
    if (venue.includes("ACADEMIC BLOCK")) {
       const lastSpaceIndex = venue.lastIndexOf(" ");
-
-      const name = venue.substring(0, lastSpaceIndex);
-      const location = venue.substring(lastSpaceIndex + 1);
-
-      result = await sqlGetVenueID(name, location);
+      name = venue.substring(0, lastSpaceIndex);
+      location = venue.substring(lastSpaceIndex + 1);
    } else {
-      result = await sqlGetVenueID(venue, venue);
+      name = location = venue;
    }
-   return result.rows[0].venue_id;
-};
-checkEventClosed = (registerDeadline) => {
-   const currentDate = new Date();
-   const registerDate = new Date(registerDeadline);
-   return currentDate > registerDate;
+
+   const result = await Venue.findOne({
+      where: {
+         name,
+         location,
+      },
+   });
+
+   if (!result) {
+      throw new Error(
+         `Venue not found for name: ${name}, location: ${location}`
+      );
+   }
+
+   return result.venue_id;
 };
 
 module.exports = {
    getTable,
    generateUniqueString,
    getVenueID,
-   checkEventClosed,
 };

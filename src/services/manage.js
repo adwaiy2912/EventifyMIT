@@ -1,17 +1,16 @@
 const { Op } = require("sequelize");
-const { Events } = require("../models/event");
-const { Registrations } = require("../models/registration");
+const { Event, Registrations } = require("../models/event");
 
 manageOrganizerUpcomingEvents = async (organizerId) => {
    try {
-      return await Events.findAll({
+      return await Event.findAll({
          where: {
             organizer_id: organizerId,
-            event_date: {
+            start_time: {
                [Op.gte]: new Date(),
             },
          },
-         order: [["event_date", "ASC"]],
+         order: [["start_time", "ASC"]],
       });
    } catch (error) {
       console.error("Error fetching organizer events:", error);
@@ -21,9 +20,9 @@ manageOrganizerUpcomingEvents = async (organizerId) => {
 
 manageAttendeeUpcomingEvents = async (attendeeId) => {
    try {
-      return await Events.findAll({
+      return await Event.findAll({
          where: {
-            event_date: {
+            start_time: {
                [Op.gte]: new Date(),
             },
          },
@@ -37,7 +36,7 @@ manageAttendeeUpcomingEvents = async (attendeeId) => {
                attributes: [],
             },
          ],
-         order: [["event_date", "ASC"]],
+         order: [["start_time", "ASC"]],
       });
    } catch (error) {
       console.error("Error fetching attendee events:", error);

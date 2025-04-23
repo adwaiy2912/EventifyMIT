@@ -1,17 +1,16 @@
 const { Op } = require("sequelize");
-const { Events } = require("../models/event");
-const { Registrations } = require("../models/registration");
+const { Event, Registrations } = require("../models/index");
 
 historyOrganizerPreviousEvents = async (organizerId) => {
    try {
-      return await Events.findAll({
+      return await Event.findAll({
          where: {
             organizer_id: organizerId,
-            event_date: {
+            start_time: {
                [Op.lt]: new Date(),
             },
          },
-         order: [["event_date", "DESC"]],
+         order: [["start_time", "DESC"]],
       });
    } catch (error) {
       console.error("Error fetching organizer previous events:", error);
@@ -21,9 +20,9 @@ historyOrganizerPreviousEvents = async (organizerId) => {
 
 historyAttendeePreviousEvents = async (attendeeId) => {
    try {
-      return await Events.findAll({
+      return await Event.findAll({
          where: {
-            event_date: {
+            start_time: {
                [Op.lt]: new Date(),
             },
          },
@@ -37,7 +36,7 @@ historyAttendeePreviousEvents = async (attendeeId) => {
                attributes: [],
             },
          ],
-         order: [["event_date", "DESC"]],
+         order: [["start_time", "DESC"]],
       });
    } catch (error) {
       console.error("Error fetching attendee previous events:", error);

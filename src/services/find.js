@@ -1,14 +1,14 @@
 const { Op } = require("sequelize");
-const { Events } = require("../models/event");
+const { Event } = require("../models/index");
 
 findAllEvents = async () => {
    const today = new Date();
    today.setHours(0, 0, 0, 0);
 
    try {
-      const events = await Events.findAll({
+      const events = await Event.findAll({
          where: {
-            event_date: {
+            start_time: {
                [Op.gte]: today,
             },
          },

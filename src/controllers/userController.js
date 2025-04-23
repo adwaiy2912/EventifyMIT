@@ -19,10 +19,14 @@ const {
    signupValidator,
    createValidator,
 } = require("../utils/formValidator");
-const { USERFIELD, VERIFIEDSTATUS } = require("../utils/constants");
+const { USER_FIELD, VERIFIED_STATUS } = require("../utils/constants");
 const { generateUniqueString, getVenueID } = require("../utils/helper");
 
 const { sendEmailOTP, sendPhoneOTP } = require("../utils/sendOTP");
+
+const { User, OTP } = require("../models/index");
+
+const { userExists, createUser } = require("../services/signup");
 
 exports.login = (req, res, next) => {
    const notValid = loginValidator(req.body);
@@ -50,24 +54,19 @@ exports.signup = async (req, res) => {
             .json({ message: notValid, redirectUrl: "/user" });
       }
 
-      const userEmailCheck = await sqlCheckForExistUser(
-         USERFIELD.EMAIL,
-         req.body.email
-      );
-      const userIDCheck = await sqlCheckForExistUser(
-         USERFIELD.ID,
-         req.body.regNo
-      );
-      const userIdentifier = userEmailCheck || userIDCheck;
-
-      if (userIdentifier) {
+      // Check if email or registration number already exists
+      const existingUser = await userExists(req.body.email, req.body.regNo);
+      if (existingUser) {
+         const field = existingUser.email === req.body.email ? "Email" : "ID";
          return res.status(400).json({
-            message: `${userIdentifier} already in use`,
+            message: `${field} already in use`,
             redirectUrl: "/user",
          });
       }
-      await sqlCreateUser(req.body);
 
+      await createUser(req.body);
+
+      // Send OTP to email and phone
       await sendEmailOTP(req.body.email);
       // await sendPhoneOTP(req.body.phone);
 
@@ -86,13 +85,13 @@ exports.signup = async (req, res) => {
 exports.forgotPassword = async (req, res) => {
    try {
       const { email, phone } = req.body;
+      const user = await User.findOne({
+         where: {
+            [Op.or]: [{ email }, { phone }],
+         },
+      });
 
-      const userEmailCheck = await sqlCheckForExistUser(USERFIELD.EMAIL, email);
-      const userPhoneCheck = await sqlCheckForExistUser(USERFIELD.PHONE, phone);
-
-      const userIdentifier = userEmailCheck || userPhoneCheck;
-
-      if (!userIdentifier) {
+      if (!user) {
          return res.status(400).json({
             message: `User not found`,
             redirectUrl: "/user",
@@ -100,7 +99,7 @@ exports.forgotPassword = async (req, res) => {
       }
 
       await sendEmailOTP(email);
-      await sendPhoneOTP(phone);
+      // await sendPhoneOTP(phone);
 
       return res.status(200).json({
          message: `OTP sent successfully. Check your email and phone for the OTP`,
@@ -126,26 +125,49 @@ exports.logout = (req, res, next) => {
 exports.verifyOTP = async (req, res) => {
    try {
       const { type, otp } = req.body;
+      const { email, phone } = req.user;
 
-      const result = await sqlGetOTP(req.user.email, req.user.phone, type);
+      const result = await OTP.findOne({
+         where: {
+            user_email: email,
+            user_phone: phone,
+            type,
+         },
+         order: [["created_at", "DESC"]],
+      });
+
+      if (!result) {
+         return res.status(404).json({
+            message: "OTP not found",
+            redirectUrl: "/verifyOTP",
+         });
+      }
 
       const matchOTP = await bcrypt.compare(otp, result.otp_code.toString());
-      const expiredOTP = result.expires_at < new Date(Date.now() - 30 * 60000);
+      const expiredOTP =
+         new Date(result.expires_at) < new Date(Date.now() - 30 * 60000); // 30 min expiry
 
       if (!matchOTP) {
          return res.status(403).json({
-            message: `Invalid OTP`,
+            message: "Invalid OTP",
             redirectUrl: "/verifyOTP",
          });
       }
       if (expiredOTP) {
          return res.status(403).json({
-            message: `OTP expired. Resend OTP to verify`,
+            message: "OTP expired. Resend OTP to verify",
             redirectUrl: "/verifyOTP",
          });
       }
 
-      await sqlUpdateVerifiedStatus(req.user, type);
+      // Update user's verified status based on type
+      const updateFields = {};
+      if (type === "email") updateFields.email_verified = true;
+      if (type === "phone") updateFields.phone_verified = true;
+
+      await User.update(updateFields, {
+         where: { id: req.user.id },
+      });
 
       return res.status(200).json({
          message: `OTP verified successfully`,
@@ -161,20 +183,25 @@ exports.verifyOTP = async (req, res) => {
 
 exports.resendOTP = async (req, res) => {
    try {
-      const { type } = req.body;
+      const { type, email } = req.body;
 
-      if (type === USERFIELD.EMAIL) {
-         await sendEmailOTP(req.body.email);
-      }
-      if (type === USERFIELD.PHONE) {
+      if (type === USER_FIELD.EMAIL) {
+         await sendEmailOTP(email || req.user.email);
+      } else if (type === USER_FIELD.PHONE) {
          await sendPhoneOTP(req.user.phone);
+      } else {
+         return res.status(400).json({
+            message: "Invalid OTP type",
+            redirectUrl: "/verifyOTP",
+         });
       }
 
       return res.status(200).json({
          message: `OTP resent successfully. Check your ${type} for the OTP`,
          redirectUrl: "/verifyOTP",
       });
-   } catch {
+   } catch (error) {
+      console.error("Error resending OTP:", error);
       return res.status(500).json({
          message: "Failed to resend OTP",
          redirectUrl: "/verifyOTP",
@@ -194,7 +221,16 @@ exports.create = async (req, res) => {
       const eventID = generateUniqueString(10);
       const venueID = await getVenueID(req.body.venue);
 
-      await sqlCreateEvent(req.body, eventID, venueID, req.user.organizer_id);
+      await Event.create({
+         id: eventID,
+         name: req.body.name,
+         description: req.body.description,
+         event_type_id: req.body.event_type_id,
+         organizer_id: req.user.organizer_id,
+         venue_id: venueID,
+         event_date: req.body.event_date,
+         registration_deadline: req.body.registration_deadline,
+      });
 
       return res
          .status(201)
@@ -268,13 +304,13 @@ exports.updateProfile = async (req, res) => {
       }
       */
       if (req.user.email !== email) {
-         verifiedStatus = VERIFIEDSTATUS.PHONE_VERIFIED;
+         VERIFIED_STATUS = VERIFIED_STATUS.PHONE_VERIFIED;
       }
 
-      if (verifiedStatus !== VERIFIEDSTATUS.PHONE_VERIFIED) {
+      if (VERIFIED_STATUS !== VERIFIED_STATUS.PHONE_VERIFIED) {
          await sendPhoneOTP(phone);
       }
-      if (verifiedStatus !== VERIFIEDSTATUS.EMAIL_VERIFIED) {
+      if (VERIFIED_STATUS !== VERIFIED_STATUS.EMAIL_VERIFIED) {
          await sendEmailOTP(email);
       }
 

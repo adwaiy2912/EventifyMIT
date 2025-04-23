@@ -28,7 +28,7 @@ sqlCreatePhoneOTP = async (phone, otp) => {
 };
 sqlCreateUser = async (data) => {
    try {
-      const table = getTable(data.userType);
+      const table = getTable(data.USER_TYPE);
       const ID = table.slice(0, -1) + "_ID";
       const hashedPassword = await bcrypt.hash(data.password, 10);
 
