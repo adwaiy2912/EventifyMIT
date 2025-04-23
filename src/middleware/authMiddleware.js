@@ -1,5 +1,5 @@
 const { sqlGetOrganizerID } = require("../models/organizerGetModels");
-const { USERTYPE, VERIFIEDSTATUS } = require("../utils/enumObj");
+const { USERTYPE, VERIFIEDSTATUS } = require("../utils/constants");
 
 checkAuthenticated = async (req, res, next) => {
    if (req.isAuthenticated()) {

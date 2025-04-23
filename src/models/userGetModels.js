@@ -1,5 +1,5 @@
 const { pool } = require("../config/postgres");
-const { REGISTRATIONSTATUS } = require("../utils/enumObj");
+const { REGISTRATIONSTATUS } = require("../utils/constants");
 
 sqlGetOTP = async (email, phone, type) => {
    try {

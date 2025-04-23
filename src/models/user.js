@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/sequelize");
-const { VERIFIED_STATUS, USER_TYPE } = require("../utils/enumObj");
+const { VERIFIED_STATUS, USER_TYPE } = require("../utils/constants");
 
 const User = sequelize.define("user", {
    id: {

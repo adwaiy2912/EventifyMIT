@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { pool } = require("../config/postgres");
-const { USERTYPE, VERIFIEDSTATUS } = require("../utils/enumObj");
+const { USERTYPE, VERIFIEDSTATUS } = require("../utils/constants");
 
 sqlUpdateVerifiedStatus = async (user, type) => {
    try {

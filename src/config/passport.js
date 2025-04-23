@@ -1,6 +1,7 @@
 const localStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const { pool } = require("./postgres");
+const User = require("../models/user");
 
 module.exports = function (passport) {
    passport.use(
@@ -13,12 +14,13 @@ module.exports = function (passport) {
          },
          async (req, email, password, done) => {
             try {
-               const result = await pool.query(
-                  "SELECT * FROM USERS WHERE email = $1",
-                  [email]
-               );
+               const user = await User.findOne({
+                  where: {
+                     email,
+                  },
+               });
 
-               if (result.rows.length === 0) {
+               if (!user) {
                   return done(null, false, {
                      status: 404,
                      message: "No user with that email",
@@ -26,7 +28,6 @@ module.exports = function (passport) {
                   });
                }
 
-               const user = result.rows[0];
                const isPasswordMatch = await bcrypt.compare(
                   password,
                   user.password
@@ -55,20 +56,15 @@ module.exports = function (passport) {
       )
    );
    passport.serializeUser((user, done) => {
-      done(null, user.email, {
-         status: 200,
-         message: "Logged in serialized",
-         redirectUrl: "/home",
-      });
+      done(null, user.email);
    });
    passport.deserializeUser(async (email, done) => {
       try {
-         const result = await pool.query(
-            "SELECT * FROM USERS WHERE email = $1",
-            [email]
-         );
+         const user = await User.findOne({
+            email,
+         });
 
-         if (result.rows.length === 0) {
+         if (!user) {
             return done(null, false, {
                status: 404,
                message: "No user with that email",
@@ -76,18 +72,9 @@ module.exports = function (passport) {
             });
          }
 
-         const user = result.rows[0];
-         return done(null, user, {
-            status: 404,
-            message: "Logged in deserialized",
-            redirectUrl: "/home",
-         });
+         return done(null, user);
       } catch (error) {
-         return done(error, false, {
-            status: 500,
-            message: "Failed to deserialize user",
-            redirectUrl: "/",
-         });
+         return done(error, false);
       }
    });
 };

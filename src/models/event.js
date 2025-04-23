@@ -1,6 +1,6 @@
 const { DataTypes, STRING } = require("sequelize");
 const sequelize = require("../config/sequelize");
-const generateUniqueString = require("../utils/userUtils");
+const generateUniqueString = require("../utils/helper");
 
 const Event = sequelize.define(
    "event",

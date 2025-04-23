@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const { pool } = require("../config/postgres");
-const { getTable } = require("../utils/userUtils");
+const { getTable } = require("../utils/helper");
 
 sqlCreateEmailOTP = async (email, otp) => {
    try {

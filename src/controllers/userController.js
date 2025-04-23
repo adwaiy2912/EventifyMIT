@@ -19,8 +19,8 @@ const {
    signupValidator,
    createValidator,
 } = require("../utils/formValidator");
-const { USERFIELD, VERIFIEDSTATUS } = require("../utils/enumObj");
-const { generateUniqueString, getVenueID } = require("../utils/userUtils");
+const { USERFIELD, VERIFIEDSTATUS } = require("../utils/constants");
+const { generateUniqueString, getVenueID } = require("../utils/helper");
 
 const { sendEmailOTP, sendPhoneOTP } = require("../utils/sendOTP");
 

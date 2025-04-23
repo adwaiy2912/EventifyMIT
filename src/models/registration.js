@@ -1,6 +1,6 @@
 const { DataTypes, STRING } = require("sequelize");
 const sequelize = require("../config/sequelize");
-const { PAYMENT_STATUS } = require("../utils/enumObj");
+const { PAYMENT_STATUS } = require("../utils/constants");
 
 const Registration = sequelize.define("registration", {
    event_id: {

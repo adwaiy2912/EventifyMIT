@@ -1,24 +1,21 @@
+const { Event } = require("../models/event");
+const { EventType } = require("../models/eventType");
+const { Venue } = require("../models/venue");
+
+const { findAllEvents } = require("../services/find");
 const {
-   sqlGetAttendeeUpcommingEvents,
-   sqlGetAttendeePreviousEvents,
-} = require("../models/attendeeGetModels");
+   manageAttendeeUpcomingEvents,
+   manageOrganizerUpcomingEvents,
+} = require("../services/manage");
 const {
-   sqlGetOrganizerUpcommingEvents,
-   sqlGetOrganizerPreviousEvents,
-} = require("../models/organizerGetModels");
-const {
-   sqlGetEventTypes,
-   sqlGetEventDetails,
-   sqlGetEventType,
-   sqlGetFindEvents,
-   sqlGetRegistrationStatus,
-} = require("../models/userGetModels");
-const { USERTYPE, VERIFIEDSTATUS } = require("../utils/enumObj");
-const {
-   getVenue,
-   checkEventClosed,
-   getRegistrationData,
-} = require("../utils/userUtils");
+   historyAttendeePreviousEvents,
+   historyOrganizerPreviousEvents,
+} = require("../services/history");
+const { eventRegistrationStatus } = require("../services/event");
+const { viewEventRegistrations } = require("../services/view");
+
+const { USERTYPE, VERIFIEDSTATUS } = require("../utils/constants");
+const { checkEventClosed } = require("../utils/helper");
 
 exports.verifyOTP = async (req, res) => {
    if (req.user.verified_status === VERIFIEDSTATUS.BOTH_VERIFIED) {
@@ -43,19 +40,20 @@ exports.dashboard = (req, res) => {
 };
 
 exports.find = async (req, res) => {
+   const events = findAllEvents();
+
    res.render("findEvents", {
       user: req.user.user_type,
-      events: await sqlGetFindEvents(),
+      events,
    });
 };
 
 exports.manage = async (req, res) => {
-   let events;
-   if (req.user.user_type === USERTYPE.ATTENDEE) {
-      events = await sqlGetAttendeeUpcommingEvents(req.user.id);
-   } else {
-      events = await sqlGetOrganizerUpcommingEvents(req.user.id);
-   }
+   const events =
+      req.user.user_type === USERTYPE.ATTENDEE
+         ? await manageAttendeeUpcomingEvents(req.user.id)
+         : await manageOrganizerUpcomingEvents(req.user.id);
+
    res.render("manageEvents", {
       user: req.user.user_type,
       events,
@@ -63,12 +61,11 @@ exports.manage = async (req, res) => {
 };
 
 exports.history = async (req, res) => {
-   let events;
-   if (req.user.user_type === USERTYPE.ATTENDEE) {
-      events = await sqlGetAttendeePreviousEvents(req.user.id);
-   } else {
-      events = await sqlGetOrganizerPreviousEvents(req.user.id);
-   }
+   const events =
+      req.user.user_type === USERTYPE.ATTENDEE
+         ? await historyAttendeePreviousEvents(req.user.id)
+         : await historyOrganizerPreviousEvents(req.user.id);
+
    res.render("history", {
       user: req.user.user_type,
       events,
@@ -78,27 +75,35 @@ exports.history = async (req, res) => {
 exports.create = async (req, res) => {
    res.render("createEvent", {
       user: req.user.user_type,
-      eventTypes: await sqlGetEventTypes(),
+      eventTypes: await EventType.findAll({}),
    });
 };
 
 exports.eventID = async (req, res) => {
-   const event = await sqlGetEventDetails(req.params.id);
+   const event = await Event.findByPk(req.params.id);
+   if (!event) {
+      return res.status(404).send("Event not found");
+   }
+
    res.render("eventCard", {
       user: req.user.user_type,
       attendeeID: req.user.id,
       event,
-      eventType: await sqlGetEventType(event.event_type_id),
-      eventTypes: await sqlGetEventTypes(),
-      venue: await getVenue(event.venue_id),
+      eventType: await EventType.findByPk(event.event_type_id),
+      eventTypes: await EventType.findAll({}),
+      venue: await Venue.findByPk(event.venue_id),
       eventClosed: checkEventClosed(event.registration_deadline),
-      status: await sqlGetRegistrationStatus(req.params.id, req.user.id),
+      status: await eventRegistrationStatus(req.params.id, req.user.id),
    });
 };
 
 exports.viewID = async (req, res) => {
-   const event = await sqlGetEventDetails(req.params.id);
-   const registrationsData = await getRegistrationData(req.params.id);
+   const event = await Event.findByPk(req.params.id);
+   if (!event) {
+      return res.status(404).send("Event not found");
+   }
+   const registrationsData = await viewEventRegistrations(req.params.id);
+
    res.render("viewRegistrations", {
       user: req.user.user_type,
       event,
