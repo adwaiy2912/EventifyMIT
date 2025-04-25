@@ -1,4 +1,4 @@
-const generateUniqueString = require("../utils/helper");
+const { generateUniqueString } = require("../utils/helper");
 
 module.exports = (sequelize, DataTypes) => {
    const Event = sequelize.define(
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.DATE,
             allowNull: false,
          },
-         register_deadline: {
+         registration_deadline: {
             type: DataTypes.DATE,
             allowNull: false,
          },
@@ -59,21 +59,23 @@ module.exports = (sequelize, DataTypes) => {
    );
 
    Event.associate = (models) => {
-      Event.belongsTo(models.user, {
+      Event.belongsTo(models.User, {
          foreignKey: "organizer_id",
          targetKey: "id",
+         as: "organizer",
       });
-      Event.belongsTo(models.venue, {
+      Event.belongsTo(models.Venue, {
          foreignKey: "venue_id",
          targetKey: "id",
       });
-      Event.belongsTo(models.eventType, {
+      Event.belongsTo(models.EventType, {
          foreignKey: "event_type_id",
          targetKey: "id",
       });
-      Event.hasMany(models.registration, {
+      Event.hasMany(models.Registration, {
          foreignKey: "event_id",
          sourceKey: "event_id",
+         as: "registrations",
       });
    };
 

@@ -4,11 +4,12 @@
    "type": "commonjs",
    "scripts": {
       "start": "node src/app.js",
-      "devStart": "nodemon src/app.js"
+      "devStart": "nodemon --trace-warnings src/app.js"
    },
    "dependencies": {
       "bcrypt": "^5.1.1",
       "ejs": "^3.1.9",
+      "ejs-lint": "^2.0.1",
       "express": "^4.19.2",
       "express-flash": "^0.0.2",
       "express-session": "^1.18.0",

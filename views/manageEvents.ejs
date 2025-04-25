@@ -41,7 +41,9 @@
          <ul
             class="cards d-flex justify-content-center align-items-center flex-wrap"
          >
-            <% events.forEach(event => { %>
+            <% if (!events || events.length === 0) { %>
+            <p>No events found.</p>
+            <% } else { %> <% events.forEach(event => { %>
             <li>
                <div class="card">
                   <img
@@ -59,14 +61,17 @@
                         <div class="card__header-text">
                            <h3 class="card__title"><%= event.event_name %></h3>
                            <span class="card__tagline"
-                              >Date: <%= event.event_date.toISOString().slice(0,
-                              10) %></span
+                              ><b>Date:</b> <%=
+                              event.start_time.toISOString().slice(0, 10)
+                              %></span
                            >
                            <span class="card__tagline"
-                              >Time: <%= event.event_time %></span
+                              ><b>Time:</b> <%=
+                              event.start_time.toISOString().slice(11, 16)
+                              %></span
                            >
                            <span class="card__tagline"
-                              >Deadline: <%=
+                              ><b>Deadline:</b> <%=
                               event.registration_deadline.toISOString().slice(0,
                               10) %></span
                            >
@@ -84,7 +89,7 @@
                   </div>
                </div>
             </li>
-            <% }); %>
+            <% }); %> <% } %>
          </ul>
       </main>
 

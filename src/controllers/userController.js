@@ -1,18 +1,8 @@
 const bcrypt = require("bcrypt");
 const passport = require("passport");
-const {
-   sqlCreateUser,
-   sqlCreateEvent,
-   sqlCreateRegistration,
-} = require("../models/userCreateModels");
-const { sqlGetOTP, sqlGetPassword } = require("../models/userGetModels");
-const {
-   sqlUpdateVerifiedStatus,
-   sqlUpdateEvent,
-   sqlUpdateProfile,
-   sqlUpdatePassword,
-} = require("../models/userUpdateModels");
-const { sqlCheckForExistUser } = require("../models/utilsModels");
+
+const { User, Event, OTP, Registration } = require("../models/index");
+const { userExists, createUser } = require("../services/signup");
 
 const {
    loginValidator,
@@ -20,13 +10,8 @@ const {
    createValidator,
 } = require("../utils/formValidator");
 const { USER_FIELD, VERIFIED_STATUS } = require("../utils/constants");
-const { generateUniqueString, getVenueID } = require("../utils/helper");
-
 const { sendEmailOTP, sendPhoneOTP } = require("../utils/sendOTP");
-
-const { User, OTP } = require("../models/index");
-
-const { userExists, createUser } = require("../services/signup");
+const { generateUniqueString, getVenueID } = require("../utils/helper");
 
 exports.login = (req, res, next) => {
    const notValid = loginValidator(req.body);
@@ -75,13 +60,15 @@ exports.signup = async (req, res) => {
             "User created successfully. Login to verify your email and phone",
          redirectUrl: "/user",
       });
-   } catch {
+   } catch (error) {
+      console.error("Error creating user:", error);
       return res
          .status(500)
          .json({ message: "Failed to create user", redirectUrl: "/" });
    }
 };
 
+// not setup yet
 exports.forgotPassword = async (req, res) => {
    try {
       const { email, phone } = req.body;
@@ -102,10 +89,11 @@ exports.forgotPassword = async (req, res) => {
       // await sendPhoneOTP(phone);
 
       return res.status(200).json({
-         message: `OTP sent successfully. Check your email and phone for the OTP`,
+         message: `OTP sent successfully. Check your email or phone for the OTP`,
          redirectUrl: "/user",
       });
-   } catch {
+   } catch (error) {
+      console.error("Error sending OTP:", error);
       return res.status(500).json({
          message: "Failed to reset password",
          redirectUrl: "/user",
@@ -126,12 +114,11 @@ exports.verifyOTP = async (req, res) => {
    try {
       const { type, otp } = req.body;
       const { email, phone } = req.user;
+      const user = email || phone;
 
       const result = await OTP.findOne({
          where: {
-            user_email: email,
-            user_phone: phone,
-            type,
+            [type === "email" ? "email" : "phone"]: user,
          },
          order: [["created_at", "DESC"]],
       });
@@ -161,19 +148,50 @@ exports.verifyOTP = async (req, res) => {
       }
 
       // Update user's verified status based on type
-      const updateFields = {};
-      if (type === "email") updateFields.email_verified = true;
-      if (type === "phone") updateFields.phone_verified = true;
+      let verified_status = req.user.verified_status;
 
-      await User.update(updateFields, {
-         where: { id: req.user.id },
-      });
+      if (
+         verified_status === VERIFIED_STATUS.UNVERIFIED &&
+         type === USER_FIELD.EMAIL
+      ) {
+         verified_status = VERIFIED_STATUS.EMAIL_VERIFIED;
+      } else if (
+         verified_status === VERIFIED_STATUS.UNVERIFIED &&
+         type === USER_FIELD.PHONE
+      ) {
+         verified_status = VERIFIED_STATUS.PHONE_VERIFIED;
+      } else if (
+         verified_status === VERIFIED_STATUS.EMAIL_VERIFIED &&
+         type === USER_FIELD.PHONE
+      ) {
+         verified_status = VERIFIED_STATUS.BOTH_VERIFIED;
+      } else if (
+         verified_status === VERIFIED_STATUS.PHONE_VERIFIED &&
+         type === USER_FIELD.EMAIL
+      ) {
+         verified_status = VERIFIED_STATUS.BOTH_VERIFIED;
+      } else {
+         return res.status(403).json({
+            message: "OTP already verified",
+            redirectUrl: "/home",
+         });
+      }
+
+      await User.update(
+         { verified_status },
+         {
+            where: {
+               id: req.user.id,
+            },
+         }
+      );
 
       return res.status(200).json({
          message: `OTP verified successfully`,
-         redirectUrl: "/verifyOTP",
+         redirectUrl: "/home",
       });
-   } catch {
+   } catch (error) {
+      console.error("Error verifying OTP:", error);
       return res.status(500).json({
          message: "Failed to verify OTP",
          redirectUrl: "/verifyOTP",
@@ -183,10 +201,10 @@ exports.verifyOTP = async (req, res) => {
 
 exports.resendOTP = async (req, res) => {
    try {
-      const { type, email } = req.body;
+      const { type } = req.body;
 
       if (type === USER_FIELD.EMAIL) {
-         await sendEmailOTP(email || req.user.email);
+         await sendEmailOTP(req.user.email);
       } else if (type === USER_FIELD.PHONE) {
          await sendPhoneOTP(req.user.phone);
       } else {
@@ -197,7 +215,7 @@ exports.resendOTP = async (req, res) => {
       }
 
       return res.status(200).json({
-         message: `OTP resent successfully. Check your ${type} for the OTP`,
+         message: `OTP resent. Check your ${type} for the OTP`,
          redirectUrl: "/verifyOTP",
       });
    } catch (error) {
@@ -218,24 +236,28 @@ exports.create = async (req, res) => {
             .json({ message: notValid, redirectUrl: "/create" });
       }
 
-      const eventID = generateUniqueString(10);
       const venueID = await getVenueID(req.body.venue);
 
       await Event.create({
-         id: eventID,
-         name: req.body.name,
-         description: req.body.description,
-         event_type_id: req.body.event_type_id,
-         organizer_id: req.user.organizer_id,
+         event_id: generateUniqueString(10),
+         event_name: req.body.name,
+         event_description: req.body.description,
+         start_time: new Date(`${req.body.start_date} ${req.body.start_time}`),
+         end_time: new Date(`${req.body.end_date} ${req.body.end_time}`),
+         registration_deadline: new Date(
+            `${req.body.deadline_date} ${req.body.deadline_time}`
+         ),
          venue_id: venueID,
-         event_date: req.body.event_date,
-         registration_deadline: req.body.registration_deadline,
+         organizer_id: req.user.id,
+         fees: req.body.fee,
+         event_type_id: req.body.event_type_id,
       });
 
       return res
          .status(201)
          .json({ message: "Event created successfully", redirectUrl: "/home" });
-   } catch {
+   } catch (error) {
+      console.error("Error creating event:", error);
       return res
          .status(500)
          .json({ message: "Failed to create event", redirectUrl: "/home" });
@@ -255,13 +277,18 @@ exports.register = async (req, res) => {
             .status(400)
             .json({ message: "Payment Failed", redirectUrl });
       }
-      await sqlCreateRegistration(eventID, userID, paymentStatus);
+      await Registration.create({
+         event_id: eventID,
+         attendee_id: userID,
+         payment_status: paymentStatus,
+      });
 
       return res.status(200).json({
          message: "Registration successful",
          redirectUrl,
       });
-   } catch {
+   } catch (error) {
+      console.error("Error registering for event:", error);
       return res.status(500).json({
          message: "Failed to register to event",
          redirectUrl: "/home",
@@ -271,15 +298,41 @@ exports.register = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
    try {
-      const venueID = await getVenueID(req.body.venue);
+      const notValid = createValidator(req.body);
       const redirectUrl = req.get("referer") || "/home";
+      if (notValid) {
+         return res.status(400).json({ message: notValid, redirectUrl });
+      }
 
-      await sqlUpdateEvent(req.body, venueID);
+      const venueID = await getVenueID(req.body.venue);
+
+      await Event.update(
+         {
+            event_name: req.body.name,
+            event_description: req.body.description,
+            start_time: new Date(
+               `${req.body.start_date} ${req.body.start_time}`
+            ),
+            end_time: new Date(`${req.body.end_date} ${req.body.end_time}`),
+            registration_deadline: new Date(
+               `${req.body.deadline_date} ${req.body.deadline_time}`
+            ),
+            venue_id: venueID,
+            fees: req.body.fee,
+            event_type_id: req.body.event_type_id,
+         },
+         {
+            where: {
+               event_id: req.body.event_id,
+            },
+         }
+      );
 
       return res
          .status(200)
          .json({ message: "Event updated successfully", redirectUrl });
-   } catch {
+   } catch (error) {
+      console.error("Error updating event:", error);
       return res.status(500).json({
          message: "Failed to update event",
          redirectUrl: "/home",
@@ -291,35 +344,42 @@ exports.updateProfile = async (req, res) => {
    try {
       const redirectUrl = req.get("referer") || "/home";
 
-      let verifiedStatus = req.user.verified_status;
-      const { email, phone } = req.body;
+      let verified_status = req.user.verified_status;
+      const { name, email, phone } = req.body;
 
-      /*
       if (req.user.email !== email && req.user.phone !== phone) {
-         verifiedStatus = "UNVERIFIED";
+         verified_status = VERIFIED_STATUS.UNVERIFIED;
       } else if (req.user.email !== email) {
-         verifiedStatus = "PHONE_VERIFIED";
+         verified_status = VERIFIED_STATUS.PHONE_VERIFIED;
       } else if (req.user.phone !== phone) {
-         verifiedStatus = "EMAIL_VERIFIED";
-      }
-      */
-      if (req.user.email !== email) {
-         VERIFIED_STATUS = VERIFIED_STATUS.PHONE_VERIFIED;
+         verified_status = VERIFIED_STATUS.EMAIL_VERIFIED;
       }
 
-      if (VERIFIED_STATUS !== VERIFIED_STATUS.PHONE_VERIFIED) {
-         await sendPhoneOTP(phone);
-      }
-      if (VERIFIED_STATUS !== VERIFIED_STATUS.EMAIL_VERIFIED) {
+      await User.update(
+         {
+            name,
+            email,
+            phone,
+            verified_status,
+         },
+         {
+            where: { id: req.user.id },
+         }
+      );
+
+      // Send OTP to email and phone
+      if (req.user.email !== email) {
          await sendEmailOTP(email);
       }
-
-      await sqlUpdateProfile(req.body, verifiedStatus);
+      if (req.user.phone !== phone) {
+         await sendPhoneOTP(phone);
+      }
 
       return res
          .status(200)
          .json({ message: "Profile updated successfully", redirectUrl });
-   } catch {
+   } catch (error) {
+      console.error("Error updating profile:", error);
       return res.status(500).json({
          message: "Failed to update profile",
          redirectUrl: "/home",
@@ -330,9 +390,11 @@ exports.updateProfile = async (req, res) => {
 exports.updatePassword = async (req, res) => {
    try {
       const redirectUrl = req.get("referer") || "/home";
+      const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
       const isPasswordMatch = await bcrypt.compare(
-         req.body.oldPassword,
-         await sqlGetPassword(req.body.id)
+         oldPassword,
+         req.user.password
       );
 
       if (!isPasswordMatch) {
@@ -341,22 +403,30 @@ exports.updatePassword = async (req, res) => {
             redirectUrl,
          });
       }
-      if (req.body.newPassword !== req.body.confirmNewPassword) {
+      if (newPassword !== confirmNewPassword) {
          return res.status(403).json({
             message: "New password not matching",
             redirectUrl,
          });
       }
-      await sqlUpdatePassword(req.body);
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await User.update(
+         { password: hashedPassword },
+         {
+            where: { id: req.user.id },
+         }
+      );
 
       return res.status(200).json({
          message: "Password updated successfully",
          redirectUrl,
       });
-   } catch {
+   } catch (error) {
+      console.error("Error updating password:", error);
       return res.status(500).json({
          message: "Failed to update password",
-         redirectUrl,
+         redirectUrl: "/dashboard",
       });
    }
 };

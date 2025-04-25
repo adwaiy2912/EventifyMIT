@@ -21,7 +21,8 @@
             id="page-content"
          >
             <h1><%= event.event_name %></h1>
-            <h2 class="text-muted mb-4">Registrations</h2>
+            <h3 class="text-muted mb-4">Registrations</h3>
+            <p><%= registrationsData.length %> Registrations</p>
             <div class="list list-row col-sm-6">
                <% registrationsData.forEach(attendee => { %>
                <div

@@ -1,3 +1,4 @@
+const { raw } = require("express");
 const { Registration, User } = require("../models/index");
 
 viewEventRegistrations = async (eventId) => {
@@ -10,6 +11,9 @@ viewEventRegistrations = async (eventId) => {
             attributes: ["id", "name", "email"],
          },
       ],
+      raw: true,
+      nest: true,
+      order: [["createdAt", "DESC"]],
    });
 };
 

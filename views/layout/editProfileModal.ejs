@@ -24,7 +24,7 @@
          </div>
          <div class="modal-body">
             <form class="eventForm formMargin" id="editProfileForm">
-               <label for="name">Name</label>
+               <label class="mt-0" for="name">Name</label>
                <input type="text" id="name" name="name" value="<%= name %>" />
                <label for="email">Email</label>
                <input
@@ -39,18 +39,6 @@
                   id="phone"
                   name="phone"
                   value="<%= phone %>"
-               />
-               <input
-                  type="hidden"
-                  id="idDetails"
-                  name="id"
-                  value="<%= ID %>"
-               />
-               <input
-                  type="hidden"
-                  id="userDetails"
-                  name="user"
-                  value="<%= user %>"
                />
             </form>
          </div>
@@ -120,18 +108,6 @@
                   id="confirmNewPassword"
                   name="confirmNewPassword"
                   required
-               />
-               <input
-                  type="hidden"
-                  id="idPassword"
-                  name="id"
-                  value="<%= ID %>"
-               />
-               <input
-                  type="hidden"
-                  id="userPassword"
-                  name="user"
-                  value="<%= user %>"
                />
             </form>
          </div>

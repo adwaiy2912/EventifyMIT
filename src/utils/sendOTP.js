@@ -1,11 +1,6 @@
-const {
-   sqlDeleteEmailOTP,
-   sqlDeletePhoneOTP,
-} = require("../models/userDeleteModels");
-const {
-   sqlCreateEmailOTP,
-   sqlCreatePhoneOTP,
-} = require("../models/userCreateModels");
+const bcrypt = require("bcrypt");
+const { OTP } = require("../models/index");
+
 const { sendMail } = require("./sendMail");
 const { sendSMS } = require("./sendPhone");
 
@@ -23,7 +18,7 @@ const sendEmailOTP = async (email, duration = 30) => {
       if (!email) {
          throw new Error("Email, Subject and Message are required");
       }
-      await sqlDeleteEmailOTP(email);
+      await OTP.destroy({ where: { email } }); // Deletes old OTP
 
       const otp = generateOTP();
 
@@ -37,7 +32,8 @@ const sendEmailOTP = async (email, duration = 30) => {
       };
       await sendMail(mailOptions);
 
-      await sqlCreateEmailOTP(email, otp);
+      const hashedOTP = await bcrypt.hash(otp.toString(), 10);
+      await OTP.create({ email, otp_code: hashedOTP });
    } catch (error) {
       throw error;
    }
@@ -48,14 +44,15 @@ const sendPhoneOTP = async (phone, duration = 30) => {
       if (!phone) {
          throw new Error("Phone is required");
       }
-      await sqlDeletePhoneOTP(phone);
+      await OTP.destroy({ where: { phone } }); // Deletes old OTP
 
       const otp = generateOTP();
       const message = `${otp} is your EventifyMIT verification code. This code expires in ${duration} minutes.`;
 
       await sendSMS(phone, message);
 
-      await sqlCreatePhoneOTP(phone, otp);
+      const hashedOTP = await bcrypt.hash(otp.toString(), 10);
+      await OTP.create({ phone, otp_code: hashedOTP });
    } catch (error) {
       throw error;
    }

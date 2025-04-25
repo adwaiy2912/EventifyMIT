@@ -7,6 +7,7 @@ eventRegistrationStatus = async (eventId, userId) => {
          event_id: eventId,
          attendee_id: userId,
       },
+      raw: true,
    });
    return registration
       ? REGISTRATION_STATUS.REGISTERED

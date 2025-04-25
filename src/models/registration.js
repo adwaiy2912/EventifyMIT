@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       registration_date: {
          type: DataTypes.DATE,
          allowNull: false,
+         defaultValue: DataTypes.NOW,
       },
       payment_status: {
          type: DataTypes.ENUM,
@@ -24,13 +25,15 @@ module.exports = (sequelize, DataTypes) => {
    });
 
    Registration.associate = (models) => {
-      Registration.belongsTo(models.event, {
+      Registration.belongsTo(models.Event, {
          foreignKey: "event_id",
          targetKey: "event_id",
+         as: "event",
       });
-      Registration.belongsTo(models.user, {
+      Registration.belongsTo(models.User, {
          foreignKey: "attendee_id",
          targetKey: "id",
+         as: "attendee",
       });
    };
 

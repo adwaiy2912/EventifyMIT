@@ -40,21 +40,25 @@ module.exports = (sequelize, DataTypes) => {
    });
 
    User.associate = (models) => {
-      User.hasMany(models.otp, {
+      User.hasMany(models.OTP, {
          foreignKey: "email",
          sourceKey: "email",
       });
-      User.hasMany(models.otp, {
+      User.hasMany(models.OTP, {
          foreignKey: "phone",
          sourceKey: "phone",
       });
-      User.hasMany(models.event, {
+      // Events organized by this user (as organizer)
+      User.hasMany(models.Event, {
          foreignKey: "organizer_id",
          sourceKey: "id",
+         as: "organizedEvents",
       });
-      User.hasMany(models.registration, {
+      // Registrations made by this user (as attendee)
+      User.hasMany(models.Registration, {
          foreignKey: "attendee_id",
          sourceKey: "id",
+         as: "registrations",
       });
    };
 

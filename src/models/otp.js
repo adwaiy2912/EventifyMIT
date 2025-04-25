@@ -2,13 +2,18 @@ module.exports = (sequelize, DataTypes) => {
    const OTP = sequelize.define(
       "otp",
       {
+         id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+         },
          email: {
             type: DataTypes.STRING(100),
-            primaryKey: true,
+            allowNull: true,
          },
          phone: {
             type: DataTypes.BIGINT,
-            primaryKey: true,
+            allowNull: true,
          },
          otp_code: {
             type: DataTypes.STRING(60),
@@ -28,15 +33,28 @@ module.exports = (sequelize, DataTypes) => {
       {
          tableName: "otp",
          timestamps: false,
+         validate: {
+            emailOrPhoneProvided() {
+               if (!this.email && !this.phone) {
+                  throw new Error("Either email or phone must be provided.");
+               }
+            },
+         },
+         indexes: [
+            {
+               unique: true,
+               fields: ["email", "phone"],
+            },
+         ],
       }
    );
 
    OTP.associate = (models) => {
-      OTP.belongsTo(models.user, {
+      OTP.belongsTo(models.User, {
          foreignKey: "email",
          targetKey: "email",
       });
-      OTP.belongsTo(models.user, {
+      OTP.belongsTo(models.User, {
          foreignKey: "phone",
          targetKey: "phone",
       });

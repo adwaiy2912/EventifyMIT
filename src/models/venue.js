@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
    );
 
    Venue.associate = (models) => {
-      Venue.hasMany(models.event, {
+      Venue.hasMany(models.Event, {
          foreignKey: "venue_id",
          sourceKey: "id",
       });

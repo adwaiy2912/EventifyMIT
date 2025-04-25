@@ -36,30 +36,38 @@
                         <%= event.event_name %>
                      </h2>
                      <h6 class="card__subtitle mb-2 text-muted text-center">
-                        <%= eventType %>
+                        <%= eventType.name %>
                      </h6>
                      <span class="card__tagline card__date"
-                        ><b>Date: </b><%=
-                        event.event_date.toISOString().slice(0, 10) + ", " +
-                        event.event_time %></span
+                        ><b>Start Date: </b><%=
+                        event.start_time.toISOString().slice(0, 10) + ", " +
+                        event.start_time.toISOString().slice(11, 16) %></span
                      >
                      <span class="card__tagline card__deadline"
-                        ><b>Deadline: </b><%=
-                        event.registration_deadline.toISOString().slice(0, 10)
-                        %></span
+                        ><b>End Date: </b><%=
+                        event.end_time.toISOString().slice(0, 10) + ", " +
+                        event.end_time.toISOString().slice(11, 16) %></span
                      >
                      <span class="card__tagline card__venue text-end"
-                        ><b>Venue:</b> <%= venue %></span
+                        ><b>Venue:</b> <%= venue.name + ", " + venue.location
+                        %></span
                      >
                      <span class="card__tagline card__fees text-end"
-                        ><b>Fees:</b> <% if (event.fees === 0) { %> Free <% }
-                        else { %> &#8377;<%= event.fees %> <% } %></span
+                        ><b>Deadline: </b><%=
+                        event.registration_deadline.toISOString().slice(0, 10) +
+                        ", " +
+                        event.registration_deadline.toISOString().slice(11, 16)
+                        %></span
                      >
                   </div>
                </div>
-               <p class="card-text p-4 text-start">
-                  <%= event.event_description %>
-               </p>
+               <div class="card-text p-4 text-start">
+                  <p><%= event.event_description %></p>
+                  <span class="card__tagline card__deadline"
+                     ><b>Fees:</b> <% if (event.fees === 0) { %> Free <% } else
+                     { %> &#8377;<%= event.fees %> <% } %></span
+                  >
+               </div>
 
                <div class="d-flex justify-content-between w-100 p-4">
                   <% if (user === 'ATTENDEE') { %>

@@ -12,6 +12,9 @@ findAllEvents = async () => {
                [Op.gte]: today,
             },
          },
+         order: [["start_time", "ASC"]],
+         raw: true,
+         nest: true,
       });
       return events;
    } catch (error) {

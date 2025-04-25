@@ -30,27 +30,53 @@
                   id="name"
                   name="name"
                   value="<%= event.event_name %>"
+                  required
                />
 
                <label for="description">Description</label>
-               <textarea type="text" id="description" name="description">
+               <textarea
+                  type="text"
+                  id="description"
+                  name="description"
+                  required
+               >
 <%= event.event_description %></textarea
                >
 
-               <label for="date">Date</label>
+               <label for="start_date">Start Date</label>
                <input
                   type="date"
-                  id="date"
-                  name="date"
-                  value="<%= event.event_date.toISOString().slice(0, 10) %>"
+                  id="start_date"
+                  name="start_date"
+                  value="<%= event.start_time.toISOString().slice(0, 10) %>"
+                  required
                />
 
-               <label for="time">Time</label>
+               <label for="start_time">Start Time</label>
                <input
                   type="time"
-                  id="time"
-                  name="time"
-                  value="<%= event.event_time.slice(0, 5) %>"
+                  id="start_time"
+                  name="start_time"
+                  value="<%= event.start_time.toISOString().slice(11, 16) %>"
+                  required
+               />
+
+               <label for="end_date">End Date</label>
+               <input
+                  type="date"
+                  id="end_date"
+                  name="end_date"
+                  value="<%= event.end_time.toISOString().slice(0, 10) %>"
+                  required
+               />
+
+               <label for="end_time">End Time</label>
+               <input
+                  type="time"
+                  id="end_time"
+                  name="end_time"
+                  value="<%= event.end_time.toISOString().slice(11, 16) %>"
+                  required
                />
 
                <label for="venue">Venue</label>
@@ -58,15 +84,25 @@
                   type="text"
                   id="venue"
                   name="venue"
-                  value="<%= venue %>"
+                  value="<%= `${venue.name} ${venue.location}` %>"
                />
 
-               <label for="date">Deadline</label>
+               <label for="deadline_date">Deadline</label>
                <input
                   type="date"
-                  id="deadline"
-                  name="deadline"
+                  id="deadline_date"
+                  name="deadline_date"
                   value="<%= event.registration_deadline.toISOString().slice(0, 10) %>"
+                  required
+               />
+
+               <label for="deadline_time">Deadline Time</label>
+               <input
+                  type="time"
+                  id="deadline_time"
+                  name="deadline_time"
+                  value="<%= event.registration_deadline.toISOString().slice(11, 16) %>"
+                  required
                />
 
                <label for="fee">Fee</label>
@@ -74,23 +110,23 @@
                   id="number"
                   id="fee"
                   name="fee"
+                  type="number"
+                  min="0"
+                  max="100000"
+                  required
                   value="<%= event.fees %>"
                />
 
                <label class="eventType">Event Type</label>
-               <select name="eventType" id="eventType" class="form-select">
-                  <option selected disabled>Choose an Event Type</option>
-                  <% eventTypes.forEach((ET) => { %> <% if (ET.event_type_name
-                  === eventType) { %>
-                  <option value="<%= event.event_type_id %>" selected>
-                     <%= ET.event_type_name %>
-                  </option>
+               <select name="event_type_id" id="eventType" class="form-select">
+                  <% eventTypes.forEach((e) => { %> <% if (e.id ===
+                  event.event_type_id) { %>
+                  <option value="<%= e.id %>" selected><%= e.name %></option>
                   <% } else { %>
-                  <option value="<%= event.event_type_id %>">
-                     <%= ET.event_type_name %>
-                  </option>
+                  <option value="<%= e.id %>"><%= e.name %></option>
                   <% } %> <% }); %>
                </select>
+
                <input
                   type="hidden"
                   id="event_id"

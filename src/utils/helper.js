@@ -1,14 +1,6 @@
 const crypto = require("crypto");
-const {
-   sqlGetVenueID,
-   sqlGetEventRegistrations,
-   sqlGetAttendeeData,
-} = require("../models/organizerGetModels");
-const { sqlGetVenue } = require("../models/userGetModels");
 
-const { Venue } = require("../models/venue");
-
-generateUniqueString = (length) => {
+const generateUniqueString = (length) => {
    if (length <= 0) {
       throw new Error("Length must be a positive integer");
    }
@@ -18,18 +10,9 @@ generateUniqueString = (length) => {
    return uniqueString;
 };
 
-getTable = (userType) => {
-   switch (userType) {
-      case "organizer":
-         return "ORGANIZERS";
-      case "attendee":
-         return "ATTENDEES";
-      default:
-         throw new Error("Invalid user type");
-   }
-};
-
 const getVenueID = async (venue) => {
+   const { Venue } = require("../models/index");
+
    venue = venue.toUpperCase();
    let name, location;
 
@@ -48,17 +31,18 @@ const getVenueID = async (venue) => {
       },
    });
 
+   let newVenue = null;
    if (!result) {
-      throw new Error(
-         `Venue not found for name: ${name}, location: ${location}`
-      );
+      newVenue = await Venue.create({
+         name,
+         location,
+      });
    }
 
-   return result.venue_id;
+   return (result || newVenue).id;
 };
 
 module.exports = {
-   getTable,
    generateUniqueString,
    getVenueID,
 };

@@ -1,4 +1,4 @@
-const { sqlGetOrganizerID } = require("../models/organizerGetModels");
+const { User } = require("../models/index");
 const { USER_TYPE, VERIFIED_STATUS } = require("../utils/constants");
 
 checkAuthenticated = async (req, res, next) => {
@@ -40,7 +40,8 @@ checkForOrganizerID = async (req, res, next) => {
    if (
       req.user.user_type === USER_TYPE.ATTENDEE ||
       (req.user.user_type === USER_TYPE.ORGANIZER &&
-         req.user.organizer_id === (await sqlGetOrganizerID(req.params.id)))
+         req.user.organizer_id ===
+            (await User.findByPk(req.user.id)).organizer_id)
    ) {
       return next();
    }

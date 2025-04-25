@@ -13,7 +13,6 @@ const { eventRegistrationStatus } = require("../services/event");
 const { viewEventRegistrations } = require("../services/view");
 
 const { USER_TYPE, VERIFIED_STATUS } = require("../utils/constants");
-const { checkEventClosed } = require("../utils/helper");
 
 exports.verifyOTP = async (req, res) => {
    if (req.user.verified_status === VERIFIED_STATUS.BOTH_VERIFIED) {
@@ -73,12 +72,12 @@ exports.history = async (req, res) => {
 exports.create = async (req, res) => {
    res.render("createEvent", {
       user: req.user.user_type,
-      eventTypes: await EventType.findAll({}),
+      eventTypes: await EventType.findAll({ raw: true }),
    });
 };
 
 exports.eventID = async (req, res) => {
-   const event = await Event.findByPk(req.params.id);
+   const event = await Event.findByPk(req.params.id, { raw: true });
    if (!event) {
       return res
          .status(404)
@@ -89,10 +88,10 @@ exports.eventID = async (req, res) => {
       user: req.user.user_type,
       attendeeID: req.user.id,
       event,
-      eventType: await EventType.findByPk(event.event_type_id),
+      eventType: await EventType.findByPk(event.event_type_id, { raw: true }),
       eventTypes: await EventType.findAll({}),
-      venue: await Venue.findByPk(event.venue_id),
-      eventClosed: checkEventClosed(event.registration_deadline),
+      venue: await Venue.findByPk(event.venue_id, { raw: true }),
+      eventClosed: event.registration_deadline < new Date(),
       status: await eventRegistrationStatus(req.params.id, req.user.id),
    });
 };
