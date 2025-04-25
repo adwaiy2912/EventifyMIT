@@ -48,7 +48,7 @@ Built with modern web technologies and a clean architecture, it allows users to 
 
 ## 📁 Project Structure
 
-![34271](https://github.com/user-attachments/assets/e5a7a2cf-eea5-4fed-b748-fb2928473a98)
+![28477](https://github.com/user-attachments/assets/ee439127-f02f-4f26-9730-9c87f8eebada)
 
 ---
 
