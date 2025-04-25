@@ -49,8 +49,8 @@
                         event.end_time.toISOString().slice(11, 16) %></span
                      >
                      <span class="card__tagline card__venue text-end"
-                        ><b>Venue:</b> <%= venue.name + ", " + venue.location
-                        %></span
+                        ><b>Venue:</b> <%= venue.name === venue.location ?
+                        venue.name : venue.name + ", " + venue.location %></span
                      >
                      <span class="card__tagline card__fees text-end"
                         ><b>Deadline: </b><%=

@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const { Op } = require("sequelize");
 const { User } = require("../models/index");
 
-userExists = async (email, regNo) => {
+const userExists = async (email, regNo) => {
    try {
       const user = await User.findOne({
          where: {
@@ -17,7 +17,7 @@ userExists = async (email, regNo) => {
    }
 };
 
-createUser = async (userData) => {
+const createUser = async (userData) => {
    try {
       const user = await User.create({
          id: userData.regNo,

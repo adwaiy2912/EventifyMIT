@@ -3,7 +3,7 @@ const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER } =
 
 const twilio = require("twilio")(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
 
-sendSMS = async (number, message) => {
+const sendSMS = async (number, message) => {
    twilio.messages
       .create({
          body: message,

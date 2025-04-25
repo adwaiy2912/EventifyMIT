@@ -1,7 +1,7 @@
 const { Registration } = require("../models/index");
 const { REGISTRATION_STATUS } = require("../utils/constants");
 
-eventRegistrationStatus = async (eventId, userId) => {
+const eventRegistrationStatus = async (eventId, userId) => {
    const registration = await Registration.findOne({
       where: {
          event_id: eventId,

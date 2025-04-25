@@ -1,7 +1,7 @@
 const { Op } = require("sequelize");
 const { Event } = require("../models/index");
 
-findAllEvents = async () => {
+const findAllEvents = async () => {
    const today = new Date();
    today.setHours(0, 0, 0, 0);
 

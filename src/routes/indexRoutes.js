@@ -9,7 +9,7 @@ const {
    checkForOrganizerID,
 } = require("../middleware/authMiddleware");
 const indexController = require("../controllers/indexController");
-const { getEventIconSrc, getEventBgSrc } = require("../utils/minEventCard");
+const { getEventIconSrc, getEventBgSrc } = require("../utils/minEventCard"); //don't touch this line
 
 router.get("/", checkNotAuthenticated, (req, res) => {
    res.render("root", {});

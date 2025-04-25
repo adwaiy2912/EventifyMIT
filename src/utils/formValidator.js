@@ -1,6 +1,6 @@
 const validator = require("validator");
 
-loginValidator = (data) => {
+const loginValidator = (data) => {
    const { email, password } = data;
 
    if (!email) return "Email is required";
@@ -9,7 +9,7 @@ loginValidator = (data) => {
    return null;
 };
 
-signupValidator = (data) => {
+const signupValidator = (data) => {
    const { name, regNo, email, phone, password, confirmPassword } = data;
 
    if (!name) return "Name is required";
@@ -34,7 +34,7 @@ signupValidator = (data) => {
    return null;
 };
 
-createValidator = (data) => {
+const createValidator = (data) => {
    const {
       name,
       description,

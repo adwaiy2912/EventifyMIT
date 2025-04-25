@@ -1,7 +1,7 @@
-getEventIconSrc = (eventType) => {
+const getEventIconSrc = (eventType) => {
    return `../img/minEventCard/icon/${eventType.substring(0, 2)}.png`;
 };
-getEventBgSrc = (eventType, eventName) => {
+const getEventBgSrc = (eventType, eventName) => {
    return `../img/minEventCard/bg/${eventType.substring(0, 2)}${
       (eventName.length % 3) + 1
    }.jpg`;

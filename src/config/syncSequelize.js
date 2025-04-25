@@ -8,7 +8,7 @@ const {
    OTP,
 } = require("../models/index");
 
-async function syncSequelize() {
+const syncSequelize = async () => {
    try {
       await sequelize.authenticate();
       console.log("🛠️ Sequelize connection established.");
@@ -28,9 +28,9 @@ async function syncSequelize() {
    } catch (error) {
       console.error("Error during syncSequelize:", error);
    }
-}
+};
 
-async function printTopRows() {
+const printTopRows = async () => {
    try {
       const tables = { User, Event, Venue, EventType, Registration, OTP };
 
@@ -42,6 +42,6 @@ async function printTopRows() {
    } catch (error) {
       console.error("Error printing table rows:", error);
    }
-}
+};
 
 module.exports = { syncSequelize };

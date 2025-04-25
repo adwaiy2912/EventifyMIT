@@ -1,9 +1,8 @@
 const localStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
-const { pool } = require("./postgres");
 const { User } = require("../models/index");
 
-module.exports = function (passport) {
+module.exports = (passport) => {
    passport.use(
       "local-login",
       new localStrategy(

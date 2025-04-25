@@ -84,7 +84,7 @@
                   type="text"
                   id="venue"
                   name="venue"
-                  value="<%= `${venue.name} ${venue.location}` %>"
+                  value="<%= venue.name === venue.location ? venue.name : `${venue.name} ${venue.location}` %>"
                />
 
                <label for="deadline_date">Deadline</label>
