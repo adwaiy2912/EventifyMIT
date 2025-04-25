@@ -13,6 +13,7 @@ const { eventRegistrationStatus } = require("../services/event");
 const { viewEventRegistrations } = require("../services/view");
 
 const { USER_TYPE, VERIFIED_STATUS } = require("../utils/constants");
+const { getEventIconSrc, getEventBgSrc } = require("../utils/minEventCard");
 
 exports.verifyOTP = async (req, res) => {
    if (req.user.verified_status === VERIFIED_STATUS.BOTH_VERIFIED) {
@@ -42,6 +43,8 @@ exports.find = async (req, res) => {
    res.render("findEvents", {
       user: req.user.user_type,
       events,
+      getEventIconSrc,
+      getEventBgSrc,
    });
 };
 
@@ -54,6 +57,8 @@ exports.manage = async (req, res) => {
    res.render("manageEvents", {
       user: req.user.user_type,
       events,
+      getEventIconSrc,
+      getEventBgSrc,
    });
 };
 
@@ -66,6 +71,8 @@ exports.history = async (req, res) => {
    res.render("history", {
       user: req.user.user_type,
       events,
+      getEventIconSrc,
+      getEventBgSrc,
    });
 };
 
@@ -93,6 +100,8 @@ exports.eventID = async (req, res) => {
       venue: await Venue.findByPk(event.venue_id, { raw: true }),
       eventClosed: event.registration_deadline < new Date(),
       status: await eventRegistrationStatus(req.params.id, req.user.id),
+      getEventIconSrc,
+      getEventBgSrc,
    });
 };
 

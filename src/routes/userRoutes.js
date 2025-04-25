@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
+const convertToIST = require("../middleware/convertToIST");
 
 router.post("/login", userController.login);
 
@@ -14,7 +15,7 @@ router.post("/verifyOTP", userController.verifyOTP);
 
 router.post("/resendOTP", userController.resendOTP);
 
-router.post("/create", userController.create);
+router.post("/create", convertToIST, userController.create);
 
 router.post("/register", userController.register);
 
