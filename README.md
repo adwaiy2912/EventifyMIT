@@ -1,6 +1,6 @@
 # EventifyMIT
 
-A DBS Mini Project for efficient event management and coordination at Manipal Institute of Technology.
+A project for efficient event management and coordination at Manipal Institute of Technology.
 
 ---
 
@@ -51,9 +51,15 @@ Built with modern web technologies and a clean architecture, it allows users to 
 
 ---
 
+## 🔧 Setup
+
+For detailed setup instructions, refer to the [Setup Guide](./setup.md).
+
+---
+
 ## 📁 Project Structure
 
-![28477](https://github.com/user-attachments/assets/ee439127-f02f-4f26-9730-9c87f8eebada)
+<img src="https://github.com/user-attachments/assets/ee439127-f02f-4f26-9730-9c87f8eebada" alt="28477" width="600"/>
 
 ---
 
