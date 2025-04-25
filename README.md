@@ -53,7 +53,7 @@ Built with modern web technologies and a clean architecture, it allows users to 
 
 ## 🔧 Setup
 
-For detailed setup instructions, refer to the [Setup Guide](./setup.md).
+For detailed setup instructions, refer to the [Setup Guide](./SETUP.md).
 
 ---
 
