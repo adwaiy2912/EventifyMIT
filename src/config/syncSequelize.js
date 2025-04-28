@@ -13,14 +13,12 @@ const syncSequelize = async () => {
       await sequelize.authenticate();
       console.log("🛠️ Sequelize connection established.");
 
-      await Promise.all([
-         User.sync({ alter: true }),
-         Event.sync({ alter: true }),
-         Venue.sync({ alter: true }),
-         EventType.sync({ alter: true }),
-         Registration.sync({ alter: true }),
-         OTP.sync({ alter: true }),
-      ]);
+      await User.sync({ alter: true });
+      await Event.sync({ alter: true });
+      await Venue.sync({ alter: true });
+      await EventType.sync({ alter: true });
+      await Registration.sync({ alter: true });
+      await OTP.sync({ alter: true });
 
       console.log("📊 Database & tables created!");
 
