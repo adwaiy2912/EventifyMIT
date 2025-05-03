@@ -17,7 +17,7 @@ Built with modern web technologies and a clean architecture, it allows users to 
 ### 🌐 Frontend
 
 -  HTML, CSS, JavaScript
--  [EJS](https://ejs.co/) – Templating engine for dynamic pages
+-  [EJS](https://ejs.co/) – for dynamic pages
 
 ### 🧠 Backend
 
