@@ -6,7 +6,7 @@ A project for efficient event management and coordination at Manipal Institute o
 
 ## 📚 About the Project
 
-**EventifyMIT** is a full-stack event management web application designed to streamline the organization and participation of events within the Manipal community.
+**EventifyMIT** is a full stack event management web application designed to streamline the organization and participation of events within the Manipal community.
 
 Built with modern web technologies and a clean architecture, it allows users to register, view, and manage events, while giving admins and organizers complete control over event logistics.
 
